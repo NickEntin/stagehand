@@ -608,7 +608,7 @@ public enum AnimationRepeatStyle: Equatable {
 
 extension Animation {
 
-    private struct KeyframeSeries<PropertyType: AnimatableProperty>: AnyKeyframeSeries {
+    internal struct KeyframeSeries<PropertyType: AnimatableProperty>: AnyKeyframeSeries {
 
         // MARK: - Public Properties
 

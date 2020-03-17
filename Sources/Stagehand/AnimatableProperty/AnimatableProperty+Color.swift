@@ -25,6 +25,10 @@ extension CGColor: AnimatableProperty {
     /// interpolation where the initial value is used in the range `[0,0.5)` and the final value is used in the range
     /// `[0.5,1]`.
     public static func value(between initialValue: CGColor, and finalValue: CGColor, at progress: Double) -> Self {
+        if initialValue == finalValue {
+            return initialValue as! Self
+        }
+
         guard
             let initialComponents = RGBAComponents(cgColor: initialValue),
             let finalComponents = RGBAComponents(cgColor: finalValue),
@@ -98,6 +102,10 @@ extension CGColor: AnimatableOptionalProperty {
 extension UIColor: AnimatableProperty {
 
     public static func value(between initialValue: UIColor, and finalValue: UIColor, at progress: Double) -> Self {
+        if initialValue == finalValue {
+            return initialValue as! Self
+        }
+
         return self.init(cgColor: CGColor.value(between: initialValue.cgColor, and: finalValue.cgColor, at: progress))
     }
 

@@ -22,10 +22,12 @@ internal final class Renderer<ElementType: AnyObject>: AnyRenderer {
 
     internal init(
         animation: Animation<ElementType>,
-        element: ElementType
+        element: ElementType,
+        initialValues: Dictionary<PartialKeyPath<ElementType>, Any>
     ) {
         self.animation = animation
         self.element = element
+        self.initialValues = initialValues
     }
 
     // MARK: - Private Properties
@@ -34,15 +36,7 @@ internal final class Renderer<ElementType: AnyObject>: AnyRenderer {
 
     private weak var element: ElementType?
 
-    private lazy var initialValues: Dictionary<PartialKeyPath<ElementType>, Any> = {
-        guard let element = element else {
-            return [:]
-        }
-
-        return Dictionary(
-            uniqueKeysWithValues: animation.propertiesWithKeyframes.map { ($0, element[keyPath: $0]) }
-        )
-    }()
+    private let initialValues: Dictionary<PartialKeyPath<ElementType>, Any>
 
     // MARK: - Internal Methods
 

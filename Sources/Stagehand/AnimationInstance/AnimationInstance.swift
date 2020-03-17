@@ -30,12 +30,16 @@ public final class AnimationInstance {
         element: ElementType,
         driver: Driver
     ) {
-        let animation = animation.optimized()
+        let initialValues = Dictionary(
+            uniqueKeysWithValues: animation.propertiesWithKeyframes.map { ($0, element[keyPath: $0]) }
+        )
+
+        let animation = animation.optimized(initialValues: initialValues)
 
         self.animationCurve = animation.curve
         self.keyframeRelativeTimestamps = animation.keyframeRelativeTimestamps
 
-        self.renderer = Renderer(animation: animation, element: element)
+        self.renderer = Renderer(animation: animation, element: element, initialValues: initialValues)
 
         let executionBlocks: [ExecutionBlock] = animation.executionBlocks
             .map { executionBlock in

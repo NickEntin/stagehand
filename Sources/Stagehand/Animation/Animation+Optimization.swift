@@ -20,12 +20,12 @@ extension Animation {
 
     // MARK: - Internal Methods
 
-    func optimized() -> Animation<ElementType> {
+    func optimized(initialValues: Dictionary<PartialKeyPath<ElementType>, Any>) -> Animation<ElementType> {
         var animation = self
 
         animation.children = animation.children.map { child in
             var child = child
-            child.animation = child.animation.optimized()
+            child.animation = child.animation.optimized(initialValues: initialValues)
             return child
         }
 
@@ -36,6 +36,9 @@ extension Animation {
         // Now that we've potentially removed keyframes from our children, we can simplify the animation by removing any
         // empty children.
         animation.removeEmptyChildren()
+
+        animation.synthesizeNilCGColors(initialValues: initialValues)
+        animation.synthesizeNilUIColors(initialValues: initialValues)
 
         return animation
     }
@@ -129,6 +132,94 @@ extension Animation {
                 || !child.animation.executionBlocks.isEmpty
                 || !child.animation.perFrameExecutionBlocks.isEmpty
                 || !child.animation.children.isEmpty
+        }
+    }
+
+    private mutating func synthesizeNilCGColors(initialValues: Dictionary<PartialKeyPath<ElementType>, Any>) {
+        let colorKeyframeProperties = keyframeSeriesByProperty.keys.filter {$0 is KeyPath<ElementType, CGColor?> }
+
+        for property in colorKeyframeProperties {
+            var keyframeSeries = keyframeSeriesByProperty[property] as! KeyframeSeries<CGColor?>
+
+            guard keyframeSeries.valuesByRelativeTimestamp.count > 1 else {
+                continue
+            }
+
+            let initialValue = initialValues[property] as! CGColor?
+
+            let valuesByRelativeTimestamp = keyframeSeries.valuesByRelativeTimestamp.sorted { $0.key < $1.key }
+
+            let firstTimestamp = valuesByRelativeTimestamp[0].key
+            let resolvedFirstValue = valuesByRelativeTimestamp[0].value(initialValue)
+
+            let lastIndex = valuesByRelativeTimestamp.count - 1
+            let lastTimestamp = valuesByRelativeTimestamp[lastIndex].key
+            let resolvedLastValue = valuesByRelativeTimestamp[lastIndex].value(initialValue)
+
+            guard resolvedFirstValue == nil || resolvedLastValue == nil else {
+                continue
+            }
+
+            if resolvedFirstValue == nil {
+                if let resolvedSecondValue = valuesByRelativeTimestamp[1].value(initialValue) {
+                    if let replacementFirstValue = resolvedSecondValue.copy(alpha: 0) {
+                        keyframeSeries.valuesByRelativeTimestamp[firstTimestamp] = { _ in replacementFirstValue }
+                    }
+                }
+            }
+
+            if resolvedLastValue == nil {
+                if let resolvedSecondToLastValue = valuesByRelativeTimestamp[lastIndex-1].value(initialValue) {
+                    if let replacementLastValue = resolvedSecondToLastValue.copy(alpha: 0) {
+                        keyframeSeries.valuesByRelativeTimestamp[lastTimestamp] = { _ in replacementLastValue }
+                    }
+                }
+            }
+
+            keyframeSeriesByProperty[property] = keyframeSeries
+        }
+    }
+
+    private mutating func synthesizeNilUIColors(initialValues: Dictionary<PartialKeyPath<ElementType>, Any>) {
+        let colorKeyframeProperties = keyframeSeriesByProperty.keys.filter {$0 is KeyPath<ElementType, UIColor?> }
+
+        for property in colorKeyframeProperties {
+            var keyframeSeries = keyframeSeriesByProperty[property] as! KeyframeSeries<UIColor?>
+
+            guard keyframeSeries.valuesByRelativeTimestamp.count > 1 else {
+                continue
+            }
+
+            let initialValue = initialValues[property] as! UIColor?
+
+            let valuesByRelativeTimestamp = keyframeSeries.valuesByRelativeTimestamp.sorted { $0.key < $1.key }
+
+            let firstTimestamp = valuesByRelativeTimestamp[0].key
+            let resolvedFirstValue = valuesByRelativeTimestamp[0].value(initialValue)
+
+            let lastIndex = valuesByRelativeTimestamp.count - 1
+            let lastTimestamp = valuesByRelativeTimestamp[lastIndex].key
+            let resolvedLastValue = valuesByRelativeTimestamp[lastIndex].value(initialValue)
+
+            guard resolvedFirstValue == nil || resolvedLastValue == nil else {
+                continue
+            }
+
+            if resolvedFirstValue == nil {
+                if let resolvedSecondValue = valuesByRelativeTimestamp[1].value(initialValue) {
+                    let replacementFirstValue = resolvedSecondValue.withAlphaComponent(0)
+                    keyframeSeries.valuesByRelativeTimestamp[firstTimestamp] = { _ in replacementFirstValue }
+                }
+            }
+
+            if resolvedLastValue == nil {
+                if let resolvedSecondToLastValue = valuesByRelativeTimestamp[lastIndex-1].value(initialValue) {
+                    let replacementLastValue = resolvedSecondToLastValue.withAlphaComponent(0)
+                    keyframeSeries.valuesByRelativeTimestamp[lastTimestamp] = { _ in replacementLastValue }
+                }
+            }
+
+            keyframeSeriesByProperty[property] = keyframeSeries
         }
     }
 

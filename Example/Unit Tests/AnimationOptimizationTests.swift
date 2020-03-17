@@ -30,7 +30,7 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.curve = CubicBezierAnimationCurve.easeInEaseOut
         parentAnimation.addChild(childAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssertEqual(optimizedAnimation.curve as? CubicBezierAnimationCurve, CubicBezierAnimationCurve.easeInEaseOut)
         XCTAssert(optimizedAnimation.children.allSatisfy { $0.animation.curve is LinearAnimationCurve })
@@ -49,7 +49,7 @@ final class AnimationOptimizationTests: XCTestCase {
         secondChildAnimation.curve = CubicBezierAnimationCurve.easeInEaseOut
         parentAnimation.addChild(secondChildAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssertEqual(optimizedAnimation.curve as? CubicBezierAnimationCurve, CubicBezierAnimationCurve.easeInEaseOut)
         XCTAssert(optimizedAnimation.children.allSatisfy { $0.animation.curve is LinearAnimationCurve })
@@ -66,7 +66,7 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.addChild(grandchildAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
         parentAnimation.addChild(childAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssertEqual(optimizedAnimation.curve as? CubicBezierAnimationCurve, CubicBezierAnimationCurve.easeInEaseOut)
         XCTAssert(optimizedAnimation.children.allSatisfy {
@@ -84,7 +84,7 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.curve = CubicBezierAnimationCurve.easeInEaseOut
         parentAnimation.addChild(childAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssert(optimizedAnimation.curve is LinearAnimationCurve)
         XCTAssert(optimizedAnimation.children.allSatisfy {
@@ -101,7 +101,7 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.curve = CubicBezierAnimationCurve.easeInEaseOut
         parentAnimation.addChild(childAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssert(optimizedAnimation.curve is ParabolicEaseInAnimationCurve)
         XCTAssert(optimizedAnimation.children.allSatisfy {
@@ -122,7 +122,7 @@ final class AnimationOptimizationTests: XCTestCase {
         secondChildAnimation.curve = CubicBezierAnimationCurve.easeInEaseOut
         parentAnimation.addChild(secondChildAnimation, for: \.self, startingAt: 0.5, relativeDuration: 0.5)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssert(optimizedAnimation.curve is LinearAnimationCurve)
         XCTAssert(optimizedAnimation.children.allSatisfy {
@@ -143,7 +143,7 @@ final class AnimationOptimizationTests: XCTestCase {
         secondChildAnimation.curve = CubicBezierAnimationCurve.easeOut
         parentAnimation.addChild(secondChildAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: [\UIView.alpha: 0])
 
         XCTAssert(optimizedAnimation.curve is LinearAnimationCurve)
         XCTAssert(optimizedAnimation.children[0].animation.curve as? CubicBezierAnimationCurve == .easeIn)
@@ -161,7 +161,12 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.addKeyframe(for: \.transform, at: 0, value: .identity)
         parentAnimation.addChild(childAnimation, for: \.self, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(
+            initialValues: [
+                \UIView.alpha: 0,
+                \UIView.transform: CGAffineTransform.identity,
+            ]
+        )
 
         XCTAssertEqual(Array(optimizedAnimation.keyframeSeriesByProperty.keys), [\UIView.alpha])
         XCTAssertEqual(Array(optimizedAnimation.children[0].animation.keyframeSeriesByProperty.keys), [\UIView.transform])
@@ -176,7 +181,7 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.addKeyframe(for: \.propertyTwo, at: 0.5, value: 0.5)
         parentAnimation.addChild(childAnimation, for: \.subelement, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: Factory.initialElementValues)
 
         XCTAssertEqual(Array(optimizedAnimation.keyframeSeriesByProperty.keys), [\Element.subelement.propertyOne])
         XCTAssertEqual(Array(optimizedAnimation.children[0].animation.keyframeSeriesByProperty.keys), [\Element.subelement.propertyTwo])
@@ -190,10 +195,128 @@ final class AnimationOptimizationTests: XCTestCase {
         childAnimation.addKeyframe(for: \.propertyOne, at: 0.5, value: 0.5)
         parentAnimation.addChild(childAnimation, for: \.subelement, startingAt: 0, relativeDuration: 1)
 
-        let optimizedAnimation = parentAnimation.optimized()
+        let optimizedAnimation = parentAnimation.optimized(initialValues: Factory.initialElementValues)
 
         XCTAssertEqual(Array(optimizedAnimation.keyframeSeriesByProperty.keys), [\Element.subelement.propertyOne])
         XCTAssert(optimizedAnimation.children.isEmpty)
+    }
+
+    // MARK: - Tests - Synthesize Nil Colors
+
+    func testSynthesizeNilCGColors_nilFirstColor() {
+        let finalColor = UIColor.red.cgColor
+
+        var animation = Animation<Element>()
+        animation.addKeyframe(for: \.optionalCGColorProperty, at: 0, value: nil)
+        animation.addKeyframe(for: \.optionalCGColorProperty, at: 1, value: finalColor)
+
+        let optimizedAnimation = animation.optimized(initialValues: Factory.initialElementValues)
+
+        guard let keyframeSeries = optimizedAnimation.keyframeSeriesByProperty[\Element.optionalCGColorProperty] as? Animation<Element>.KeyframeSeries<CGColor?> else {
+            XCTFail("Missing keyframe series")
+            return
+        }
+
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp.count, 2)
+        XCTAssertEqual(keyframeSeries.keyframeRelativeTimestamps, [0, 1])
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[0]?(nil), finalColor.copy(alpha: 0))
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[1]?(nil), finalColor)
+    }
+
+    func testSynthesizeNilCGColors_nilLastColor() {
+        let initialColor = UIColor.red.cgColor
+
+        var animation = Animation<Element>()
+        animation.addKeyframe(for: \.optionalCGColorProperty, at: 0, value: initialColor)
+        animation.addKeyframe(for: \.optionalCGColorProperty, at: 1, value: nil)
+
+        let optimizedAnimation = animation.optimized(initialValues: Factory.initialElementValues)
+
+        guard let keyframeSeries = optimizedAnimation.keyframeSeriesByProperty[\Element.optionalCGColorProperty] as? Animation<Element>.KeyframeSeries<CGColor?> else {
+            XCTFail("Missing keyframe series")
+            return
+        }
+
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp.count, 2)
+        XCTAssertEqual(keyframeSeries.keyframeRelativeTimestamps, [0, 1])
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[0]?(nil), initialColor)
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[1]?(nil), initialColor.copy(alpha: 0))
+    }
+
+    func testSynthesizeNilCGColors_nilFirstAndLastColor() {
+        var animation = Animation<Element>()
+        animation.addKeyframe(for: \.optionalCGColorProperty, at: 0, value: nil)
+        animation.addKeyframe(for: \.optionalCGColorProperty, at: 1, value: nil)
+
+        let optimizedAnimation = animation.optimized(initialValues: Factory.initialElementValues)
+
+        guard let keyframeSeries = optimizedAnimation.keyframeSeriesByProperty[\Element.optionalCGColorProperty] as? Animation<Element>.KeyframeSeries<CGColor?> else {
+            XCTFail("Missing keyframe series")
+            return
+        }
+
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp.count, 2)
+        XCTAssertEqual(keyframeSeries.keyframeRelativeTimestamps, [0, 1])
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[0]?(nil), nil)
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[1]?(nil), nil)
+    }
+
+    func testSynthesizeNilUIColors_nilFirstColor() {
+        let finalColor = UIColor.red
+
+        var animation = Animation<Element>()
+        animation.addKeyframe(for: \.optionalUIColorProperty, at: 0, value: nil)
+        animation.addKeyframe(for: \.optionalUIColorProperty, at: 1, value: finalColor)
+
+        let optimizedAnimation = animation.optimized(initialValues: Factory.initialElementValues)
+
+        guard let keyframeSeries = optimizedAnimation.keyframeSeriesByProperty[\Element.optionalUIColorProperty] as? Animation<Element>.KeyframeSeries<UIColor?> else {
+            XCTFail("Missing keyframe series")
+            return
+        }
+
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp.count, 2)
+        XCTAssertEqual(keyframeSeries.keyframeRelativeTimestamps, [0, 1])
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[0]?(nil), finalColor.withAlphaComponent(0))
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[1]?(nil), finalColor)
+    }
+
+    func testSynthesizeNilUIColors_nilLastColor() {
+        let initialColor = UIColor.red
+
+        var animation = Animation<Element>()
+        animation.addKeyframe(for: \.optionalUIColorProperty, at: 0, value: initialColor)
+        animation.addKeyframe(for: \.optionalUIColorProperty, at: 1, value: nil)
+
+        let optimizedAnimation = animation.optimized(initialValues: Factory.initialElementValues)
+
+        guard let keyframeSeries = optimizedAnimation.keyframeSeriesByProperty[\Element.optionalUIColorProperty] as? Animation<Element>.KeyframeSeries<UIColor?> else {
+            XCTFail("Missing keyframe series")
+            return
+        }
+
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp.count, 2)
+        XCTAssertEqual(keyframeSeries.keyframeRelativeTimestamps, [0, 1])
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[0]?(nil), initialColor)
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[1]?(nil), initialColor.withAlphaComponent(0))
+    }
+
+    func testSynthesizeNilUIColors_nilFirstAndLastColor() {
+        var animation = Animation<Element>()
+        animation.addKeyframe(for: \.optionalUIColorProperty, at: 0, value: nil)
+        animation.addKeyframe(for: \.optionalUIColorProperty, at: 1, value: nil)
+
+        let optimizedAnimation = animation.optimized(initialValues: Factory.initialElementValues)
+
+        guard let keyframeSeries = optimizedAnimation.keyframeSeriesByProperty[\Element.optionalUIColorProperty] as? Animation<Element>.KeyframeSeries<UIColor?> else {
+            XCTFail("Missing keyframe series")
+            return
+        }
+
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp.count, 2)
+        XCTAssertEqual(keyframeSeries.keyframeRelativeTimestamps, [0, 1])
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[0]?(nil), nil)
+        XCTAssertEqual(keyframeSeries.valuesByRelativeTimestamp[1]?(nil), nil)
     }
 
 }
@@ -208,6 +331,10 @@ private extension AnimationOptimizationTests {
 
         var subelement: Subelement = .init()
 
+        var optionalCGColorProperty: CGColor?
+
+        var optionalUIColorProperty: UIColor?
+
     }
 
     final class Subelement {
@@ -219,5 +346,18 @@ private extension AnimationOptimizationTests {
         var propertyTwo: Double = 0
 
     }
+
+}
+
+// MARK: -
+
+private enum Factory {
+
+    static let initialElementValues: [PartialKeyPath<AnimationOptimizationTests.Element>: Any] = [
+        \AnimationOptimizationTests.Element.subelement.propertyOne: 0,
+        \AnimationOptimizationTests.Element.subelement.propertyTwo: 0,
+        \AnimationOptimizationTests.Element.optionalCGColorProperty: UIColor.black.cgColor,
+        \AnimationOptimizationTests.Element.optionalUIColorProperty: UIColor.black,
+    ]
 
 }

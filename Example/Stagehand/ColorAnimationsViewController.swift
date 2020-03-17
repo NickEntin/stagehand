@@ -104,6 +104,17 @@ final class ColorAnimationsViewController: DemoViewController {
 
                 self.animationInstance = animation.perform(on: self.contentView)
             }),
+            ("Red (sRGB) -> nil", { [unowned self] in
+                self.animationInstance?.cancel()
+
+                var animation = Animation<UIView>()
+                animation.duration = 2
+
+                animation.addKeyframe(for: \UIView.backgroundColor, at: 0, value: .red)
+                animation.addKeyframe(for: \UIView.backgroundColor, at: 1, value: nil)
+
+                self.animationInstance = animation.perform(on: self.contentView)
+            }),
         ]
     }
 

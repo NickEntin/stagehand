@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+import simd
 import UIKit
 
 extension CATransform3D: AnimatableProperty {
@@ -64,13 +65,13 @@ extension CATransform3D: AnimatableProperty {
         at progress: Double
     ) -> CATransform3D.DecomposedTransform {
         return CATransform3D.DecomposedTransform(
-            scaleX: CGFloat.value(between: initialDecomposition.scaleX, and: finalDecomposition.scaleX, at: progress),
-            scaleY: CGFloat.value(between: initialDecomposition.scaleY, and: finalDecomposition.scaleY, at: progress),
-            scaleZ: CGFloat.value(between: initialDecomposition.scaleZ, and: finalDecomposition.scaleZ, at: progress),
-            skewXY: CGFloat.value(between: initialDecomposition.skewXY, and: finalDecomposition.skewXY, at: progress),
-            skewXZ: CGFloat.value(between: initialDecomposition.skewXZ, and: finalDecomposition.skewXZ, at: progress),
-            skewYZ: CGFloat.value(between: initialDecomposition.skewYZ, and: finalDecomposition.skewYZ, at: progress),
-            rotation: Quaternions.value(between: initialDecomposition.rotation, and: finalDecomposition.rotation, at: progress),
+            scaleX: Double.value(between: initialDecomposition.scaleX, and: finalDecomposition.scaleX, at: progress),
+            scaleY: Double.value(between: initialDecomposition.scaleY, and: finalDecomposition.scaleY, at: progress),
+            scaleZ: Double.value(between: initialDecomposition.scaleZ, and: finalDecomposition.scaleZ, at: progress),
+            skewXY: Double.value(between: initialDecomposition.skewXY, and: finalDecomposition.skewXY, at: progress),
+            skewXZ: Double.value(between: initialDecomposition.skewXZ, and: finalDecomposition.skewXZ, at: progress),
+            skewYZ: Double.value(between: initialDecomposition.skewYZ, and: finalDecomposition.skewYZ, at: progress),
+            rotation: simd_slerp(initialDecomposition.rotation, finalDecomposition.rotation, progress),
             translateX: CGFloat.value(between: initialDecomposition.translateX, and: finalDecomposition.translateX, at: progress),
             translateY: CGFloat.value(between: initialDecomposition.translateY, and: finalDecomposition.translateY, at: progress),
             translateZ: CGFloat.value(between: initialDecomposition.translateZ, and: finalDecomposition.translateZ, at: progress),
@@ -147,9 +148,9 @@ extension CATransform3D {
         decomposedTransform.translateY = matrix.m42
         decomposedTransform.translateZ = matrix.m43
 
-        var row1 = Vector3(v1: matrix.m11, v2: matrix.m12, v3: matrix.m13)
-        var row2 = Vector3(v1: matrix.m21, v2: matrix.m22, v3: matrix.m23)
-        var row3 = Vector3(v1: matrix.m31, v2: matrix.m32, v3: matrix.m33)
+        var row1 = simd_double3(Double(matrix.m11), Double(matrix.m12), Double(matrix.m13))
+        var row2 = simd_double3(Double(matrix.m21), Double(matrix.m22), Double(matrix.m23))
+        var row3 = simd_double3(Double(matrix.m31), Double(matrix.m32), Double(matrix.m33))
 
         // Scale
         //
@@ -179,32 +180,32 @@ extension CATransform3D {
         // This isn't ideal, but it's tough to differentiate between two shears with the same pinned axis and a rotation
         // around that axis (e.g. an XY shear plus a YX shear looks the same as rotating around the Z axis).
 
-        decomposedTransform.scaleX = row1.length()
-        row1.normalize()
+        decomposedTransform.scaleX = simd_length(row1)
+        row1 = simd_normalize(row1)
 
-        decomposedTransform.skewXY = row1.dot(row2)
+        decomposedTransform.skewXY = simd_dot(row1, row2)
 
         // Make row 2 orthogonal to row 1.
         row2 = row2 + (-decomposedTransform.skewXY * row1)
 
-        decomposedTransform.scaleY = row2.length()
-        row2.normalize()
+        decomposedTransform.scaleY = simd_length(row2)
+        row2 = simd_normalize(row2)
         decomposedTransform.skewXY /= decomposedTransform.scaleY
 
         // Calculate XZ and YZ shears and orthagonalize row 3.
-        decomposedTransform.skewXZ = row1.dot(row3)
+        decomposedTransform.skewXZ = simd_dot(row1, row3)
         row3 = row3 + (-decomposedTransform.skewXZ * row1)
 
-        decomposedTransform.skewYZ = row2.dot(row3)
+        decomposedTransform.skewYZ = simd_dot(row2, row3)
         row3 = row3 + (-decomposedTransform.skewYZ * row2)
 
-        decomposedTransform.scaleZ = row3.length()
-        row3.normalize()
+        decomposedTransform.scaleZ = simd_length(row3)
+        row3 = simd_normalize(row3)
         decomposedTransform.skewXZ /= decomposedTransform.scaleZ
         decomposedTransform.skewYZ /= decomposedTransform.scaleZ
 
         // The rows are now orthonormal. Check for a coordinate system flip before moving on to rotation.
-        let determinant = row1.dot(row2.cross(row3))
+        let determinant = simd_dot(row1, simd_cross(row2, row3))
         if determinant < 0 {
             decomposedTransform.scaleX *= -1
             decomposedTransform.scaleY *= -1
@@ -222,34 +223,42 @@ extension CATransform3D {
         // potential to result in gimbal lock while we're interpolating. Instead, we'll decompose the rotation into
         // quaternions.
 
-        let t = row1.v1 + row2.v2 + row3.v3 + 1
+        let t = row1[0] + row2[1] + row3[2] + 1
         if t > 1e-4 {
             let s = 0.5 / sqrt(t)
-            decomposedTransform.rotation.x = (row3.v2 - row2.v3) * s
-            decomposedTransform.rotation.y = (row1.v3 - row3.v1) * s
-            decomposedTransform.rotation.z = (row2.v1 - row1.v2) * s
-            decomposedTransform.rotation.w = 0.25 / s
+            decomposedTransform.rotation = .init(
+                ix: (row3[1] - row2[2]) * s,
+                iy: (row1[2] - row3[0]) * s,
+                iz: (row2[0] - row1[1]) * s,
+                r: 0.25 / s
+            )
 
-        } else if row1.v1 > row2.v2 && row1.v1 > row3.v3 {
-            let s = sqrt(1 + row1.v1 - row2.v2 - row3.v3) * 2
-            decomposedTransform.rotation.x = 0.25 * s
-            decomposedTransform.rotation.y = (row1.v2 + row2.v1) / s
-            decomposedTransform.rotation.z = (row1.v3 + row3.v1) / s
-            decomposedTransform.rotation.w = (row3.v2 - row2.v3) / s
+        } else if row1[0] > row2[1] && row1[0] > row3[2] {
+            let s = sqrt(1 + row1[0] - row2[1] - row3[2]) * 2
+            decomposedTransform.rotation = .init(
+                ix: 0.25 * s,
+                iy: (row1[1] + row2[0]) / s,
+                iz: (row1[2] + row3[0]) / s,
+                r: (row3[1] - row2[2]) / s
+            )
 
-        } else if row2.v2 > row3.v3 {
-            let s = sqrt(1 + row2.v2 - row1.v1 - row3.v3) * 2
-            decomposedTransform.rotation.x = (row1.v2 + row2.v1) / s
-            decomposedTransform.rotation.y = 0.25 * s
-            decomposedTransform.rotation.z = (row2.v3 + row3.v2) / s
-            decomposedTransform.rotation.w = (row1.v3 - row3.v1) / s
+        } else if row2[1] > row3[2] {
+            let s = sqrt(1 + row2[1] - row1[0] - row3[2]) * 2
+            decomposedTransform.rotation = .init(
+                ix: (row1[1] + row2[0]) / s,
+                iy: 0.25 * s,
+                iz: (row2[2] + row3[1]) / s,
+                r: (row1[2] - row3[0]) / s
+            )
 
         } else {
-            let s = sqrt(1 + row3.v3 - row1.v1 - row2.v2) * 2
-            decomposedTransform.rotation.x = (row1.v3 + row3.v1) / s
-            decomposedTransform.rotation.y = (row2.v3 + row3.v2) / s
-            decomposedTransform.rotation.z = 0.25 * s
-            decomposedTransform.rotation.w = (row2.v1 - row1.v2) / s
+            let s = sqrt(1 + row3[2] - row1[0] - row2[1]) * 2
+            decomposedTransform.rotation = .init(
+                ix: (row1[2] + row3[0]) / s,
+                iy: (row2[2] + row3[1]) / s,
+                iz: 0.25 * s,
+                r: (row2[0] - row1[1]) / s
+            )
         }
 
         return decomposedTransform
@@ -321,19 +330,19 @@ extension CATransform3D {
 
     internal struct DecomposedTransform: Equatable {
 
-        var scaleX: CGFloat = 1
+        var scaleX: Double = 1
 
-        var scaleY: CGFloat = 1
+        var scaleY: Double = 1
 
-        var scaleZ: CGFloat = 1
+        var scaleZ: Double = 1
 
-        var skewXY: CGFloat = 0
+        var skewXY: Double = 0
 
-        var skewXZ: CGFloat = 0
+        var skewXZ: Double = 0
 
-        var skewYZ: CGFloat = 0
+        var skewYZ: Double = 0
 
-        var rotation: Quaternions = .init()
+        var rotation: simd_quatd = .init(real: 1, imag: .zero)
 
         var translateX: CGFloat = 0
 
@@ -367,56 +376,47 @@ extension CATransform3D.DecomposedTransform {
 
         transform = CATransform3DTranslate(transform, translateX, translateY, translateZ)
 
-        let qxx = rotation.x * rotation.x
-        let qxy = rotation.x * rotation.y
-        let qxz = rotation.x * rotation.z
-        let qxw = rotation.x * rotation.w
-        let qyy = rotation.y * rotation.y
-        let qyz = rotation.y * rotation.z
-        let qyw = rotation.y * rotation.w
-        let qzz = rotation.z * rotation.z
-        let qzw = rotation.z * rotation.w
-
+        let rotationSIMDMatrix = simd_matrix4x4(rotation)
         let rotationMatrix = CATransform3D(
-            m11: 1 - 2 * (qyy + qzz),
-            m12: 2 * (qxy - qzw),
-            m13: 2 * (qxz + qyw),
-            m14: 0,
-            m21: 2 * (qxy + qzw),
-            m22: 1 - 2 * (qxx + qzz),
-            m23: 2 * (qyz - qxw),
-            m24: 0,
-            m31: 2 * (qxz - qyw),
-            m32: 2 * (qyz + qxw),
-            m33: 1 - 2 * (qxx + qyy),
-            m34: 0,
-            m41: 0,
-            m42: 0,
-            m43: 0,
-            m44: 1
+            m11: CGFloat(rotationSIMDMatrix[0][0]),
+            m12: CGFloat(rotationSIMDMatrix[1][0]),
+            m13: CGFloat(rotationSIMDMatrix[2][0]),
+            m14: CGFloat(rotationSIMDMatrix[3][0]),
+            m21: CGFloat(rotationSIMDMatrix[1][0]),
+            m22: CGFloat(rotationSIMDMatrix[1][1]),
+            m23: CGFloat(rotationSIMDMatrix[1][2]),
+            m24: CGFloat(rotationSIMDMatrix[1][3]),
+            m31: CGFloat(rotationSIMDMatrix[2][0]),
+            m32: CGFloat(rotationSIMDMatrix[2][1]),
+            m33: CGFloat(rotationSIMDMatrix[2][2]),
+            m34: CGFloat(rotationSIMDMatrix[2][3]),
+            m41: CGFloat(rotationSIMDMatrix[3][0]),
+            m42: CGFloat(rotationSIMDMatrix[3][1]),
+            m43: CGFloat(rotationSIMDMatrix[3][2]),
+            m44: CGFloat(rotationSIMDMatrix[3][3])
         )
 
         transform = CATransform3DConcat(rotationMatrix, transform)
 
         if skewYZ != 0 {
             var skewMatrix = CATransform3DIdentity
-            skewMatrix.m32 = skewYZ
+            skewMatrix.m32 = CGFloat(skewYZ)
             transform = CATransform3DConcat(skewMatrix, transform)
         }
 
         if skewXZ != 0 {
             var skewMatrix = CATransform3DIdentity
-            skewMatrix.m31 = skewXZ
+            skewMatrix.m31 = CGFloat(skewXZ)
             transform = CATransform3DConcat(skewMatrix, transform)
         }
 
         if skewXY != 0 {
             var skewMatrix = CATransform3DIdentity
-            skewMatrix.m21 = skewXY
+            skewMatrix.m21 = CGFloat(skewXY)
             transform = CATransform3DConcat(skewMatrix, transform)
         }
 
-        transform = CATransform3DScale(transform, scaleX, scaleY, scaleZ)
+        transform = CATransform3DScale(transform, CGFloat(scaleX), CGFloat(scaleY), CGFloat(scaleZ))
 
         return transform
     }

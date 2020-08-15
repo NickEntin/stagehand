@@ -69,7 +69,7 @@ final class CATransform3DDecompositionTests: XCTestCase {
         ) {
             XCTAssertEqual(
                 CATransform3DMakeScale(x, y, z).decomposed(),
-                CATransform3D.DecomposedTransform(scaleX: x, scaleY: y, scaleZ: z),
+                CATransform3D.DecomposedTransform(scaleX: Double(x), scaleY: Double(y), scaleZ: Double(z)),
                 file: file,
                 line: line
             )
@@ -137,7 +137,7 @@ final class CATransform3DDecompositionTests: XCTestCase {
             line: UInt = #line
         ) {
             XCTAssertEqual(
-                CATransform3D.DecomposedTransform(scaleX: x, scaleY: y, scaleZ: z).recompose(),
+                CATransform3D.DecomposedTransform(scaleX: Double(x), scaleY: Double(y), scaleZ: Double(z)).recompose(),
                 CATransform3DMakeScale(x, y, z),
                 file: file,
                 line: line

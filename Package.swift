@@ -19,24 +19,47 @@
 import PackageDescription
 
 let package = Package(
-	name: "Stagehand",
-	platforms: [
-		.iOS(.v12),
-	],
-	products: [
-		.library(
-			name: "Stagehand",
-			targets: ["Stagehand"]
-		),
-	],
-	targets: [
-		.target(
-			name: "Stagehand",
-			dependencies: [],
-			path: "Sources/Stagehand"
-		),
-	],
-	swiftLanguageVersions: [.v5]
+    name: "Stagehand",
+    platforms: [
+        .iOS(.v12),
+    ],
+    products: [
+        .library(
+            name: "Stagehand",
+            targets: ["Stagehand"]
+        ),
+        .library(
+            name: "StagehandTesting",
+            targets: ["StagehandTesting"]
+        ),
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
+            .exact("1.7.0")
+        )
+    ],
+    targets: [
+        .target(
+            name: "Stagehand",
+            dependencies: [],
+            path: "Sources/Stagehand"
+        ),
+        .target(
+            name: "StagehandTestingCore",
+            dependencies: ["Stagehand"],
+            path: "Sources/StagehandTesting/Core"
+        ),
+        .target(
+            name: "StagehandTesting",
+            dependencies: [
+                "SnapshotTesting",
+                "StagehandTestingCore",
+            ],
+            path: "Sources/StagehandTesting/SnapshotTesting"
+        ),
+    ],
+    swiftLanguageVersions: [.v5]
 )
 
 let version = Version(3, 0, 0)

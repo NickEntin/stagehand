@@ -19,6 +19,10 @@ import UIKit
 
 @testable import Stagehand
 
+#if SWIFT_PACKAGE
+@testable import StagehandTestingCore
+#endif
+
 /// **Do not add conformances to this protocol outside of StagehandTesting**.
 ///
 /// This protocol is an unfortunate workaround for a limitation in how Swift handles extensions. Hopefully this will be

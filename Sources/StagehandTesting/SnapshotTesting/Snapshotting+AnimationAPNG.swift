@@ -20,6 +20,10 @@ import XCTest
 
 @testable import Stagehand
 
+#if SWIFT_PACKAGE
+@testable import StagehandTestingCore
+#endif
+
 extension Snapshotting where Value: SnapshottableViewAnimation, Format == Data {
 
     public static func animatedImage(

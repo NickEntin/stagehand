@@ -12,12 +12,15 @@ PODS:
   - StagehandTesting/SnapshotTesting (4.0.0):
     - SnapshotTesting (~> 1.7)
     - Stagehand (= 4.0.0)
+  - StageManager (1.0.0):
+    - Stagehand (~> 4.0)
 
 DEPENDENCIES:
   - SnapshotTesting (= 1.7.0)
   - Stagehand (from `../`)
   - StagehandTesting/iOSSnapshotTestCase (from `../`)
   - StagehandTesting/SnapshotTesting (from `../`)
+  - StageManager (from `../`)
 
 SPEC REPOS:
   trunk:
@@ -29,13 +32,16 @@ EXTERNAL SOURCES:
     :path: "../"
   StagehandTesting:
     :path: "../"
+  StageManager:
+    :path: "../"
 
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   SnapshotTesting: 273b614fcc60fac7d9f613f6648afa91a7da36be
   Stagehand: 29ee26a0690ebf90a5ea45e86fd88b865baf5403
   StagehandTesting: 3354a5300e7fc6d1ba9ab182762feff9e80cb6de
+  StageManager: ed278cce4f09c03cddf40bf26c60834b5fcb7fea
 
-PODFILE CHECKSUM: b4841bd82e57283ff97d83f4bb89137cc01f6102
+PODFILE CHECKSUM: 33cb7e50d97e00645fa5cb37aef27745d0433eb6
 
 COCOAPODS: 1.10.0

@@ -6,6 +6,8 @@ target 'Stagehand_Example' do
   pod 'Stagehand', :path => '../'
   pod 'StageManager', :path => '../'
 
+  pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
+
   target 'Stagehand-UnitTests' do
     inherit! :search_paths
 
@@ -22,6 +24,18 @@ target 'Stagehand_Example' do
 
     pod 'Stagehand', :path => '../'
   end
+end
+
+target 'StageManager (iOS)' do
+  pod 'StageManagerPrimitives', :path => '../'
+  pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
+end
+
+target 'StageManager (macOS)' do
+  platform :osx, '11.0'
+
+  pod 'StageManagerPrimitives', :path => '../'
+  pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
 end
 
 install! 'cocoapods', disable_input_output_paths: true

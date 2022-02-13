@@ -14,12 +14,14 @@
 //  limitations under the License.
 //
 
+import Memo
 import Stagehand
 import StageManager
 import UIKit
 
 final class ManagedAnimationViewController: DemoViewController {
 
+    
     // MARK: - Life Cycle
 
     override init() {
@@ -45,6 +47,13 @@ final class ManagedAnimationViewController: DemoViewController {
                 rightToLeftAnimation.perform(on: self.mainView)
             }),
         ]
+
+        do {
+            try memoServer.start()
+            print("Started memo server")
+        } catch {
+            print("Failed to start memo server")
+        }
     }
 
     // MARK: - Private Properties
@@ -52,6 +61,8 @@ final class ManagedAnimationViewController: DemoViewController {
     private let mainView: View = .init()
 
     private let stageManager: StageManager = .init()
+
+    private let memoServer: Memo.Server = .init()
 
     // MARK: - Private Static Methods
 

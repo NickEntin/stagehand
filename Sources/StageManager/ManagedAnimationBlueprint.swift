@@ -15,6 +15,7 @@
 //
 
 import Stagehand
+import StageManagerPrimitives
 
 public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
@@ -41,7 +42,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         for property: WritableKeyPath<ElementType, Double>,
         keyframes: [(relativeTimestamp: Double, value: Double)]
     ) {
-        addManagedKeyframes(named: name, for: property, keyframeSequence: .double(keyframes))
+        addManagedKeyframes(named: name, for: property, keyframeSequence: .double(keyframes.map(Keyframe.init(_:))))
     }
 
     public mutating func addManagedKeyframes(
@@ -49,7 +50,24 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         for property: WritableKeyPath<ElementType, CGFloat>,
         keyframes: [(relativeTimestamp: Double, value: CGFloat)]
     ) {
-        addManagedKeyframes(named: name, for: property, keyframeSequence: .cgfloat(keyframes))
+        addManagedKeyframes(named: name, for: property, keyframeSequence: .cgfloat(keyframes.map(Keyframe.init(_:))))
+    }
+
+    // MARK: - Internal Methods
+
+    internal func prepareForSerialization(name: String) -> AnimationBlueprint {
+        let repeatStyle: AnimationBlueprint.RepeatStyle
+        switch implicitRepeatStyle {
+        case let .repeating(count, autoreversing):
+            repeatStyle = .init(count: count, autoreversing: autoreversing)
+        }
+
+        return AnimationBlueprint(
+            name: name,
+            implicitDuration: implicitDuration,
+            implicitRepeatStyle: repeatStyle,
+            managedKeyframeSeries: managedKeyframeSeries.map(AnimationBlueprint.ManagedKeyframeSeries.init(series:))
+        )
     }
 
     // MARK: - Private Methods
@@ -80,10 +98,10 @@ internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 
 }
 
-internal enum KeyframeSequence {
+extension AnimationBlueprint.ManagedKeyframeSeries {
 
-    case double([(Double, Double)])
-
-    case cgfloat([(Double, CGFloat)])
+    init<ElementType: AnyObject>(series: ManagedKeyframeSeries<ElementType>) {
+        self.init(name: series.name, keyframeSequence: series.keyframeSequence)
+    }
 
 }

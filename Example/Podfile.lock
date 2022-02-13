@@ -4,6 +4,9 @@ PODS:
   - iOSSnapshotTestCase/Core (6.2.0)
   - iOSSnapshotTestCase/SwiftSupport (6.2.0):
     - iOSSnapshotTestCase/Core
+  - Memo (0.1.0):
+    - PeerTalk (~> 0.1)
+  - PeerTalk (0.1.0)
   - SnapshotTesting (1.7.0)
   - Stagehand (4.0.0)
   - StagehandTesting/iOSSnapshotTestCase (4.0.0):
@@ -13,35 +16,48 @@ PODS:
     - SnapshotTesting (~> 1.7)
     - Stagehand (= 4.0.0)
   - StageManager (1.0.0):
+    - Memo
     - Stagehand (~> 4.0)
+    - StageManagerPrimitives (~> 1.0)
+  - StageManagerPrimitives (1.0.0)
 
 DEPENDENCIES:
+  - Memo (from `../../Memo-Swift/Memo.podspec`)
   - SnapshotTesting (= 1.7.0)
   - Stagehand (from `../`)
   - StagehandTesting/iOSSnapshotTestCase (from `../`)
   - StagehandTesting/SnapshotTesting (from `../`)
   - StageManager (from `../`)
+  - StageManagerPrimitives (from `../`)
 
 SPEC REPOS:
   trunk:
     - iOSSnapshotTestCase
+    - PeerTalk
     - SnapshotTesting
 
 EXTERNAL SOURCES:
+  Memo:
+    :path: "../../Memo-Swift/Memo.podspec"
   Stagehand:
     :path: "../"
   StagehandTesting:
     :path: "../"
   StageManager:
     :path: "../"
+  StageManagerPrimitives:
+    :path: "../"
 
 SPEC CHECKSUMS:
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
+  Memo: 380c1e0013629ad399fb7f6969ff9a6e2650731e
+  PeerTalk: 7ad12ee847f28748f8996afdae3add70f7670306
   SnapshotTesting: 273b614fcc60fac7d9f613f6648afa91a7da36be
   Stagehand: 29ee26a0690ebf90a5ea45e86fd88b865baf5403
   StagehandTesting: 3354a5300e7fc6d1ba9ab182762feff9e80cb6de
-  StageManager: ed278cce4f09c03cddf40bf26c60834b5fcb7fea
+  StageManager: 5d935f71a18bb59b6b19d57a291f8bc0e0901871
+  StageManagerPrimitives: 1e2a9dd2a7911be96b884ce673db9cda18a2ef64
 
-PODFILE CHECKSUM: 33cb7e50d97e00645fa5cb37aef27745d0433eb6
+PODFILE CHECKSUM: 0eadfd44a9107557d7323ed53540cec278177556
 
 COCOAPODS: 1.10.0

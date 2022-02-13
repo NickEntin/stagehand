@@ -14,13 +14,21 @@
 //  limitations under the License.
 //
 
+import Memo
 import Stagehand
+import StageManagerPrimitives
 
 public final class StageManager {
 
     // MARK: - Life Cycle
 
-    public init() {}
+    public init() {
+        try! memoServer.start()
+    }
+
+    deinit {
+        memoServer.stop()
+    }
 
     // MARK: - Public Methods
 
@@ -28,7 +36,15 @@ public final class StageManager {
         named name: String,
         blueprint: ManagedAnimationBlueprint<ElementType>
     ) -> ManagedAnimation<ElementType> {
-        return ManagedAnimation(blueprint: blueprint)
+        let animation = ManagedAnimation(blueprint: blueprint)
+        managedAnimations[name] = animation
+        return animation
     }
+
+    // MARK: - Private Properties
+
+    private let memoServer: Memo.Server = .init(name: UIDevice.current.name)
+
+    private var managedAnimations: [String: AnyObject] = [:]
 
 }

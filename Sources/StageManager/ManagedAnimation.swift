@@ -15,7 +15,7 @@
 //
 
 import Stagehand
-import Foundation
+import StageManagerPrimitives
 
 public final class ManagedAnimation<ElementType: AnyObject> {
 
@@ -68,13 +68,13 @@ public final class ManagedAnimation<ElementType: AnyObject> {
     }
 
     private func add<PropertyType: AnimatableProperty>(
-        keyframes: [(Double, PropertyType)],
+        keyframes: [Keyframe<PropertyType>],
         for property: PartialKeyPath<ElementType>,
         to animation: inout Animation<ElementType>
     ) {
         let writableProperty = property as! WritableKeyPath<ElementType, PropertyType>
-        for (relativeTimestamp, value) in keyframes {
-            animation.addKeyframe(for: writableProperty, at: relativeTimestamp, value: value)
+        for keyframe in keyframes {
+            animation.addKeyframe(for: writableProperty, at: keyframe.relativeTimestamp, value: keyframe.value)
         }
     }
 

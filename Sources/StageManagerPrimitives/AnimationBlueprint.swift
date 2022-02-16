@@ -16,11 +16,13 @@ public struct AnimationBlueprint: Codable {
     // MARK: - Life Cycle
 
     public init(
+        id: UUID,
         name: String,
         implicitDuration: TimeInterval,
         implicitRepeatStyle: AnimationBlueprint.RepeatStyle,
         managedKeyframeSeries: [AnimationBlueprint.ManagedKeyframeSeries]
     ) {
+        self.id = id
         self.name = name
         self.implicitDuration = implicitDuration
         self.implicitRepeatStyle = implicitRepeatStyle
@@ -29,11 +31,15 @@ public struct AnimationBlueprint: Codable {
 
     // MARK: - Public Properties
 
+    public var id: UUID
+
     public var name: String
 
     public var implicitDuration: TimeInterval
 
     public var implicitRepeatStyle: RepeatStyle
+
+    // TODO: Include curve
 
     public var managedKeyframeSeries: [ManagedKeyframeSeries]
 
@@ -60,12 +66,15 @@ public struct AnimationBlueprint: Codable {
 
         // MARK: - Life Cycle
 
-        public init(name: String, keyframeSequence: KeyframeSequence) {
+        public init(id: UUID, name: String, keyframeSequence: KeyframeSequence) {
+            self.id = id
             self.name = name
             self.keyframeSequence = keyframeSequence
         }
 
         // MARK: - Public Properties
+
+        public var id: UUID
 
         public var name: String
 

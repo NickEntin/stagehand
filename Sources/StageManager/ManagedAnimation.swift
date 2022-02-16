@@ -22,12 +22,12 @@ public final class ManagedAnimation<ElementType: AnyObject> {
     // MARK: - Life Cycle
 
     internal init(blueprint: ManagedAnimationBlueprint<ElementType>) {
-        self.managedKeyframeSeries = blueprint.managedKeyframeSeries
+        self.blueprint = blueprint
     }
 
-    // MARK: - Private Properties
+    // MARK: - Internal Properties
 
-    private var managedKeyframeSeries: [ManagedKeyframeSeries<ElementType>] = []
+    internal var blueprint: ManagedAnimationBlueprint<ElementType>
 
     // MARK: - Public Methods
 
@@ -55,7 +55,11 @@ public final class ManagedAnimation<ElementType: AnyObject> {
     private func buildAnimation() -> Animation<ElementType> {
         var animation = Animation<ElementType>()
 
-        for keyframeSeries in managedKeyframeSeries {
+        animation.implicitDuration = blueprint.implicitDuration
+        animation.implicitRepeatStyle = blueprint.implicitRepeatStyle
+        animation.curve = blueprint.curve
+
+        for keyframeSeries in blueprint.managedKeyframeSeries {
             switch keyframeSeries.keyframeSequence {
             case let .double(keyframes):
                 add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)

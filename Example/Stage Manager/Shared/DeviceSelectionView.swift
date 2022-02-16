@@ -58,13 +58,10 @@ struct AvailableTransceiver: Identifiable {
 
 }
 
-final class Client: NSObject, ObservableObject {
+final class Client: ObservableObject {
 
-    override init() {
+    init() {
         memoClient = Memo.Client()
-
-        super.init()
-
         memoClient.delegate = self
 
         Task {

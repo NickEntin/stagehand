@@ -67,6 +67,8 @@
 		D2FCB22927B092D600FB97F4 /* DeviceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB22627B0922C00FB97F4 /* DeviceSelectionView.swift */; };
 		D2FCB22B27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */; };
 		D2FCB22C27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */; };
+		D2FCB24427BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */; };
+		D2FCB24527BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */; };
 		EDE46CB6F253F6D21068EF4F /* Pods_StageManager__macOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB89D4C220D05351840C15C /* Pods_StageManager__macOS_.framework */; };
 /* End PBXBuildFile section */
 
@@ -165,6 +167,7 @@
 		D2FCB21827B0879400FB97F4 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		D2FCB22627B0922C00FB97F4 /* DeviceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSelectionView.swift; sourceTree = "<group>"; };
 		D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationSelectionView.swift; sourceTree = "<group>"; };
+		D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDetailsView.swift; sourceTree = "<group>"; };
 		E9E8270E78934D4E99FC9067 /* Pods_StageManager__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StageManager__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F058A67C239ED37BC34BE76C /* Pods_Stagehand_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stagehand_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC42083017E18C3B5F030B47 /* Pods-Stagehand-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand-UnitTests.release.xcconfig"; path = "Target Support Files/Pods-Stagehand-UnitTests/Pods-Stagehand-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -423,6 +426,7 @@
 				D2FCB20B27B0879300FB97F4 /* ContentView.swift */,
 				D2FCB22627B0922C00FB97F4 /* DeviceSelectionView.swift */,
 				D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */,
+				D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */,
 				D2FCB20C27B0879400FB97F4 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -904,6 +908,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2FCB24427BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */,
 				D2FCB22B27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */,
 				D2FCB22827B092D500FB97F4 /* DeviceSelectionView.swift in Sources */,
 				D2FCB21B27B0879400FB97F4 /* ContentView.swift in Sources */,
@@ -915,6 +920,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2FCB24527BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */,
 				D2FCB22C27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */,
 				D2FCB22927B092D600FB97F4 /* DeviceSelectionView.swift in Sources */,
 				D2FCB21C27B0879400FB97F4 /* ContentView.swift in Sources */,
@@ -1204,7 +1210,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1243,7 +1249,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;

@@ -7,8 +7,8 @@
 //
 
 import Memo
-import SwiftUI
 import StageManagerPrimitives
+import SwiftUI
 
 struct AnimationSelectionView: View {
 
@@ -24,7 +24,12 @@ struct AnimationSelectionView: View {
             HStack {
                 VStack(alignment: .leading) {
                     ForEach(transceiver.managedAnimations) { animation in
-                        Text(animation.displayName)
+                        NavigationLink {
+                            AnimationDetailsView(animation: animation.blueprint, transceiver: transceiver)
+                        } label: {
+                            Text(animation.displayName)
+                                .padding()
+                        }
                     }
                 }
                 Spacer()
@@ -46,16 +51,23 @@ struct ManagedAnimation: Identifiable {
 
 }
 
-final class Transceiver: NSObject, ObservableObject {
+final class Transceiver: ObservableObject {
 
     init(memoTransceiver: Memo.Transceiver) {
         self.memoTransceiver = memoTransceiver
+        memoTransceiver.delegate = self
     }
 
-    @State
+    @Published
     var managedAnimations: [ManagedAnimation] = []
 
     private let memoTransceiver: Memo.Transceiver
+
+    public func updateAnimation(_ blueprint: AnimationBlueprint) async throws {
+        let encoder = JSONEncoder()
+        let payload = try encoder.encode(ClientToServerMessage.updateAnimation(blueprint))
+        try await memoTransceiver.send(payload: payload)
+    }
 
 }
 
@@ -65,21 +77,21 @@ extension Transceiver: Memo.TransceiverDelegate {
         let jsonDecoder = JSONDecoder()
 
         do {
-            let message = try jsonDecoder.decode(StageManagerMessage.self, from: payload)
+            let message = try jsonDecoder.decode(ServerToClientMessage.self, from: payload)
 
             switch message {
             case let .registerAnimation(blueprint):
                 managedAnimations.append(
                     ManagedAnimation(
-                        id: blueprint.name,
+                        id: blueprint.name, // TODO
                         displayName: blueprint.name,
                         blueprint: blueprint
                     )
                 )
             }
 
-        } catch {
-            return
+        } catch let error {
+            print("Failed to decode message: \(error)")
         }
     }
 

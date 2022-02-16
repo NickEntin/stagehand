@@ -55,20 +55,20 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     // MARK: - Internal Methods
 
-    internal func prepareForSerialization(name: String) -> AnimationBlueprint {
-        let repeatStyle: AnimationBlueprint.RepeatStyle
-        switch implicitRepeatStyle {
-        case let .repeating(count, autoreversing):
-            repeatStyle = .init(count: count, autoreversing: autoreversing)
-        }
-
-        return AnimationBlueprint(
-            name: name,
-            implicitDuration: implicitDuration,
-            implicitRepeatStyle: repeatStyle,
-            managedKeyframeSeries: managedKeyframeSeries.map(AnimationBlueprint.ManagedKeyframeSeries.init(series:))
-        )
-    }
+//    internal func serialize(name: String) -> AnimationBlueprint {
+//        let repeatStyle: AnimationBlueprint.RepeatStyle
+//        switch implicitRepeatStyle {
+//        case let .repeating(count, autoreversing):
+//            repeatStyle = .init(count: count, autoreversing: autoreversing)
+//        }
+//
+//        return AnimationBlueprint(
+//            name: name,
+//            implicitDuration: implicitDuration,
+//            implicitRepeatStyle: repeatStyle,
+//            managedKeyframeSeries: managedKeyframeSeries.map(AnimationBlueprint.ManagedKeyframeSeries.init(series:))
+//        )
+//    }
 
     // MARK: - Private Methods
 
@@ -79,6 +79,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
     ) {
         managedKeyframeSeries.append(
             ManagedKeyframeSeries(
+                id: UUID(),
                 name: name,
                 property: property,
                 keyframeSequence: keyframeSequence
@@ -90,18 +91,12 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
 internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 
+    var id: UUID
+
     var name: String
 
     var property: PartialKeyPath<ElementType>
 
     var keyframeSequence: KeyframeSequence
-
-}
-
-extension AnimationBlueprint.ManagedKeyframeSeries {
-
-    init<ElementType: AnyObject>(series: ManagedKeyframeSeries<ElementType>) {
-        self.init(name: series.name, keyframeSequence: series.keyframeSequence)
-    }
 
 }

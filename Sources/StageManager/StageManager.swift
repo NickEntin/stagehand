@@ -23,7 +23,13 @@ public final class StageManager {
     // MARK: - Life Cycle
 
     public init() {
-        try! memoServer.start()
+        memoServer.delegate = self
+
+        do {
+            try memoServer.start()
+        } catch {
+            print("[StageManager] Failed to start Memo server")
+        }
     }
 
     deinit {
@@ -37,14 +43,63 @@ public final class StageManager {
         blueprint: ManagedAnimationBlueprint<ElementType>
     ) -> ManagedAnimation<ElementType> {
         let animation = ManagedAnimation(blueprint: blueprint)
-        managedAnimations[name] = animation
+        let id = UUID()
+        managedAnimations[id] = AnyManagedAnimation(managedAnimation: animation, id: id, name: name)
         return animation
     }
 
     // MARK: - Private Properties
 
-    private let memoServer: Memo.Server = .init(name: UIDevice.current.name)
+    private let memoServer: Memo.Server = .init()
 
-    private var managedAnimations: [String: AnyObject] = [:]
+    private var managedAnimations: [UUID: AnyManagedAnimation] = [:]
+
+    private var transceivers: [Transceiver] = []
+
+    // MARK: - Private Methods
+
+    private func register(_ blueprint: AnimationBlueprint, with transceiver: Transceiver) {
+        let message = ServerToClientMessage.registerAnimation(blueprint)
+        let jsonEncoder = JSONEncoder()
+        Task {
+            try await transceiver.send(payload: try jsonEncoder.encode(message))
+        }
+    }
+
+}
+
+extension StageManager: Memo.ServerDelegate {
+
+    public func server(_ server: Server, didReceiveIncomingConnection transceiver: Transceiver) {
+        transceiver.delegate = self
+        transceivers.append(transceiver)
+
+        managedAnimations.forEach { (id, managedAnimation) in
+            register(managedAnimation.serialize(), with: transceiver)
+        }
+    }
+
+    public func server(_ server: Server, didFailWithError error: Error) {
+        // TODO
+    }
+
+}
+
+extension StageManager: Memo.TransceiverDelegate {
+
+    public func transceiver(_ transceiver: Transceiver, didReceivePayload payload: Data) {
+        let decoder = JSONDecoder()
+        do {
+            let message = try decoder.decode(ClientToServerMessage.self, from: payload)
+
+            switch message {
+            case let .updateAnimation(blueprint):
+                try managedAnimations[blueprint.id]?.update(from: blueprint)
+            }
+
+        } catch let error {
+            print("Failed to complete received action: \(error)")
+        }
+    }
 
 }

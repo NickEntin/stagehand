@@ -1,27 +1,27 @@
 //
-//  Payload.swift
-//  StageManagerPrimitives
+//  ClientToServerMessage.swift
+//  StageManager
 //
-//  Created by Nick Entin on 2/12/22.
+//  Created by Nick Entin on 2/15/22.
 //
 
 import Foundation
 
-public enum StageManagerMessage {
+public enum ClientToServerMessage {
 
-    case registerAnimation(AnimationBlueprint)
+    case updateAnimation(AnimationBlueprint)
 
 }
 
-extension StageManagerMessage {
+extension ClientToServerMessage {
 
     enum CodingKeys: CodingKey {
-        case registerAnimation
+        case updateAnimation
     }
 
 }
 
-extension StageManagerMessage: Decodable {
+extension ClientToServerMessage: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -36,21 +36,21 @@ extension StageManagerMessage: Decodable {
         }
 
         switch key {
-        case .registerAnimation:
-            self = .registerAnimation(try container.decode(AnimationBlueprint.self, forKey: .registerAnimation))
+        case .updateAnimation:
+            self = .updateAnimation(try container.decode(AnimationBlueprint.self, forKey: .updateAnimation))
         }
     }
 
 }
 
-extension StageManagerMessage: Encodable {
+extension ClientToServerMessage: Encodable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         switch self {
-        case let .registerAnimation(blueprint):
-            try container.encode(blueprint, forKey: .registerAnimation)
+        case let .updateAnimation(blueprint):
+            try container.encode(blueprint, forKey: .updateAnimation)
         }
     }
 

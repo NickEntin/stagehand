@@ -6,27 +6,35 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
+import StageManagerPrimitives
 import SwiftUI
 
 struct ContentView: View {
 
+    @State
+    var animationDetailsParams: (AnimationBlueprint, Transceiver)?
+
     var body: some View {
-        NavigationView {
-            DeviceSelectionView()
+        HStack {
+            NavigationView {
+                DeviceSelectionView(
+                    animationSelectionAction: { (animation, transceiver) in
+                        animationDetailsParams = (animation, transceiver)
+                    }
+                )
                 .navigationTitle("Devices")
-//            Text("Hello, World!")
-//                .navigationTitle("Navigation")
-//            Text("Hello, World!")
-//                .navigationTitle("Navigation")
+            }
+//            .frame(minWidth: 350)
+//            .layoutPriority(0.3)
+//            ZStack {
+//                Color.purple
+//                if let (animation, transceiver) = animationDetailsParams {
+//                    AnimationDetailsView(animation: animation, transceiver: transceiver)
+//                }
+//            }
+//            .layoutPriority(0.7)
+
         }
-    }
-
-}
-
-struct ContentView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        ContentView()
     }
 
 }

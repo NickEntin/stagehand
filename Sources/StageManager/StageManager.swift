@@ -50,7 +50,7 @@ public final class StageManager {
 
     // MARK: - Private Properties
 
-    private let memoServer: Memo.Server = .init()
+    private let memoServer: Memo.Server = .init(config: .stageManager)
 
     private var managedAnimations: [UUID: AnyManagedAnimation] = [:]
 
@@ -61,9 +61,25 @@ public final class StageManager {
     private func register(_ blueprint: AnimationBlueprint, with transceiver: Transceiver) {
         let message = ServerToClientMessage.registerAnimation(blueprint)
         let jsonEncoder = JSONEncoder()
-        Task {
-            try await transceiver.send(payload: try jsonEncoder.encode(message))
+
+        let payload = try! jsonEncoder.encode(message)
+
+        @Sendable
+        func send(payload: Data, retryCount: Int) {
+            Task {
+                do {
+                    try await transceiver.send(payload: payload)
+                } catch {
+                    if retryCount > 0 {
+                        print("Failed to send blueprint")
+                        try await Task.sleep(nanoseconds: UInt64(1 * Double(NSEC_PER_SEC)))
+                        send(payload: payload, retryCount: retryCount - 1)
+                    }
+                }
+            }
         }
+
+        send(payload: payload, retryCount: 10)
     }
 
 }
@@ -71,11 +87,11 @@ public final class StageManager {
 extension StageManager: Memo.ServerDelegate {
 
     public func server(_ server: Server, didReceiveIncomingConnection transceiver: Transceiver) {
-        transceiver.delegate = self
+        transceiver.addObserver(self)
         transceivers.append(transceiver)
 
-        managedAnimations.forEach { (id, managedAnimation) in
-            register(managedAnimation.serialize(), with: transceiver)
+        self.managedAnimations.forEach { (id, managedAnimation) in
+            self.register(managedAnimation.serialize(), with: transceiver)
         }
     }
 
@@ -85,7 +101,7 @@ extension StageManager: Memo.ServerDelegate {
 
 }
 
-extension StageManager: Memo.TransceiverDelegate {
+extension StageManager: Memo.TransceiverObserver {
 
     public func transceiver(_ transceiver: Transceiver, didReceivePayload payload: Data) {
         let decoder = JSONDecoder()
@@ -100,6 +116,14 @@ extension StageManager: Memo.TransceiverDelegate {
         } catch let error {
             print("Failed to complete received action: \(error)")
         }
+    }
+
+    public func transceiverDidUpdateConnection(_ transceiver: Transceiver) {
+        // No-op.
+    }
+
+    public func transceiverDidLoseConnection(_ transceiver: Transceiver) {
+        // No-op.
     }
 
 }

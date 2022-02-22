@@ -12,5 +12,7 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.0.1'
 
+  s.dependency 'Memo'
+
   s.source_files = 'Sources/StageManagerPrimitives/**/*'
 end

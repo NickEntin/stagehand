@@ -12,18 +12,24 @@ import SwiftUI
 
 struct AnimationSelectionView: View {
 
-    init(transceiver: Memo.Transceiver) {
+    init(transceiver: Memo.Transceiver, animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void) {
         self.transceiver = Transceiver(memoTransceiver: transceiver)
+        self.animationSelectionAction = animationSelectionAction
     }
 
     @ObservedObject
     var transceiver: Transceiver
+
+    var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
 
     var body: some View {
         ScrollView {
             HStack {
                 VStack(alignment: .leading) {
                     ForEach(transceiver.managedAnimations) { animation in
+//                        Button(animation.displayName) {
+//                            animationSelectionAction(animation.blueprint, transceiver)
+//                        }
                         NavigationLink {
                             AnimationDetailsView(animation: animation.blueprint, transceiver: transceiver)
                         } label: {
@@ -55,7 +61,7 @@ final class Transceiver: ObservableObject {
 
     init(memoTransceiver: Memo.Transceiver) {
         self.memoTransceiver = memoTransceiver
-        memoTransceiver.delegate = self
+        memoTransceiver.addObserver(self)
     }
 
     @Published
@@ -71,7 +77,7 @@ final class Transceiver: ObservableObject {
 
 }
 
-extension Transceiver: Memo.TransceiverDelegate {
+extension Transceiver: Memo.TransceiverObserver {
 
     func transceiver(_ transceiver: Memo.Transceiver, didReceivePayload payload: Data) {
         let jsonDecoder = JSONDecoder()
@@ -81,6 +87,7 @@ extension Transceiver: Memo.TransceiverDelegate {
 
             switch message {
             case let .registerAnimation(blueprint):
+                print("[AnimationSelectionView] Adding managed animation: \"\(blueprint.name)\"")
                 managedAnimations.append(
                     ManagedAnimation(
                         id: blueprint.name, // TODO
@@ -93,6 +100,14 @@ extension Transceiver: Memo.TransceiverDelegate {
         } catch let error {
             print("Failed to decode message: \(error)")
         }
+    }
+
+    func transceiverDidUpdateConnection(_ transceiver: Memo.Transceiver) {
+        // No-op.
+    }
+
+    func transceiverDidLoseConnection(_ transceiver: Memo.Transceiver) {
+        // No-op.
     }
 
 }

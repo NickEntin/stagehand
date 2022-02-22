@@ -7,16 +7,21 @@
 //
 
 import Memo
+import StageManagerPrimitives
 import SwiftUI
 
 struct DeviceSelectionView: View {
 
-    init() {
+    init(animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void) {
+        self.animationSelectionAction = animationSelectionAction
+
         client = Client()
     }
 
     @ObservedObject
     var client: Client
+
+    var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
 
     var body: some View {
         ScrollView {
@@ -24,7 +29,10 @@ struct DeviceSelectionView: View {
                 VStack(alignment: .leading) {
                     ForEach(client.availableTransceivers) { transceiver in
                         NavigationLink {
-                            AnimationSelectionView(transceiver: transceiver.memoTransceiver)
+                            AnimationSelectionView(
+                                transceiver: transceiver.memoTransceiver,
+                                animationSelectionAction: animationSelectionAction
+                            )
                         } label: {
                             Text(transceiver.displayName)
                                 .padding()
@@ -36,14 +44,6 @@ struct DeviceSelectionView: View {
             Spacer()
         }
 
-    }
-
-}
-
-struct DeviceSelectionView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        DeviceSelectionView()
     }
 
 }
@@ -61,7 +61,7 @@ struct AvailableTransceiver: Identifiable {
 final class Client: ObservableObject {
 
     init() {
-        memoClient = Memo.Client()
+        memoClient = Memo.Client(config: .stageManager)
         memoClient.delegate = self
 
         Task {

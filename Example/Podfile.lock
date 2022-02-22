@@ -19,7 +19,8 @@ PODS:
     - Memo
     - Stagehand (~> 4.0)
     - StageManagerPrimitives (~> 1.0)
-  - StageManagerPrimitives (1.0.0)
+  - StageManagerPrimitives (1.0.0):
+    - Memo
 
 DEPENDENCIES:
   - Memo (from `../../Memo-Swift/Memo.podspec`)
@@ -56,7 +57,7 @@ SPEC CHECKSUMS:
   Stagehand: 29ee26a0690ebf90a5ea45e86fd88b865baf5403
   StagehandTesting: 3354a5300e7fc6d1ba9ab182762feff9e80cb6de
   StageManager: 5d935f71a18bb59b6b19d57a291f8bc0e0901871
-  StageManagerPrimitives: 1e2a9dd2a7911be96b884ce673db9cda18a2ef64
+  StageManagerPrimitives: ba46fbe2e6ffed4b159906dd0c26b92c2936b4f6
 
 PODFILE CHECKSUM: 0eadfd44a9107557d7323ed53540cec278177556
 

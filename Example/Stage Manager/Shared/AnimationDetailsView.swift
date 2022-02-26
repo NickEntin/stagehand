@@ -81,6 +81,9 @@ struct AnimationDetailsView: View {
                     )
                 }
             }
+            ForEach($animation.managedKeyframeSeries) { series in
+                KeyframeSeriesView(keyframeSeries: series)
+            }
         }
         .navigationTitle(animation.name)
         HStack {

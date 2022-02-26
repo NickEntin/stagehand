@@ -59,7 +59,7 @@ public final class ManagedAnimation<ElementType: AnyObject> {
         animation.implicitRepeatStyle = blueprint.implicitRepeatStyle
         animation.curve = blueprint.curve
 
-        for keyframeSeries in blueprint.managedKeyframeSeries {
+        for keyframeSeries in blueprint.managedKeyframeSeries.filter({ $0.enabled }) {
             switch keyframeSeries.keyframeSequence {
             case let .double(keyframes):
                 add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)
@@ -67,6 +67,10 @@ public final class ManagedAnimation<ElementType: AnyObject> {
                 add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)
             }
         }
+
+        // TODO: Add unmanaged keyframe series
+
+        // TODO: Add managed property assignments
 
         return animation
     }

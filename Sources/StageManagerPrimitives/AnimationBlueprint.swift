@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AnimationBlueprint: Codable {
+public struct AnimationBlueprint: Codable, Identifiable {
 
     // MARK: - Public Static Properties
 
@@ -62,13 +62,14 @@ public struct AnimationBlueprint: Codable {
 
     }
 
-    public struct ManagedKeyframeSeries: Codable {
+    public struct ManagedKeyframeSeries: Codable, Identifiable {
 
         // MARK: - Life Cycle
 
-        public init(id: UUID, name: String, keyframeSequence: KeyframeSequence) {
+        public init(id: UUID, name: String, enabled: Bool, keyframeSequence: KeyframeSequence) {
             self.id = id
             self.name = name
+            self.enabled = enabled
             self.keyframeSequence = keyframeSequence
         }
 
@@ -77,6 +78,8 @@ public struct AnimationBlueprint: Codable {
         public var id: UUID
 
         public var name: String
+
+        public var enabled: Bool
 
         public var keyframeSequence: KeyframeSequence
 

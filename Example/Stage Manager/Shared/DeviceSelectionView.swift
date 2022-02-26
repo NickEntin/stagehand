@@ -88,12 +88,14 @@ extension Client: Memo.ClientDelegate {
 
     func clientDidUpdateAvailableTransceivers(client: Memo.Client) {
         print("Updating available transceivers")
-        availableTransceivers = client.availableTransceivers.map { transceiver in
-            AvailableTransceiver(
-                id: transceiver.deviceToken.uuidString,
-                displayName: transceiver.name.isEmpty ? "(null)" : transceiver.name,
-                memoTransceiver: transceiver
-            )
+        DispatchQueue.main.async {
+            availableTransceivers = client.availableTransceivers.map { transceiver in
+                AvailableTransceiver(
+                    id: transceiver.deviceToken.uuidString,
+                    displayName: transceiver.name.isEmpty ? "(null)" : transceiver.name,
+                    memoTransceiver: transceiver
+                )
+            }
         }
     }
 

@@ -62,6 +62,8 @@
 		D2883ABD27C0CA8B009AC3A1 /* StepperRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */; };
 		D2883ABF27C3A24F009AC3A1 /* OptionPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2883ABE27C3A24F009AC3A1 /* OptionPickerView.swift */; };
 		D2883AC027C3A24F009AC3A1 /* OptionPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2883ABE27C3A24F009AC3A1 /* OptionPickerView.swift */; };
+		D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
+		D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2FCB20827AFD92100FB97F4 /* ManagedAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */; };
 		D2FCB21927B0879400FB97F4 /* StageManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB20A27B0879300FB97F4 /* StageManagerApp.swift */; };
 		D2FCB21A27B0879400FB97F4 /* StageManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB20A27B0879300FB97F4 /* StageManagerApp.swift */; };
@@ -167,6 +169,7 @@
 		D24516EB27C48D1100491DEB /* SwitchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRow.swift; sourceTree = "<group>"; };
 		D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperRow.swift; sourceTree = "<group>"; };
 		D2883ABE27C3A24F009AC3A1 /* OptionPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionPickerView.swift; sourceTree = "<group>"; };
+		D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSeriesView.swift; sourceTree = "<group>"; };
 		D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedAnimationViewController.swift; sourceTree = "<group>"; };
 		D2FCB20A27B0879300FB97F4 /* StageManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManagerApp.swift; sourceTree = "<group>"; };
 		D2FCB20B27B0879300FB97F4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -441,6 +444,7 @@
 				D24516EB27C48D1100491DEB /* SwitchRow.swift */,
 				D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */,
 				D2883ABE27C3A24F009AC3A1 /* OptionPickerView.swift */,
+				D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */,
 				D2FCB20C27B0879400FB97F4 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -925,6 +929,7 @@
 				D2FCB24427BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */,
 				D2FCB22B27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */,
 				D2883ABC27C0CA8B009AC3A1 /* StepperRow.swift in Sources */,
+				D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */,
 				D2883ABF27C3A24F009AC3A1 /* OptionPickerView.swift in Sources */,
 				D24516EC27C48D1100491DEB /* SwitchRow.swift in Sources */,
 				D2FCB22827B092D500FB97F4 /* DeviceSelectionView.swift in Sources */,
@@ -940,6 +945,7 @@
 				D2FCB24527BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */,
 				D2FCB22C27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */,
 				D2883ABD27C0CA8B009AC3A1 /* StepperRow.swift in Sources */,
+				D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */,
 				D2883AC027C3A24F009AC3A1 /* OptionPickerView.swift in Sources */,
 				D24516ED27C48D1100491DEB /* SwitchRow.swift in Sources */,
 				D2FCB22927B092D600FB97F4 /* DeviceSelectionView.swift in Sources */,

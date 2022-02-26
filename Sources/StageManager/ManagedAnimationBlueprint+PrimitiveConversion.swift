@@ -36,11 +36,13 @@ extension ManagedAnimationBlueprint {
         // TODO: Update curve
 
         self.managedKeyframeSeries = try self.managedKeyframeSeries.map { series in
-            var series = series
-
             guard let serializedSeries = blueprint.managedKeyframeSeries.first(where: { $0.id == series.id }) else {
                 return series
             }
+
+            var series = series
+
+            series.enabled = serializedSeries.enabled
 
             switch (serializedSeries.keyframeSequence, series.keyframeSequence) {
             case (.double, .double), (.cgfloat, .cgfloat):
@@ -53,6 +55,10 @@ extension ManagedAnimationBlueprint {
             series.keyframeSequence = serializedSeries.keyframeSequence
             return series
         }
+
+        // TODO: Update unmanaged keyframe series
+
+        // TODO: Update managed property assignments
     }
 
     enum BlueprintUpdateError: Swift.Error {
@@ -87,7 +93,7 @@ extension AnimationRepeatStyle {
 extension AnimationBlueprint.ManagedKeyframeSeries {
 
     init<ElementType: AnyObject>(series: ManagedKeyframeSeries<ElementType>) {
-        self.init(id: series.id, name: series.name, keyframeSequence: series.keyframeSequence)
+        self.init(id: series.id, name: series.name, enabled: series.enabled, keyframeSequence: series.keyframeSequence)
     }
 
 }

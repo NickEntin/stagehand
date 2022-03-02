@@ -36,6 +36,12 @@ struct AnimationDetailsView: View {
         return "\(formattedNumber) sec"
     }
 
+    @State
+    private var showDocumentPicker: Bool = false
+
+    @State
+    private var dataToImport: Data?
+
     var body: some View {
         ScrollView {
             StepperRow(
@@ -108,6 +114,22 @@ struct AnimationDetailsView: View {
             case .infinitelyRepeating:
                 animation.implicitRepeatStyle.count = 0
             }
+        }
+        .toolbar {
+            Button {
+                print("Import file")
+                showDocumentPicker = true
+            } label: {
+                Image(systemName: "square.and.arrow.down")
+            }
+            Button {
+                print("Export file")
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+            }
+        }
+        .onChange(of: dataToImport) { dataToImport in
+
         }
     }
 

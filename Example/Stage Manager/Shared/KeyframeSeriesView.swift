@@ -52,36 +52,31 @@ struct NumericKeyframeChart: View {
 
     let keyframeSequence: Binding<KeyframeSequence>
 
-    var keyframeValues: [(CGFloat, CGFloat)] {
+    var keyframeValues: [Keyframe] {
         switch keyframeSequence.wrappedValue {
         case let .double(keyframes):
-            return keyframes.map { (CGFloat($0.relativeTimestamp), CGFloat($0.value)) }
+            return keyframes.map { Keyframe(relativeTimestamp: CGFloat($0.relativeTimestamp), relativeValue: CGFloat($0.value)) }
         case let .cgfloat(keyframes):
-            return keyframes.map { (CGFloat($0.relativeTimestamp), $0.value) }
+            return keyframes.map { Keyframe(relativeTimestamp: CGFloat($0.relativeTimestamp), relativeValue: $0.value) }
         }
     }
+
+    @State
+    var inProgressTranslation: CGSize = .zero
 
     var body: some View {
         GeometryReader { geometry in
             let width: CGFloat = geometry.size.width
             let height: CGFloat = geometry.size.height
 
-            ZStack {
-                Path { path in
-                    for y in stride(from: 0, through: height, by: height / 10) {
-                        path.move(to: CGPoint(x: 0, y: y))
-                        path.addLine(to: CGPoint(x: width, y: y))
-                    }
-                    for x in stride(from: 0, through: width, by: width / 10) {
-                        path.move(to: CGPoint(x: x, y: 0))
-                        path.addLine(to: CGPoint(x: x, y: height))
-                    }
-                }
-                .stroke(Color(white: 0.5), lineWidth: 0.5)
+            let controlPointSize = CGSize(width: 8, height: 8)
+
+            ZStack(alignment: .topLeading) {
+                Grid(width: width, height: height)
                 Path { path in
                     guard
-                        let firstValue = keyframeValues.first?.1,
-                        let (lastTimestamp, lastValue) = keyframeValues.last
+                        let firstValue = keyframeValues.first?.relativeValue,
+                        let lastKeyframe = keyframeValues.last
                     else {
                         return
                     }
@@ -89,28 +84,81 @@ struct NumericKeyframeChart: View {
                     path.move(
                         to: CGPoint(
                             x: 0,
-                            y: height * firstValue // TODO: Adjust for value range
+                            y: height - height * firstValue // TODO: Adjust for value range
                         )
                     )
 
-                    for (timestamp, value) in keyframeValues {
+                    for keyframe in keyframeValues {
                         path.addLine(
                             to: CGPoint(
-                                x: timestamp * width,
-                                y: value * height
+                                x: keyframe.relativeTimestamp * width,
+                                y: height - keyframe.relativeValue * height
                             )
                         )
                     }
 
-                    if lastTimestamp != 1 {
-                        path.addLine(to: CGPoint(x: width, y: lastValue * height))
+                    if lastKeyframe.relativeTimestamp != 1 {
+                        path.addLine(to: CGPoint(x: width, y: height - lastKeyframe.relativeValue * height))
                     }
                 }
                 .stroke(lineWidth: 2)
+                ForEach(keyframeValues) { keyframe in
+                    let offsetX: CGFloat = keyframe.relativeTimestamp * width - controlPointSize.width / 2 + inProgressTranslation.width
+                    let offsetY: CGFloat = height - keyframe.relativeValue * height - controlPointSize.height / 2 - inProgressTranslation.height
+                    Circle()
+                        .fill(Color.blue)
+                        .frame(width: controlPointSize.width, height: controlPointSize.height, alignment: .center)
+                        .offset(
+                            x: offsetX,
+                            y: offsetY
+                        )
+//                        .gesture(
+//                            DragGesture()
+//                                .onChanged { value in
+//                                    inProgressTranslation = value.translation
+//                                }
+//                        )
+                }
             }
 
         }
         .frame(height: 120)
+    }
+
+    struct Keyframe: Identifiable {
+
+        var id: UUID = UUID()
+
+        var relativeTimestamp: CGFloat
+
+        var relativeValue: CGFloat
+
+    }
+
+}
+
+struct Grid: View {
+
+    init(width: CGFloat, height: CGFloat) {
+        self.width = width
+        self.height = height
+    }
+
+    let width: CGFloat
+    let height: CGFloat
+
+    var body: some View {
+        Path { path in
+            for y in stride(from: 0, through: height, by: height / 10) {
+                path.move(to: CGPoint(x: 0, y: y))
+                path.addLine(to: CGPoint(x: width, y: y))
+            }
+            for x in stride(from: 0, through: width, by: width / 10) {
+                path.move(to: CGPoint(x: x, y: 0))
+                path.addLine(to: CGPoint(x: x, y: height))
+            }
+        }
+        .stroke(Color(white: 0.5), lineWidth: 0.5)
     }
 
 }

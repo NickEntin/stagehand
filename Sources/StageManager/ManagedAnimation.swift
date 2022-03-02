@@ -65,6 +65,11 @@ public final class ManagedAnimation<ElementType: AnyObject> {
                 add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)
             case let .cgfloat(keyframes):
                 add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)
+            case let .color(keyframes):
+                let writableProperty = keyframeSeries.property as! WritableKeyPath<ElementType, CGColor>
+                for keyframe in keyframes {
+                    animation.addKeyframe(for: writableProperty, at: keyframe.relativeTimestamp, value: keyframe.value.toCGColor())
+                }
             }
         }
 

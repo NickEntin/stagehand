@@ -36,6 +36,9 @@ struct KeyframeSeriesView: View {
             case .double, .cgfloat:
                 NumericKeyframeChart(keyframeSequence: keyframeSeries.keyframeSequence)
                     .padding([.horizontal, .bottom])
+            case .color:
+                ColorKeyframeChart(keyframeSequence: keyframeSeries.keyframeSequence)
+                    .padding([.horizontal, .bottom])
             }
         }
     }
@@ -58,6 +61,8 @@ struct NumericKeyframeChart: View {
             return keyframes.map { Keyframe(relativeTimestamp: CGFloat($0.relativeTimestamp), relativeValue: CGFloat($0.value)) }
         case let .cgfloat(keyframes):
             return keyframes.map { Keyframe(relativeTimestamp: CGFloat($0.relativeTimestamp), relativeValue: $0.value) }
+        case .color:
+            fatalError("Unexpected keyframe type")
         }
     }
 
@@ -163,21 +168,132 @@ struct Grid: View {
 
 }
 
+struct ColorKeyframeChart: View {
+
+    init(
+        keyframeSequence: Binding<KeyframeSequence>
+    ) {
+        self.keyframeSequence = keyframeSequence
+
+        switch keyframeSequence.wrappedValue {
+        case let .color(keyframes):
+            self._keyframes = State(wrappedValue: keyframes.map { keyframe in
+                Keyframe(timestamp: CGFloat(keyframe.relativeTimestamp), color: keyframe.value.toCGColor())
+            })
+
+        default:
+            fatalError()
+        }
+    }
+
+    let keyframeSequence: Binding<KeyframeSequence>
+
+    @State
+    var keyframes: [Keyframe]
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .topLeading) {
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: geometry.size.height - 5))
+                    path.addLine(to: CGPoint(x: geometry.size.width, y: geometry.size.height - 5))
+                }
+                .stroke(
+                    LinearGradient(
+                        stops: keyframes.map { keyframe in
+                            Gradient.Stop(color: Color(keyframe.color), location: keyframe.timestamp)
+                        },
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    lineWidth: 6
+                )
+                ForEach($keyframes) { keyframe in
+                    ColorPicker(selection: keyframe.color) {}
+                        .frame(width: 25, height: 25, alignment: .center)
+                        .offset(
+                            x: keyframe.timestamp.wrappedValue * geometry.size.width - 16,
+                            y: 0
+                        )
+                    Rectangle()
+                        .frame(width: 10, height: 10)
+                        .rotationEffect(.degrees(45))
+                        .offset(
+                            x: keyframe.timestamp.wrappedValue * geometry.size.width - 5,
+                            y: geometry.size.height - 10
+                        )
+                }
+            }
+        }
+        .frame(height: 50)
+        .onChange(of: keyframes) { keyframes in
+            keyframeSequence.wrappedValue = .color(keyframes.map { keyframe in
+                StageManagerPrimitives.Keyframe<RGBAColor>(
+                    relativeTimestamp: Double(keyframe.timestamp),
+                    value: RGBAColor(cgColor: keyframe.color)
+                )
+            })
+        }
+    }
+
+    struct Keyframe: Identifiable, Equatable {
+
+        var id: UUID = UUID()
+
+        var timestamp: CGFloat
+
+        var color: CGColor
+
+    }
+
+}
+
+//extension RGBAColor {
+//
+//    init(color: Color) {
+//        guard let components = color.cgColor?.components else {
+//            fatalError()
+//        }
+//
+//        self.init(
+//            red: components[0],
+//            green: components[1],
+//            blue: components[2],
+//            alpha: components[3]
+//        )
+//    }
+//
+//}
+
 struct KeyframeSeriesView_Previews: PreviewProvider {
 
     static var value = 0
 
+//    @State
+//    static var series: AnimationBlueprint.ManagedKeyframeSeries = .init(
+//        id: UUID(),
+//        name: "Alpha",
+//        enabled: true,
+//        keyframeSequence: KeyframeSequence.cgfloat(
+//            [
+//                .init(relativeTimestamp: 0.0, value: 0.5),
+//                .init(relativeTimestamp: 0.25, value: 0.0),
+//                .init(relativeTimestamp: 0.75, value: 1.0),
+//                .init(relativeTimestamp: 1.00, value: 0.5),
+//            ]
+//        )
+//    )
+
     @State
     static var series: AnimationBlueprint.ManagedKeyframeSeries = .init(
         id: UUID(),
-        name: "Alpha",
+        name: "Background Color",
         enabled: true,
-        keyframeSequence: KeyframeSequence.cgfloat(
+        keyframeSequence: KeyframeSequence.color(
             [
-                .init(relativeTimestamp: 0.0, value: 0.5),
-                .init(relativeTimestamp: 0.25, value: 0.0),
-                .init(relativeTimestamp: 0.75, value: 1.0),
-                .init(relativeTimestamp: 1.00, value: 0.5),
+                .init(relativeTimestamp: 0.0, value: RGBAColor(red: 1, green: 0, blue: 0, alpha: 1)),
+                .init(relativeTimestamp: 0.5, value: RGBAColor(red: 1, green: 1, blue: 0, alpha: 1)),
+                .init(relativeTimestamp: 1.0, value: RGBAColor(red: 0.5, green: 0, blue: 1, alpha: 1)),
             ]
         )
     )

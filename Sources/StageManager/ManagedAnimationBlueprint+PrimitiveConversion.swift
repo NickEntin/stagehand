@@ -45,10 +45,11 @@ extension ManagedAnimationBlueprint {
             series.enabled = serializedSeries.enabled
 
             switch (serializedSeries.keyframeSequence, series.keyframeSequence) {
-            case (.double, .double), (.cgfloat, .cgfloat):
+            case (.double, .double), (.cgfloat, .cgfloat), (.color, .color):
                 break
 
-            case (.double, .cgfloat), (.cgfloat, .double):
+//            case (.double, .cgfloat), (.cgfloat, .double):
+            default:
                 throw BlueprintUpdateError.keyframeSeriesTypeMistmatch(id: series.id)
             }
 

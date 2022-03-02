@@ -35,6 +35,8 @@ public enum KeyframeSequence {
 
     case cgfloat([Keyframe<CGFloat>])
 
+    case color([Keyframe<RGBAColor>])
+
 }
 
 extension KeyframeSequence {
@@ -42,6 +44,7 @@ extension KeyframeSequence {
     enum CodingKeys: CodingKey {
         case double
         case cgfloat
+        case color
     }
 
 }
@@ -57,6 +60,9 @@ extension KeyframeSequence: Encodable {
 
         case let .cgfloat(keyframes):
             try container.encode(keyframes, forKey: .cgfloat)
+
+        case let .color(keyframes):
+            try container.encode(keyframes, forKey: .color)
         }
     }
 
@@ -81,7 +87,40 @@ extension KeyframeSequence: Decodable {
             self = .double(try container.decode(Array<Keyframe<Double>>.self, forKey: .double))
         case .cgfloat:
             self = .cgfloat(try container.decode(Array<Keyframe<CGFloat>>.self, forKey: .cgfloat))
+        case .color:
+            self = .color(try container.decode(Array<Keyframe<RGBAColor>>.self, forKey: .color))
         }
+    }
+
+}
+
+public struct RGBAColor: Codable {
+
+    public init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+
+    public init(cgColor: CGColor) {
+        guard let components = cgColor.components, components.count == 4 else {
+            fatalError()
+        }
+
+        self.red = components[0]
+        self.green = components[1]
+        self.blue = components[2]
+        self.alpha = components[3]
+    }
+
+    public var red: CGFloat
+    public var green: CGFloat
+    public var blue: CGFloat
+    public var alpha: CGFloat
+
+    public func toCGColor() -> CGColor {
+        return CGColor(red: red, green: green, blue: blue, alpha: alpha)
     }
 
 }

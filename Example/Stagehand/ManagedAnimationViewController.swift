@@ -68,6 +68,15 @@ final class ManagedAnimationViewController: DemoViewController {
             for: \View.rightView.alpha,
             keyframes: [(0.5, 0), (1, 1)]
         )
+        leftToRightAnimationBlueprint.addManagedKeyframes(
+            named: "Left View Background Color",
+            for: \View.leftView.layer.backgroundColor!,
+            keyframes: [
+                (0, UIColor.red.cgColor),
+                (0.25, UIColor.green.cgColor),
+                (1.0, UIColor.yellow.cgColor),
+            ]
+        )
         return leftToRightAnimationBlueprint
     }
 

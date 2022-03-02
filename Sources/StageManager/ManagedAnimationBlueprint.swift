@@ -57,6 +57,15 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         addManagedKeyframes(named: name, for: property, keyframeSequence: .cgfloat(keyframes.map(Keyframe.init(_:))))
     }
 
+    public mutating func addManagedKeyframes(
+        named name: String,
+        for property: WritableKeyPath<ElementType, CGColor>,
+        keyframes: [(relativeTimestamp: Double, color: CGColor)]
+    ) {
+        let keyframes = keyframes.map { (relativeTimestamp: $0.relativeTimestamp, color: RGBAColor(cgColor: $0.color)) }
+        addManagedKeyframes(named: name, for: property, keyframeSequence: .color(keyframes.map(Keyframe.init(_:))))
+    }
+
     // MARK: - Public Methods - Unmanaged Keyframes
 
     public mutating func addUnmanagedKeyframes<PropertyType: AnimatableProperty>(

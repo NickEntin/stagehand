@@ -98,9 +98,9 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         )
     }
 
-    // MARK: - Public Methods - Property Assignments
+    // MARK: - Public Methods - Managed Property Assignments
 
-    public mutating func addManagedPropertyAssignments(
+    public mutating func addManagedAssignments(
         named name: String,
         for property: WritableKeyPath<ElementType, Int>,
         assignments: [(relativeTimestamp: Double, value: Int)]
@@ -112,7 +112,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         )
     }
 
-    public mutating func addManagedPropertyAssignments(
+    public mutating func addManagedAssignments(
         named name: String,
         for property: WritableKeyPath<ElementType, Double>,
         assignments: [(relativeTimestamp: Double, value: Double)]
@@ -124,7 +124,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         )
     }
 
-    public mutating func addManagedPropertyAssignments(
+    public mutating func addManagedAssignments(
         named name: String,
         for property: WritableKeyPath<ElementType, CGFloat>,
         assignments: [(relativeTimestamp: Double, value: CGFloat)]
@@ -134,6 +134,16 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
             for: property,
             assignmentSequence: .cgfloat(assignments.map(Assignment.init(_:)))
         )
+    }
+
+    // MARK: - Public Methods - Unmanaged Property Assignments
+
+    public mutating func addUnmanagedAssignments<PropertyType>(
+        named name: String,
+        for property: WritableKeyPath<ElementType, PropertyType>,
+        assignments: [(relativeTimestamp: Double, value: PropertyType)]
+    ) {
+        // TODO
     }
 
     // MARK: - Public Methods - Execution

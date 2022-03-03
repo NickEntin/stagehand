@@ -12,8 +12,8 @@ import SwiftUI
 
 struct DeviceSelectionView: View {
 
-    init(animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void) {
-        self.animationSelectionAction = animationSelectionAction
+    init(/* animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void */) {
+        // self.animationSelectionAction = animationSelectionAction
 
         client = Client()
     }
@@ -21,7 +21,7 @@ struct DeviceSelectionView: View {
     @ObservedObject
     var client: Client
 
-    var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
+    // var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
 
     var body: some View {
         ScrollView {
@@ -30,8 +30,8 @@ struct DeviceSelectionView: View {
                     ForEach(client.availableTransceivers) { transceiver in
                         NavigationLink {
                             AnimationSelectionView(
-                                transceiver: transceiver.memoTransceiver,
-                                animationSelectionAction: animationSelectionAction
+                                transceiver: transceiver.memoTransceiver //,
+                                // animationSelectionAction: animationSelectionAction
                             )
                         } label: {
                             Text(transceiver.displayName)

@@ -77,6 +77,15 @@ final class ManagedAnimationViewController: DemoViewController {
                 (1.0, UIColor.yellow.cgColor),
             ]
         )
+        leftToRightAnimationBlueprint.addUnmanagedKeyframes(
+            named: "Right View Scale",
+            for: \View.rightView.transform,
+            keyframes: [
+                (0.5, CGAffineTransform.identity),
+                (0.75, CGAffineTransform(scaleX: 1.2, y: 1.2)),
+                (1.0, CGAffineTransform.identity),
+            ]
+        )
         return leftToRightAnimationBlueprint
     }
 

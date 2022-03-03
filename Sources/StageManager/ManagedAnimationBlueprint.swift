@@ -87,7 +87,15 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         for property: WritableKeyPath<ElementType, PropertyType>,
         keyframes: [(relativeTimestamp: Double, relativeValue: (_ initialValue: PropertyType) -> PropertyType)]
     ) {
-        // TODO
+        unmanagedKeyframeSeries.append(
+            UnmanagedKeyframeSeries<ElementType>(
+                id: UUID(),
+                name: name,
+                enabled: true,
+                property: property,
+                keyframes: keyframes
+            )
+        )
     }
 
     // MARK: - Public Methods - Property Assignments
@@ -222,6 +230,8 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
 }
 
+// MARK: -
+
 internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 
     var id: UUID
@@ -237,6 +247,32 @@ internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 }
 
 internal struct UnmanagedKeyframeSeries<ElementType: AnyObject> {
+
+    init<PropertyType: AnimatableProperty>(
+        id: UUID,
+        name: String,
+        enabled: Bool,
+        property: WritableKeyPath<ElementType, PropertyType>,
+        keyframes: [(Double, (PropertyType) -> PropertyType)]
+    ) {
+        self.id = id
+        self.name = name
+        self.enabled = enabled
+
+        self.addToAnimation = { animation in
+            for (relativeTimestamp, relativeValue) in keyframes {
+                animation.addKeyframe(for: property, at: relativeTimestamp, relativeValue: relativeValue)
+            }
+        }
+    }
+
+    var id: UUID
+
+    var name: String
+
+    var enabled: Bool
+
+    var addToAnimation: (_ animation: inout Animation<ElementType>) -> Void
 
 }
 

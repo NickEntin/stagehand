@@ -73,9 +73,13 @@ public final class ManagedAnimation<ElementType: AnyObject> {
             }
         }
 
-        // TODO: Add unmanaged keyframe series
+        for keyframeSeries in blueprint.unmanagedKeyframeSeries.filter({ $0.enabled }) {
+            keyframeSeries.addToAnimation(&animation)
+        }
 
         // TODO: Add managed property assignments
+
+        // TODO: Add the rest of the properties
 
         return animation
     }

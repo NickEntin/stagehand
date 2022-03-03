@@ -248,44 +248,18 @@ struct ColorKeyframeChart: View {
 
 }
 
-//extension RGBAColor {
-//
-//    init(color: Color) {
-//        guard let components = color.cgColor?.components else {
-//            fatalError()
-//        }
-//
-//        self.init(
-//            red: components[0],
-//            green: components[1],
-//            blue: components[2],
-//            alpha: components[3]
-//        )
-//    }
-//
-//}
-
 struct KeyframeSeriesView_Previews: PreviewProvider {
 
-    static var value = 0
-
-//    @State
-//    static var series: AnimationBlueprint.ManagedKeyframeSeries = .init(
-//        id: UUID(),
-//        name: "Alpha",
-//        enabled: true,
-//        keyframeSequence: KeyframeSequence.cgfloat(
-//            [
-//                .init(relativeTimestamp: 0.0, value: 0.5),
-//                .init(relativeTimestamp: 0.25, value: 0.0),
-//                .init(relativeTimestamp: 0.75, value: 1.0),
-//                .init(relativeTimestamp: 1.00, value: 0.5),
-//            ]
-//        )
-//    )
-
     @State
-    static var series: AnimationBlueprint.ManagedKeyframeSeries = .init(
+    static var series = colorKeyframeSeries
+
+    static var previews: some View {
+        KeyframeSeriesView(
+            keyframeSeries: $series
+        )
+    }
+
+    static var colorKeyframeSeries: AnimationBlueprint.ManagedKeyframeSeries = .init(
         id: UUID(),
         name: "Background Color",
         enabled: true,
@@ -298,9 +272,18 @@ struct KeyframeSeriesView_Previews: PreviewProvider {
         )
     )
 
-    static var previews: some View {
-        KeyframeSeriesView(
-            keyframeSeries: $series
+    static var alphaKeyframeSeries: AnimationBlueprint.ManagedKeyframeSeries = .init(
+        id: UUID(),
+        name: "Alpha",
+        enabled: true,
+        keyframeSequence: KeyframeSequence.cgfloat(
+            [
+                .init(relativeTimestamp: 0.0, value: 0.5),
+                .init(relativeTimestamp: 0.25, value: 0.0),
+                .init(relativeTimestamp: 0.75, value: 1.0),
+                .init(relativeTimestamp: 1.00, value: 0.5),
+            ]
         )
-    }
+    )
+
 }

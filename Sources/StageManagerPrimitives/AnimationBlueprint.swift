@@ -20,13 +20,15 @@ public struct AnimationBlueprint: Codable, Identifiable {
         name: String,
         implicitDuration: TimeInterval,
         implicitRepeatStyle: AnimationBlueprint.RepeatStyle,
-        managedKeyframeSeries: [AnimationBlueprint.ManagedKeyframeSeries]
+        managedKeyframeSeries: [AnimationBlueprint.ManagedKeyframeSeries],
+        unmanagedKeyframeSeries: [AnimationBlueprint.UnmanagedKeyframeSeries]
     ) {
         self.id = id
         self.name = name
         self.implicitDuration = implicitDuration
         self.implicitRepeatStyle = implicitRepeatStyle
         self.managedKeyframeSeries = managedKeyframeSeries
+        self.unmanagedKeyframeSeries = unmanagedKeyframeSeries
     }
 
     // MARK: - Public Properties
@@ -42,6 +44,10 @@ public struct AnimationBlueprint: Codable, Identifiable {
     // TODO: Include curve
 
     public var managedKeyframeSeries: [ManagedKeyframeSeries]
+
+    public var unmanagedKeyframeSeries: [UnmanagedKeyframeSeries]
+
+    // TODO
 
     // MARK: - Public Types
 
@@ -82,6 +88,26 @@ public struct AnimationBlueprint: Codable, Identifiable {
         public var enabled: Bool
 
         public var keyframeSequence: KeyframeSequence
+
+    }
+
+    public struct UnmanagedKeyframeSeries: Codable, Identifiable {
+
+        // MARK: - Life Cycle
+
+        public init(id: UUID, name: String, enabled: Bool) {
+            self.id = id
+            self.name = name
+            self.enabled = enabled
+        }
+
+        // MARK: - Public Properties
+
+        public var id: UUID
+
+        public var name: String
+
+        public var enabled: Bool
 
     }
 

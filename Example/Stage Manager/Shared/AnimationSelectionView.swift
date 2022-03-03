@@ -12,15 +12,15 @@ import SwiftUI
 
 struct AnimationSelectionView: View {
 
-    init(transceiver: Memo.Transceiver, animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void) {
+    init(transceiver: Memo.Transceiver /*, animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void */) {
         self.transceiver = Transceiver(memoTransceiver: transceiver)
-        self.animationSelectionAction = animationSelectionAction
+        // self.animationSelectionAction = animationSelectionAction
     }
 
     @ObservedObject
     var transceiver: Transceiver
 
-    var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
+    // var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
 
     var body: some View {
         ScrollView {

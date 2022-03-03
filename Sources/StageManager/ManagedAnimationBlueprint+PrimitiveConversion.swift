@@ -21,7 +21,9 @@ extension AnimationBlueprint {
             implicitDuration: blueprint.implicitDuration,
             implicitRepeatStyle: RepeatStyle(repeatStyle: blueprint.implicitRepeatStyle),
             managedKeyframeSeries: blueprint.managedKeyframeSeries
-                .map(AnimationBlueprint.ManagedKeyframeSeries.init(series:))
+                .map(AnimationBlueprint.ManagedKeyframeSeries.init(series:)),
+            unmanagedKeyframeSeries: blueprint.unmanagedKeyframeSeries
+                .map(AnimationBlueprint.UnmanagedKeyframeSeries.init(series:))
         )
     }
 
@@ -57,7 +59,17 @@ extension ManagedAnimationBlueprint {
             return series
         }
 
-        // TODO: Update unmanaged keyframe series
+        self.unmanagedKeyframeSeries = self.unmanagedKeyframeSeries.map { series in
+            guard let serializedSeries = blueprint.unmanagedKeyframeSeries.first(where: { $0.id == series.id }) else {
+                return series
+            }
+
+            var series = series
+
+            series.enabled = serializedSeries.enabled
+
+            return series
+        }
 
         // TODO: Update managed property assignments
     }
@@ -95,6 +107,14 @@ extension AnimationBlueprint.ManagedKeyframeSeries {
 
     init<ElementType: AnyObject>(series: ManagedKeyframeSeries<ElementType>) {
         self.init(id: series.id, name: series.name, enabled: series.enabled, keyframeSequence: series.keyframeSequence)
+    }
+
+}
+
+extension AnimationBlueprint.UnmanagedKeyframeSeries {
+
+    init<ElementType: AnyObject>(series: UnmanagedKeyframeSeries<ElementType>) {
+        self.init(id: series.id, name: series.name, enabled: series.enabled)
     }
 
 }

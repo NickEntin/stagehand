@@ -50,45 +50,12 @@ struct AnimationDetailsView: View {
                 onDecrement: { animation.implicitDuration -= 0.1 },
                 getValue: { formattedImplicitDuration }
             )
-            HStack {
-                Text("Implicit Repeat Style")
-                Spacer()
-                Picker("Implicit Repeat Style", selection: $selectedEffectiveRepeatStyle) {
-                    Text("No Repeat").tag(EffectiveRepeatStyle.noRepeat)
-                    Text("Repeating").tag(EffectiveRepeatStyle.repeating)
-                    Text("Infinitely Repeating").tag(EffectiveRepeatStyle.infinitelyRepeating)
-                }
-            }
-            .padding()
-            if case .repeating = selectedEffectiveRepeatStyle {
-                HStack {
-                    Spacer(minLength: 32)
-                    StepperRow(
-                        title: "Repeat Count",
-                        onIncrement: { animation.implicitRepeatStyle.count += 1 },
-                        onDecrement: { animation.implicitRepeatStyle.count = max(animation.implicitRepeatStyle.count - 1, 2) },
-                        getValue: { "\(animation.implicitRepeatStyle.count)" }
-                    )
-                }
-                HStack {
-                    Spacer(minLength: 32)
-                    SwitchRow(
-                        title: "Autoreversing",
-                        isOn: $animation.implicitRepeatStyle.autoreversing
-                    )
-                }
-            }
-            if case .infinitelyRepeating = selectedEffectiveRepeatStyle {
-                HStack {
-                    Spacer(minLength: 32)
-                    SwitchRow(
-                        title: "Autoreversing",
-                        isOn: $animation.implicitRepeatStyle.autoreversing
-                    )
-                }
-            }
+            RepeatStyleRows(selectedEffectiveRepeatStyle: $selectedEffectiveRepeatStyle, animation: $animation)
             ForEach($animation.managedKeyframeSeries) { series in
                 KeyframeSeriesView(keyframeSeries: series)
+            }
+            ForEach($animation.unmanagedKeyframeSeries) { series in
+                SwitchRow(title: series.wrappedValue.name, isOn: series.enabled)
             }
         }
         .navigationTitle(animation.name)
@@ -130,6 +97,61 @@ struct AnimationDetailsView: View {
         }
         .onChange(of: dataToImport) { dataToImport in
 
+        }
+    }
+
+}
+
+struct RepeatStyleRows: View {
+
+    init(
+        selectedEffectiveRepeatStyle: Binding<EffectiveRepeatStyle>,
+        animation: Binding<AnimationBlueprint>
+    ) {
+        self.selectedEffectiveRepeatStyle = selectedEffectiveRepeatStyle
+        self.animation = animation
+    }
+
+    let selectedEffectiveRepeatStyle: Binding<EffectiveRepeatStyle>
+    let animation: Binding<AnimationBlueprint>
+
+    var body: some View {
+        HStack {
+            Text("Implicit Repeat Style")
+            Spacer()
+            Picker("Implicit Repeat Style", selection: selectedEffectiveRepeatStyle) {
+                Text("No Repeat").tag(EffectiveRepeatStyle.noRepeat)
+                Text("Repeating").tag(EffectiveRepeatStyle.repeating)
+                Text("Infinitely Repeating").tag(EffectiveRepeatStyle.infinitelyRepeating)
+            }
+        }
+        .padding()
+        if case .repeating = selectedEffectiveRepeatStyle.wrappedValue {
+            HStack {
+                Spacer(minLength: 32)
+                StepperRow(
+                    title: "Repeat Count",
+                    onIncrement: { animation.wrappedValue.implicitRepeatStyle.count += 1 },
+                    onDecrement: { animation.wrappedValue.implicitRepeatStyle.count = max(animation.wrappedValue.implicitRepeatStyle.count - 1, 2) },
+                    getValue: { "\(animation.wrappedValue.implicitRepeatStyle.count)" }
+                )
+            }
+            HStack {
+                Spacer(minLength: 32)
+                SwitchRow(
+                    title: "Autoreversing",
+                    isOn: animation.implicitRepeatStyle.autoreversing
+                )
+            }
+        }
+        if case .infinitelyRepeating = selectedEffectiveRepeatStyle.wrappedValue {
+            HStack {
+                Spacer(minLength: 32)
+                SwitchRow(
+                    title: "Autoreversing",
+                    isOn: animation.implicitRepeatStyle.autoreversing
+                )
+            }
         }
     }
 

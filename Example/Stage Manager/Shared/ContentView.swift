@@ -18,9 +18,9 @@ struct ContentView: View {
         HStack {
             NavigationView {
                 DeviceSelectionView(
-                    animationSelectionAction: { (animation, transceiver) in
-                        animationDetailsParams = (animation, transceiver)
-                    }
+//                    animationSelectionAction: { (animation, transceiver) in
+//                        animationDetailsParams = (animation, transceiver)
+//                    }
                 )
                 .navigationTitle("Devices")
             }

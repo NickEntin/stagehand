@@ -17,6 +17,7 @@
 import Memo
 import Stagehand
 import StageManager
+//import StageManagerPrimitives
 import UIKit
 
 final class ManagedAnimationViewController: DemoViewController {
@@ -90,18 +91,31 @@ final class ManagedAnimationViewController: DemoViewController {
     }
 
     private static func makeRightToLeftBlueprint() -> ManagedAnimationBlueprint<View> {
-        var leftToRightAnimationBlueprint = ManagedAnimationBlueprint<View>()
-        leftToRightAnimationBlueprint.addManagedKeyframes(
+        var rightToLeftAnimationBlueprint = ManagedAnimationBlueprint<View>()
+        rightToLeftAnimationBlueprint.addManagedKeyframes(
             named: "Left View Alpha",
             for: \View.leftView.alpha,
             keyframes: [(0.5, 0), (1, 1)]
         )
-        leftToRightAnimationBlueprint.addManagedKeyframes(
+        rightToLeftAnimationBlueprint.addManagedKeyframes(
             named: "Right View Alpha",
             for: \View.rightView.alpha,
             keyframes: [(0, 1), (0.5, 0)]
         )
-        return leftToRightAnimationBlueprint
+        rightToLeftAnimationBlueprint.addManagedExecution(
+            named: "Haptic Feedback",
+            factory: { config in
+                let generator = UIImpactFeedbackGenerator(style: config.selectedStyle)
+                generator.prepare()
+
+                return .init(
+                    onForward: { _ in generator.impactOccurred() }
+                )
+            },
+            config: HapticFeedbackConfig(selectedStyle: .medium),
+            at: 0.9
+        )
+        return rightToLeftAnimationBlueprint
     }
 
 }
@@ -152,6 +166,41 @@ extension ManagedAnimationViewController {
             )
         }
 
+    }
+
+}
+
+// MARK: -
+
+struct HapticFeedbackConfig: ExecutionBlockConfig {
+
+    init(selectedStyle: UIImpactFeedbackGenerator.FeedbackStyle) {
+        controls = [
+            .intSelection(
+                .init(
+                    name: "Style",
+                    availableOptions: [
+                        (displayName: "Light", value: UIImpactFeedbackGenerator.FeedbackStyle.light.rawValue),
+                        (displayName: "Medium", value: UIImpactFeedbackGenerator.FeedbackStyle.medium.rawValue),
+                        (displayName: "Heavy", value: UIImpactFeedbackGenerator.FeedbackStyle.heavy.rawValue),
+                        (displayName: "Soft", value: UIImpactFeedbackGenerator.FeedbackStyle.soft.rawValue),
+                        (displayName: "Rigid", value: UIImpactFeedbackGenerator.FeedbackStyle.rigid.rawValue),
+                    ],
+                    selectedOption: UIImpactFeedbackGenerator.FeedbackStyle.medium.rawValue
+                )
+            ),
+        ]
+    }
+
+    var controls: [ExecutionBlockControl]
+
+    var selectedStyle: UIImpactFeedbackGenerator.FeedbackStyle {
+        switch controls[0] {
+        case let .intSelection(selection):
+            return .init(rawValue: selection.selectedOption)!
+//        default:
+//            fatalError()
+        }
     }
 
 }

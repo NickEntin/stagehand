@@ -21,7 +21,8 @@ public struct AnimationBlueprint: Codable, Identifiable {
         implicitDuration: TimeInterval,
         implicitRepeatStyle: AnimationBlueprint.RepeatStyle,
         managedKeyframeSeries: [AnimationBlueprint.ManagedKeyframeSeries],
-        unmanagedKeyframeSeries: [AnimationBlueprint.UnmanagedKeyframeSeries]
+        unmanagedKeyframeSeries: [AnimationBlueprint.UnmanagedKeyframeSeries],
+        managedExecutionBlockConfigs: [AnimationBlueprint.ManagedExecutionBlockConfig]
     ) {
         self.id = id
         self.name = name
@@ -29,6 +30,7 @@ public struct AnimationBlueprint: Codable, Identifiable {
         self.implicitRepeatStyle = implicitRepeatStyle
         self.managedKeyframeSeries = managedKeyframeSeries
         self.unmanagedKeyframeSeries = unmanagedKeyframeSeries
+        self.managedExecutionBlockConfigs = managedExecutionBlockConfigs
     }
 
     // MARK: - Public Properties
@@ -47,7 +49,9 @@ public struct AnimationBlueprint: Codable, Identifiable {
 
     public var unmanagedKeyframeSeries: [UnmanagedKeyframeSeries]
 
-    // TODO
+    // TODO: Add the rest of the properties
+
+    public var managedExecutionBlockConfigs: [ManagedExecutionBlockConfig]
 
     // MARK: - Public Types
 
@@ -110,5 +114,41 @@ public struct AnimationBlueprint: Codable, Identifiable {
         public var enabled: Bool
 
     }
+
+    public struct ManagedExecutionBlockConfig: Codable {
+
+        // MARK: - Life Cycle
+
+        // TODO
+
+    }
+
+}
+
+public enum ExecutionBlockControl {
+
+    public struct Selection<OptionType> {
+
+        public init(name: String, availableOptions: [(displayName: String, value: OptionType)], selectedOption: OptionType) {
+            self.name = name
+            self.availableOptions = availableOptions
+            self.selectedOption = selectedOption
+        }
+
+        public var name: String
+
+        public var availableOptions: [(displayName: String, value: OptionType)]
+
+        public var selectedOption: OptionType
+
+    }
+
+    // case stringSelection(Selection<String>)
+
+    case intSelection(Selection<Int>)
+
+    // MARK: -
+
+    // case freeformInt(name: String, defaultValue: Int, validRange: ClosedRange<Int>)
 
 }

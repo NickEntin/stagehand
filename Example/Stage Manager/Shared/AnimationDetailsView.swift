@@ -57,6 +57,7 @@ struct AnimationDetailsView: View {
             ForEach($animation.unmanagedKeyframeSeries) { series in
                 SwitchRow(title: series.wrappedValue.name, isOn: series.enabled)
             }
+            // TODO: Show managed execution blocks
         }
         .navigationTitle(animation.name)
         HStack {

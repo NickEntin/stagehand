@@ -79,6 +79,10 @@ public final class ManagedAnimation<ElementType: AnyObject> {
 
         // TODO: Add managed property assignments
 
+        for executionBlock in blueprint.managedExeuctionBlocks.filter({ $0.enabled }) {
+            executionBlock.addToAnimation(&animation)
+        }
+
         // TODO: Add the rest of the properties
 
         return animation

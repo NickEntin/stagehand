@@ -39,6 +39,8 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     internal var managedAssignmentSeries: [ManagedAssignmentSeries<ElementType>] = []
 
+    internal var managedExeuctionBlocks: [ManagedExecutionBlock<ElementType>] = []
+
     // MARK: - Public Methods - Managed Keyframes
 
     public mutating func addManagedKeyframes(
@@ -148,13 +150,58 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     // MARK: - Public Methods - Execution
 
+    public struct ManagedExecution {
+
+        public init(
+            onForward forwardBlock: @escaping (ElementType) -> Void,
+            onReverse reverseBlock: @escaping (ElementType) -> Void = { _ in }
+        ) {
+            self.forwardBlock = forwardBlock
+            self.reverseBlock = reverseBlock
+        }
+
+        public var forwardBlock: (ElementType) -> Void
+
+        public var reverseBlock: (ElementType) -> Void
+
+    }
+
+    public mutating func addManagedExecution<Config: ExecutionBlockConfig>(
+        named name: String,
+        factory: @escaping (Config) -> ManagedExecution,
+        config: Config,
+        at relativeTimestamp: Double
+    ) {
+        managedExeuctionBlocks.append(
+            .init(
+                id: UUID(),
+                name: name,
+                enabled: true,
+                factory: factory,
+                config: config,
+                relativeTimestamp: relativeTimestamp
+            )
+        )
+    }
+
     public mutating func addUnmanagedExecution(
         named name: String,
         onForward forwardBlock: @escaping (ElementType) -> Void,
         onReverse reverseBlock: @escaping (ElementType) -> Void = { _ in },
         at relativeTimestamp: Double
     ) {
-        // TODO
+        addManagedExecution(
+            named: name,
+            factory: { _ in ManagedExecution(onForward: forwardBlock, onReverse: reverseBlock) },
+            config: EmptyConfig(),
+            at: relativeTimestamp
+        )
+    }
+
+    private struct EmptyConfig: ExecutionBlockConfig {
+
+        var controls: [ExecutionBlockControl] = []
+
     }
 
     // MARK: - Public Methods - Per-Frame Execution
@@ -242,6 +289,14 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
 // MARK: -
 
+public protocol ExecutionBlockConfig {
+
+    var controls: [ExecutionBlockControl] { get }
+
+}
+
+// MARK: -
+
 internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 
     var id: UUID
@@ -297,5 +352,43 @@ internal struct ManagedAssignmentSeries<ElementType: AnyObject> {
     var enabled: Bool
 
     var assignmentSequence: AssignmentSequence
+
+}
+
+internal final class ManagedExecutionBlock<ElementType: AnyObject> {
+
+    init<Config: ExecutionBlockConfig>(
+        id: UUID,
+        name: String,
+        enabled: Bool,
+        factory: @escaping (Config) -> ManagedAnimationBlueprint<ElementType>.ManagedExecution,
+        config: Config,
+        relativeTimestamp: Double
+    ) {
+        self.id = id
+        self.name = name
+        self.enabled = enabled
+        self.config = config
+        self.addToAnimation = { _ in }
+
+        self.addToAnimation = { [unowned self] animation in
+            let managedExecution = factory(self.config as! Config)
+            animation.addExecution(
+                onForward: managedExecution.forwardBlock,
+                onReverse: managedExecution.reverseBlock,
+                at: relativeTimestamp
+            )
+        }
+    }
+
+    var id: UUID
+
+    var name: String
+
+    var enabled: Bool
+
+    var config: ExecutionBlockConfig
+
+    var addToAnimation: (_ animation: inout Animation<ElementType>) -> Void
 
 }

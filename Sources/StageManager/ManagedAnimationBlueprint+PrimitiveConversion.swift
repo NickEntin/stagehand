@@ -23,7 +23,8 @@ extension AnimationBlueprint {
             managedKeyframeSeries: blueprint.managedKeyframeSeries
                 .map(AnimationBlueprint.ManagedKeyframeSeries.init(series:)),
             unmanagedKeyframeSeries: blueprint.unmanagedKeyframeSeries
-                .map(AnimationBlueprint.UnmanagedKeyframeSeries.init(series:))
+                .map(AnimationBlueprint.UnmanagedKeyframeSeries.init(series:)),
+            managedExecutionBlockConfigs: [] // TODO
         )
     }
 
@@ -72,6 +73,8 @@ extension ManagedAnimationBlueprint {
         }
 
         // TODO: Update managed property assignments
+
+        // TODO: Update the rest of the properties
     }
 
     enum BlueprintUpdateError: Swift.Error {

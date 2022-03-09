@@ -21,13 +21,16 @@ public final class ManagedAnimation<ElementType: AnyObject> {
 
     // MARK: - Life Cycle
 
-    internal init(blueprint: ManagedAnimationBlueprint<ElementType>) {
+    internal init(blueprint: ManagedAnimationBlueprint<ElementType>, id: UUID) {
         self.blueprint = blueprint
+        self.id = id
     }
 
     // MARK: - Internal Properties
 
     internal var blueprint: ManagedAnimationBlueprint<ElementType>
+
+    internal let id: UUID
 
     // MARK: - Public Methods
 
@@ -50,9 +53,9 @@ public final class ManagedAnimation<ElementType: AnyObject> {
         )
     }
 
-    // MARK: - Private Methods
+    // MARK: - Internal Methods
 
-    private func buildAnimation() -> Animation<ElementType> {
+    internal func buildAnimation() -> Animation<ElementType> {
         var animation = Animation<ElementType>()
 
         animation.implicitDuration = blueprint.implicitDuration
@@ -83,10 +86,16 @@ public final class ManagedAnimation<ElementType: AnyObject> {
             executionBlock.addToAnimation(&animation)
         }
 
+        for child in blueprint.childManagedAnimations.filter({ $0.enabled }) {
+            child.addToAnimation(&animation)
+        }
+
         // TODO: Add the rest of the properties
 
         return animation
     }
+
+    // MARK: - Private Methods
 
     private func add<PropertyType: AnimatableProperty>(
         keyframes: [Keyframe<PropertyType>],

@@ -10,7 +10,7 @@ import Memo
 extension Memo.Config {
 
     public static let stageManager = Memo.Config(
-        localhostPort: 2345,
+        localhostPort: 7846,
         bonjourServiceName: "stgmngr"
     )
 

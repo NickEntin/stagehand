@@ -24,7 +24,10 @@ extension AnimationBlueprint {
                 .map(AnimationBlueprint.ManagedKeyframeSeries.init(series:)),
             unmanagedKeyframeSeries: blueprint.unmanagedKeyframeSeries
                 .map(AnimationBlueprint.UnmanagedKeyframeSeries.init(series:)),
-            managedExecutionBlockConfigs: [] // TODO
+            managedExecutionBlockConfigs: blueprint.managedExeuctionBlocks
+                .map(AnimationBlueprint.ManagedExecutionBlockConfig.init(managedExecution:)),
+            managedChildAnimations: blueprint.childManagedAnimations
+                .map(AnimationBlueprint.ManagedChildAnimation.init(child:))
         )
     }
 
@@ -51,8 +54,7 @@ extension ManagedAnimationBlueprint {
             case (.double, .double), (.cgfloat, .cgfloat), (.color, .color):
                 break
 
-//            case (.double, .cgfloat), (.cgfloat, .double):
-            default:
+            case (.double, _), (.cgfloat, _), (.color, _):
                 throw BlueprintUpdateError.keyframeSeriesTypeMistmatch(id: series.id)
             }
 
@@ -73,6 +75,29 @@ extension ManagedAnimationBlueprint {
         }
 
         // TODO: Update managed property assignments
+
+        self.managedExeuctionBlocks = self.managedExeuctionBlocks.map { execution in
+            guard let serializedExecutionConfig = blueprint.managedExecutionBlockConfigs.first(where: { $0.id == execution.id }) else {
+                return execution
+            }
+
+            execution.enabled = serializedExecutionConfig.enabled
+            execution.config.controls = serializedExecutionConfig.controls
+
+            return execution
+        }
+
+        self.childManagedAnimations = self.childManagedAnimations.map { child in
+            guard let serializedChild = blueprint.managedChildAnimations.first(where: { $0.id == child.id }) else {
+                return child
+            }
+
+            var child = child
+
+            child.enabled = serializedChild.enabled
+
+            return child
+        }
 
         // TODO: Update the rest of the properties
     }
@@ -118,6 +143,27 @@ extension AnimationBlueprint.UnmanagedKeyframeSeries {
 
     init<ElementType: AnyObject>(series: UnmanagedKeyframeSeries<ElementType>) {
         self.init(id: series.id, name: series.name, enabled: series.enabled)
+    }
+
+}
+
+extension AnimationBlueprint.ManagedExecutionBlockConfig {
+
+    init<ElementType: AnyObject>(managedExecution: ManagedExecutionBlock<ElementType>) {
+        self.init(
+            id: managedExecution.id,
+            name: managedExecution.name,
+            enabled: managedExecution.enabled,
+            controls: managedExecution.config.controls
+        )
+    }
+
+}
+
+extension AnimationBlueprint.ManagedChildAnimation {
+
+    init<ElementType: AnyObject>(child: ChildManagedAnimation<ElementType>) {
+        self.init(id: child.id, name: child.name, enabled: child.enabled, animationID: child.managedAnimationID)
     }
 
 }

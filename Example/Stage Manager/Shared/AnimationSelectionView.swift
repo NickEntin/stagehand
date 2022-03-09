@@ -31,7 +31,15 @@ struct AnimationSelectionView: View {
 //                            animationSelectionAction(animation.blueprint, transceiver)
 //                        }
                         NavigationLink {
-                            AnimationDetailsView(animation: animation.blueprint, transceiver: transceiver)
+                            AnimationDetailsView(
+                                animation: animation.blueprint,
+                                transceiver: transceiver,
+                                blueprintForID: { id in
+                                    return transceiver.managedAnimations
+                                        .first(where: { $0.blueprint.id == id })?
+                                        .blueprint
+                                }
+                            )
                         } label: {
                             Text(animation.displayName)
                                 .padding()

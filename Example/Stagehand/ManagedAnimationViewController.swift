@@ -39,12 +39,25 @@ final class ManagedAnimationViewController: DemoViewController {
             blueprint: Self.makeRightToLeftBlueprint()
         )
 
+        let scaleAnimation = stageManager.registerManagedAnimation(
+            named: "Scale View",
+            blueprint: Self.makeScaleBlueprint()
+        )
+
+        let scaleBothAnimation = stageManager.registerManagedAnimation(
+            named: "Scale Both",
+            blueprint: Self.makeScaleBothBlueprint(scaleAnimation: scaleAnimation)
+        )
+
         animationRows = [
             ("Left to Right", { [unowned self] in
                 leftToRightAnimation.perform(on: self.mainView)
             }),
             ("Right to Left", { [unowned self] in
                 rightToLeftAnimation.perform(on: self.mainView)
+            }),
+            ("Scale Both Views", { [unowned self] in
+                scaleBothAnimation.perform(on: self.mainView)
             }),
         ]
     }
@@ -102,7 +115,30 @@ final class ManagedAnimationViewController: DemoViewController {
             for: \View.rightView.alpha,
             keyframes: [(0, 1), (0.5, 0)]
         )
-        rightToLeftAnimationBlueprint.addManagedExecution(
+        return rightToLeftAnimationBlueprint
+    }
+
+    private static func makeScaleBlueprint(hapticFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle) -> ManagedAnimationBlueprint<UIView> {
+        var blueprint = ManagedAnimationBlueprint<UIView>()
+        blueprint.addUnmanagedKeyframes(
+            named: "Scale Transform",
+            for: \UIView.transform,
+            keyframes: [
+                (0, CGAffineTransform.identity),
+                (0.5, CGAffineTransform(scaleX: 1.5, y: 1.5)),
+                (1, CGAffineTransform.identity),
+            ]
+        )
+        blueprint.addManagedKeyframes(
+            named: "Opacity",
+            for: \.alpha,
+            keyframes: [
+                (0, 1),
+                (0.5, 0.8),
+                (1, 1),
+            ]
+        )
+        blueprint.addManagedExecution(
             named: "Haptic Feedback",
             factory: { config in
                 let generator = UIImpactFeedbackGenerator(style: config.selectedStyle)
@@ -112,10 +148,29 @@ final class ManagedAnimationViewController: DemoViewController {
                     onForward: { _ in generator.impactOccurred() }
                 )
             },
-            config: HapticFeedbackConfig(selectedStyle: .medium),
-            at: 0.9
+            config: HapticFeedbackConfig(selectedStyle: hapticFeedbackStyle),
+            at: 0.5
         )
-        return rightToLeftAnimationBlueprint
+        return blueprint
+    }
+
+    private static func makeScaleBothBlueprint(scaleAnimation: ManagedAnimation<UIView>) -> ManagedAnimationBlueprint<View> {
+        var blueprint = ManagedAnimationBlueprint<View>()
+        blueprint.addManagedChild(
+            named: "Left View Scale",
+            scaleAnimation,
+            for: \.leftView,
+            startingAt: 0,
+            relativeDuration: 0.75
+        )
+        blueprint.addManagedChild(
+            named: "Right View Scale",
+            scaleAnimation,
+            for: \.rightView,
+            startingAt: 0.25,
+            relativeDuration: 0.75
+        )
+        return blueprint
     }
 
 }
@@ -178,6 +233,7 @@ struct HapticFeedbackConfig: ExecutionBlockConfig {
         controls = [
             .intSelection(
                 .init(
+                    id: UUID(),
                     name: "Style",
                     availableOptions: [
                         (displayName: "Light", value: UIImpactFeedbackGenerator.FeedbackStyle.light.rawValue),
@@ -186,7 +242,7 @@ struct HapticFeedbackConfig: ExecutionBlockConfig {
                         (displayName: "Soft", value: UIImpactFeedbackGenerator.FeedbackStyle.soft.rawValue),
                         (displayName: "Rigid", value: UIImpactFeedbackGenerator.FeedbackStyle.rigid.rawValue),
                     ],
-                    selectedOption: UIImpactFeedbackGenerator.FeedbackStyle.medium.rawValue
+                    selectedOption: selectedStyle.rawValue
                 )
             ),
         ]

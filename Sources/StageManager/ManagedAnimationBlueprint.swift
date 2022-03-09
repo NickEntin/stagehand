@@ -41,6 +41,8 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     internal var managedExeuctionBlocks: [ManagedExecutionBlock<ElementType>] = []
 
+    internal var childManagedAnimations: [ChildManagedAnimation<ElementType>] = []
+
     // MARK: - Public Methods - Managed Keyframes
 
     public mutating func addManagedKeyframes(
@@ -184,6 +186,12 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         )
     }
 
+    private struct EmptyConfig: ExecutionBlockConfig {
+
+        var controls: [ExecutionBlockControl] = []
+
+    }
+
     public mutating func addUnmanagedExecution(
         named name: String,
         onForward forwardBlock: @escaping (ElementType) -> Void,
@@ -198,12 +206,6 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         )
     }
 
-    private struct EmptyConfig: ExecutionBlockConfig {
-
-        var controls: [ExecutionBlockControl] = []
-
-    }
-
     // MARK: - Public Methods - Per-Frame Execution
 
     public mutating func addUnmanagedPerFrameExecution(
@@ -216,15 +218,26 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
     // MARK: - Public Methods - Composition
 
     public mutating func addManagedChild<SubelementType: AnyObject>(
+        named name: String,
         _ childAnimation: ManagedAnimation<SubelementType>,
         for subelement: KeyPath<ElementType, SubelementType>,
         startingAt relativeStartTimestamp: Double,
         relativeDuration: Double
     ) {
-        // TODO
+        childManagedAnimations.append(
+            ChildManagedAnimation<ElementType>(
+                id: UUID(),
+                name: name,
+                enabled: true,
+                managedAnimation: childAnimation,
+                subelement: subelement,
+                relativeStartTimestamp: relativeStartTimestamp,
+                relativeDuration: relativeDuration
+            )
+        )
     }
 
-    public mutating func addManagedChild<SubelementType: AnyObject>(
+    public mutating func addChildBlueprint<SubelementType: AnyObject>(
         _ childBlueprint: ManagedAnimationBlueprint<SubelementType>,
         for subelement: KeyPath<ElementType, SubelementType>,
         startingAt relativeStartTimestamp: Double,
@@ -291,7 +304,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
 public protocol ExecutionBlockConfig {
 
-    var controls: [ExecutionBlockControl] { get }
+    var controls: [ExecutionBlockControl] { get set }
 
 }
 
@@ -388,6 +401,50 @@ internal final class ManagedExecutionBlock<ElementType: AnyObject> {
     var enabled: Bool
 
     var config: ExecutionBlockConfig
+
+    var addToAnimation: (_ animation: inout Animation<ElementType>) -> Void
+
+}
+
+internal struct ChildManagedAnimation<ElementType: AnyObject> {
+
+    init<SubelementType: AnyObject>(
+        id: UUID,
+        name: String,
+        enabled: Bool,
+        managedAnimation: ManagedAnimation<SubelementType>,
+        subelement: KeyPath<ElementType, SubelementType>,
+        relativeStartTimestamp: Double,
+        relativeDuration: Double
+    ) {
+        self.id = id
+        self.name = name
+        self.enabled = enabled
+        self.managedAnimationID = managedAnimation.id
+        self.relativeStartTimestamp = relativeStartTimestamp
+        self.relativeDuration = relativeDuration
+
+        self.addToAnimation = { animation in
+            animation.addChild(
+                managedAnimation.buildAnimation(),
+                for: subelement,
+                startingAt: relativeStartTimestamp,
+                relativeDuration: relativeDuration
+            )
+        }
+    }
+
+    var id: UUID
+
+    var name: String
+
+    var enabled: Bool
+
+    var managedAnimationID: UUID
+
+    var relativeStartTimestamp: Double
+
+    var relativeDuration: Double
 
     var addToAnimation: (_ animation: inout Animation<ElementType>) -> Void
 

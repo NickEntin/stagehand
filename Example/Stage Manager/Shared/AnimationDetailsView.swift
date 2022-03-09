@@ -12,13 +12,18 @@ import SwiftUI
 
 struct AnimationDetailsView: View {
 
-    init(animation: AnimationBlueprint, transceiver: Transceiver) {
+    init(
+        animation: AnimationBlueprint,
+        transceiver: Transceiver,
+        blueprintForID: @escaping (UUID) -> AnimationBlueprint?
+    ) {
         self.durationFormatter = NumberFormatter()
         durationFormatter.maximumFractionDigits = 2
 
         self._animation = State(initialValue: animation)
         self._selectedEffectiveRepeatStyle = State(initialValue: .init(animation.implicitRepeatStyle))
         self.transceiver = transceiver
+        self.blueprintForID = blueprintForID
     }
 
     @State
@@ -26,6 +31,8 @@ struct AnimationDetailsView: View {
 
     @ObservedObject
     var transceiver: Transceiver
+
+    private let blueprintForID: (UUID) -> AnimationBlueprint?
 
     @State
     private var selectedEffectiveRepeatStyle: EffectiveRepeatStyle
@@ -57,7 +64,24 @@ struct AnimationDetailsView: View {
             ForEach($animation.unmanagedKeyframeSeries) { series in
                 SwitchRow(title: series.wrappedValue.name, isOn: series.enabled)
             }
-            // TODO: Show managed execution blocks
+            ForEach($animation.managedExecutionBlockConfigs) { config in
+                ManagedExecutionView(managedExecutionConfig: config)
+            }
+            ForEach($animation.managedChildAnimations) { child in
+                SwitchRow(
+                    title: child.wrappedValue.name,
+                    isOn: child.enabled,
+                    titleDestination: blueprintForID(child.wrappedValue.animationID).map { blueprint in
+                        {
+                            AnimationDetailsView(
+                                animation: blueprint,
+                                transceiver: transceiver,
+                                blueprintForID: blueprintForID
+                            )
+                        }
+                    }
+                )
+            }
         }
         .navigationTitle(animation.name)
         HStack {

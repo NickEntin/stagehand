@@ -42,8 +42,8 @@ public final class StageManager {
         named name: String,
         blueprint: ManagedAnimationBlueprint<ElementType>
     ) -> ManagedAnimation<ElementType> {
-        let animation = ManagedAnimation(blueprint: blueprint)
         let id = UUID()
+        let animation = ManagedAnimation(blueprint: blueprint, id: id)
         managedAnimations[id] = AnyManagedAnimation(managedAnimation: animation, id: id, name: name)
         return animation
     }

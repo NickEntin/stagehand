@@ -8,23 +8,33 @@
 
 import SwiftUI
 
-struct SwitchRow: View {
+struct SwitchRow<Destination: View>: View {
 
     init(
         title: String,
-        isOn: Binding<Bool>
+        isOn: Binding<Bool>,
+        titleDestination: (() -> Destination)?
     ) {
         self.title = title
         self.isOn = isOn
+        self.titleDestination = titleDestination
     }
 
     let title: String
     let isOn: Binding<Bool>
+    let titleDestination: (() -> Destination)?
 
     var body: some View {
         HStack {
-            Text(title)
-                .layoutPriority(1)
+//            if let titleDestination = titleDestination {
+//                NavigationLink(destination: titleDestination) {
+//                    Text(title)
+//                        .layoutPriority(1)
+//                }
+//            } else {
+                Text(title)
+                    .layoutPriority(1)
+//            }
             Spacer()
                 .layoutPriority(0.5)
             Toggle(title, isOn: isOn)
@@ -52,3 +62,14 @@ struct SwitchRow: View {
 //
 //    }
 //}
+
+extension SwitchRow where Destination == EmptyView {
+
+    init(
+        title: String,
+        isOn: Binding<Bool>
+    ) {
+        self.init(title: title, isOn: isOn, titleDestination: nil)
+    }
+
+}

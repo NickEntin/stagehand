@@ -58,16 +58,61 @@ struct NumericKeyframeChart: View {
     var keyframeValues: [Keyframe] {
         switch keyframeSequence.wrappedValue {
         case let .double(keyframes):
-            return keyframes.map { Keyframe(relativeTimestamp: CGFloat($0.relativeTimestamp), relativeValue: CGFloat($0.value)) }
+            return keyframes
+                .enumerated()
+                .map { index, keyframe in
+                    Keyframe(
+                        id: index,
+                        relativeTimestamp: CGFloat(keyframe.relativeTimestamp),
+                        relativeValue: CGFloat(keyframe.value)
+                    )
+                }
+
         case let .cgfloat(keyframes):
-            return keyframes.map { Keyframe(relativeTimestamp: CGFloat($0.relativeTimestamp), relativeValue: $0.value) }
+            return keyframes
+                .enumerated()
+                .map { index, keyframe in
+                    Keyframe(
+                        id: index,
+                        relativeTimestamp: CGFloat(keyframe.relativeTimestamp),
+                        relativeValue: keyframe.value
+                    )
+                }
+
         case .color:
             fatalError("Unexpected keyframe type")
         }
     }
 
     @State
-    var inProgressTranslation: CGSize = .zero
+    var inProgressTranslation: (Int, CGSize)? = nil
+
+    func offsetForKeyframe(id: Int) -> CGSize {
+        guard let inProgressTranslation = inProgressTranslation else {
+            return .zero
+        }
+
+        return inProgressTranslation.0 == id ? inProgressTranslation.1 : .zero
+    }
+
+    func updateKeyframe(at index: Int, relativeTimestamp: CGFloat, value: CGFloat) {
+        switch keyframeSequence.wrappedValue {
+        case let .double(keyframes):
+            var keyframes = keyframes
+            keyframes[index].relativeTimestamp = relativeTimestamp
+            keyframes[index].value = Double(value)
+            keyframeSequence.wrappedValue = .double(keyframes)
+
+        case let .cgfloat(keyframes):
+            var keyframes = keyframes
+            keyframes[index].relativeTimestamp = relativeTimestamp
+            keyframes[index].value = value
+            keyframeSequence.wrappedValue = .cgfloat(keyframes)
+
+        case .color:
+            fatalError("Unexpected keyframe type")
+        }
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -86,30 +131,44 @@ struct NumericKeyframeChart: View {
                         return
                     }
 
+                    let firstOffset = offsetForKeyframe(id: 0)
+
                     path.move(
                         to: CGPoint(
                             x: 0,
-                            y: height - height * firstValue // TODO: Adjust for value range
+                            y: (height - height * firstValue + firstOffset.height) // TODO: Adjust for value range
+                                .clamped(in: 0...height)
                         )
                     )
 
                     for keyframe in keyframeValues {
+                        let offset = offsetForKeyframe(id: keyframe.id)
                         path.addLine(
                             to: CGPoint(
-                                x: keyframe.relativeTimestamp * width,
-                                y: height - keyframe.relativeValue * height
+                                x: keyframe.relativeTimestamp * width + offset.width,
+                                y: (height - keyframe.relativeValue * height + offset.height)
+                                    .clamped(in: 0...height)
                             )
                         )
                     }
 
                     if lastKeyframe.relativeTimestamp != 1 {
-                        path.addLine(to: CGPoint(x: width, y: height - lastKeyframe.relativeValue * height))
+                        let lastOffset = offsetForKeyframe(id: lastKeyframe.id)
+                        path.addLine(
+                            to: CGPoint(
+                                x: width,
+                                y: (height - lastKeyframe.relativeValue * height + lastOffset.height)
+                                    .clamped(in: 0...height)
+                            )
+                        )
                     }
                 }
                 .stroke(lineWidth: 2)
                 ForEach(keyframeValues) { keyframe in
-                    let offsetX: CGFloat = keyframe.relativeTimestamp * width - controlPointSize.width / 2 + inProgressTranslation.width
-                    let offsetY: CGFloat = height - keyframe.relativeValue * height - controlPointSize.height / 2 - inProgressTranslation.height
+                    let inProgressOffset = offsetForKeyframe(id: keyframe.id)
+                    let offsetX: CGFloat = keyframe.relativeTimestamp * width - controlPointSize.width / 2 + inProgressOffset.width
+                    let offsetY: CGFloat = (height - keyframe.relativeValue * height - controlPointSize.height / 2 + inProgressOffset.height)
+                        .clamped(in: (-controlPointSize.height / 2)...(height - controlPointSize.height / 2))
                     Circle()
                         .fill(Color.blue)
                         .frame(width: controlPointSize.width, height: controlPointSize.height, alignment: .center)
@@ -117,22 +176,36 @@ struct NumericKeyframeChart: View {
                             x: offsetX,
                             y: offsetY
                         )
-//                        .gesture(
-//                            DragGesture()
-//                                .onChanged { value in
-//                                    inProgressTranslation = value.translation
-//                                }
-//                        )
+                        .simultaneousGesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    inProgressTranslation = (
+                                        keyframe.id,
+                                        CGSize(width: value.translation.width, height: value.translation.height)
+                                    )
+                                }
+                                .onEnded { value in
+                                    inProgressTranslation = nil
+
+                                    let relativeTimestampDelta = (value.translation.width / geometry.size.width)
+                                    let relativeTimestamp = (keyframe.relativeTimestamp + relativeTimestampDelta)
+                                        .clamped(in: 0...1)
+
+                                    let valueDelta = (-value.translation.height / geometry.size.height)
+                                    let value = (keyframe.relativeValue + valueDelta) // TODO: Clamp
+
+                                    updateKeyframe(at: keyframe.id, relativeTimestamp: relativeTimestamp, value: value)
+                                }
+                        )
                 }
             }
-
         }
         .frame(height: 120)
     }
 
     struct Keyframe: Identifiable {
 
-        var id: UUID = UUID()
+        var id: Int
 
         var relativeTimestamp: CGFloat
 
@@ -285,5 +358,17 @@ struct KeyframeSeriesView_Previews: PreviewProvider {
             ]
         )
     )
+
+}
+
+private extension Comparable {
+
+    func clamped(min minValue: Self, max maxValue: Self) -> Self {
+        return max(minValue, min(maxValue, self))
+    }
+
+    func clamped(in range: ClosedRange<Self>) -> Self {
+        return clamped(min: range.lowerBound, max: range.upperBound)
+    }
 
 }

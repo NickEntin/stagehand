@@ -82,14 +82,19 @@ private struct SelectionControlView<OptionType: Hashable>: View {
     var selectedValue: OptionType
 
     var body: some View {
-        Picker(name, selection: $selectedValue) {
-            ForEach(availableOptions) { option in
-                Text(option.displayName).tag(option.value)
+        HStack {
+            Text(name)
+            Spacer()
+            Picker(name, selection: $selectedValue) {
+                ForEach(availableOptions) { option in
+                    Text(option.displayName).tag(option.value)
+                }
+            }
+            .onChange(of: selectedValue) { newValue in
+                onUpdate(newValue)
             }
         }
-        .onChange(of: selectedValue) { newValue in
-            onUpdate(newValue)
-        }
+        .padding()
     }
 
 }

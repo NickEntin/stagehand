@@ -61,7 +61,7 @@ struct ManagedAnimation: Identifiable {
 
     var displayName: String
 
-    var blueprint: AnimationBlueprint
+    var blueprint: SerializableAnimationBlueprint
 
 }
 
@@ -77,7 +77,7 @@ final class Transceiver: ObservableObject {
 
     private let memoTransceiver: Memo.Transceiver
 
-    public func updateAnimation(_ blueprint: AnimationBlueprint) async throws {
+    public func updateAnimation(_ blueprint: SerializableAnimationBlueprint) async throws {
         let encoder = JSONEncoder()
         let payload = try encoder.encode(ClientToServerMessage.updateAnimation(blueprint))
         try await memoTransceiver.send(payload: payload)

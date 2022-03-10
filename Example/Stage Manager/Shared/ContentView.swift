@@ -12,7 +12,7 @@ import SwiftUI
 struct ContentView: View {
 
     @State
-    var animationDetailsParams: (AnimationBlueprint, Transceiver)?
+    var animationDetailsParams: (SerializableAnimationBlueprint, Transceiver)?
 
     var body: some View {
         HStack {

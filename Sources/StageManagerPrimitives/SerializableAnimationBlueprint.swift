@@ -7,8 +7,7 @@
 
 import Foundation
 
-// TODO: Prefix with "Serializable"
-public struct AnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
+public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
 
     // MARK: - TokenIdentifiable
 
@@ -17,14 +16,14 @@ public struct AnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
     // MARK: - Life Cycle
 
     public init(
-        id: Token<AnimationBlueprint>,
+        id: Token<SerializableAnimationBlueprint>,
         name: String,
         implicitDuration: TimeInterval,
-        implicitRepeatStyle: AnimationBlueprint.RepeatStyle,
-        managedKeyframeSeries: [AnimationBlueprint.ManagedKeyframeSeries],
-        unmanagedKeyframeSeries: [AnimationBlueprint.UnmanagedKeyframeSeries],
-        managedExecutionBlockConfigs: [AnimationBlueprint.ManagedExecutionBlockConfig],
-        managedChildAnimations: [AnimationBlueprint.ManagedChildAnimation]
+        implicitRepeatStyle: SerializableAnimationBlueprint.RepeatStyle,
+        managedKeyframeSeries: [SerializableAnimationBlueprint.ManagedKeyframeSeries],
+        unmanagedKeyframeSeries: [SerializableAnimationBlueprint.UnmanagedKeyframeSeries],
+        managedExecutionBlockConfigs: [SerializableAnimationBlueprint.ManagedExecutionBlockConfig],
+        managedChildAnimations: [SerializableAnimationBlueprint.ManagedChildAnimation]
     ) {
         self.id = id
         self.name = name
@@ -38,7 +37,7 @@ public struct AnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
 
     // MARK: - Public Properties
 
-    public var id: Token<AnimationBlueprint>
+    public var id: Token<SerializableAnimationBlueprint>
 
     public var name: String
 
@@ -172,7 +171,7 @@ public struct AnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
             id: Token<ManagedChildAnimation>,
             name: String,
             enabled: Bool,
-            animationID: Token<AnimationBlueprint>
+            animationID: Token<SerializableAnimationBlueprint>
         ) {
             self.id = id
             self.name = name
@@ -188,7 +187,7 @@ public struct AnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
 
         public var enabled: Bool
 
-        public var animationID: Token<AnimationBlueprint>
+        public var animationID: Token<SerializableAnimationBlueprint>
 
     }
 

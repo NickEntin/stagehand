@@ -12,12 +12,12 @@ import SwiftUI
 struct KeyframeSeriesView: View {
 
     init(
-        keyframeSeries: Binding<AnimationBlueprint.ManagedKeyframeSeries>
+        keyframeSeries: Binding<SerializableAnimationBlueprint.ManagedKeyframeSeries>
     ) {
         self.keyframeSeries = keyframeSeries
     }
 
-    let keyframeSeries: Binding<AnimationBlueprint.ManagedKeyframeSeries>
+    let keyframeSeries: Binding<SerializableAnimationBlueprint.ManagedKeyframeSeries>
 
     var body: some View {
         VStack {
@@ -332,8 +332,8 @@ struct KeyframeSeriesView_Previews: PreviewProvider {
         )
     }
 
-    static var colorKeyframeSeries: AnimationBlueprint.ManagedKeyframeSeries = .init(
-        id: UUID(),
+    static var colorKeyframeSeries: SerializableAnimationBlueprint.ManagedKeyframeSeries = .init(
+        id: .init(),
         name: "Background Color",
         enabled: true,
         keyframeSequence: KeyframeSequence.color(
@@ -345,8 +345,8 @@ struct KeyframeSeriesView_Previews: PreviewProvider {
         )
     )
 
-    static var alphaKeyframeSeries: AnimationBlueprint.ManagedKeyframeSeries = .init(
-        id: UUID(),
+    static var alphaKeyframeSeries: SerializableAnimationBlueprint.ManagedKeyframeSeries = .init(
+        id: .init(),
         name: "Alpha",
         enabled: true,
         keyframeSequence: KeyframeSequence.cgfloat(

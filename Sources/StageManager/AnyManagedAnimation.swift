@@ -14,7 +14,7 @@ internal final class AnyManagedAnimation {
 
     internal init<ElementType: AnyObject>(
         managedAnimation: ManagedAnimation<ElementType>,
-        id: Token<AnimationBlueprint>,
+        id: Token<SerializableAnimationBlueprint>,
         name: String
     ) {
         self.managedAnimation = managedAnimation
@@ -28,13 +28,13 @@ internal final class AnyManagedAnimation {
         }
 
         self.serializeAction = {
-            return AnimationBlueprint(blueprint: managedAnimation.blueprint, id: id, name: name)
+            return SerializableAnimationBlueprint(blueprint: managedAnimation.blueprint, id: id, name: name)
         }
     }
 
     // MARK: - Public Methods
 
-    public func update(from blueprint: AnimationBlueprint) throws {
+    public func update(from blueprint: SerializableAnimationBlueprint) throws {
         var error: Error? = nil
         updateBlueprintAction(blueprint, &error)
         if let error = error {
@@ -42,7 +42,7 @@ internal final class AnyManagedAnimation {
         }
     }
 
-    public func serialize() -> AnimationBlueprint {
+    public func serialize() -> SerializableAnimationBlueprint {
         return serializeAction()
     }
 
@@ -50,8 +50,8 @@ internal final class AnyManagedAnimation {
 
     private let managedAnimation: AnyObject
 
-    private let updateBlueprintAction: (AnimationBlueprint, inout Error?) -> Void
+    private let updateBlueprintAction: (SerializableAnimationBlueprint, inout Error?) -> Void
 
-    private let serializeAction: () -> AnimationBlueprint
+    private let serializeAction: () -> SerializableAnimationBlueprint
 
 }

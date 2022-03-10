@@ -9,7 +9,7 @@ import Foundation
 
 public enum ServerToClientMessage {
 
-    case registerAnimation(AnimationBlueprint)
+    case registerAnimation(SerializableAnimationBlueprint)
 
 }
 
@@ -37,7 +37,9 @@ extension ServerToClientMessage: Decodable {
 
         switch key {
         case .registerAnimation:
-            self = .registerAnimation(try container.decode(AnimationBlueprint.self, forKey: .registerAnimation))
+            self = .registerAnimation(
+                try container.decode(SerializableAnimationBlueprint.self, forKey: .registerAnimation)
+            )
         }
     }
 

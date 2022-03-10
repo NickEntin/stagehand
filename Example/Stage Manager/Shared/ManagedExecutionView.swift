@@ -12,12 +12,12 @@ import SwiftUI
 struct ManagedExecutionView: View {
 
     init(
-        managedExecutionConfig: Binding<AnimationBlueprint.ManagedExecutionBlockConfig>
+        managedExecutionConfig: Binding<SerializableAnimationBlueprint.ManagedExecutionBlockConfig>
     ) {
         self.managedExecutionConfig = managedExecutionConfig
     }
 
-    let managedExecutionConfig: Binding<AnimationBlueprint.ManagedExecutionBlockConfig>
+    let managedExecutionConfig: Binding<SerializableAnimationBlueprint.ManagedExecutionBlockConfig>
 
     var body: some View {
         ForEach(managedExecutionConfig.controls) { control in

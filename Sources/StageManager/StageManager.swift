@@ -42,7 +42,7 @@ public final class StageManager {
         named name: String,
         blueprint: ManagedAnimationBlueprint<ElementType>
     ) -> ManagedAnimation<ElementType> {
-        let id = Token<AnimationBlueprint>()
+        let id = Token<SerializableAnimationBlueprint>()
         let animation = ManagedAnimation(blueprint: blueprint, id: id)
         managedAnimations[id] = AnyManagedAnimation(managedAnimation: animation, id: id, name: name)
         return animation
@@ -52,13 +52,13 @@ public final class StageManager {
 
     private let memoServer: Memo.Server = .init(config: .stageManager)
 
-    private var managedAnimations: [Token<AnimationBlueprint>: AnyManagedAnimation] = [:]
+    private var managedAnimations: [Token<SerializableAnimationBlueprint>: AnyManagedAnimation] = [:]
 
     private var transceivers: [Transceiver] = []
 
     // MARK: - Private Methods
 
-    private func register(_ blueprint: AnimationBlueprint, with transceiver: Transceiver) {
+    private func register(_ blueprint: SerializableAnimationBlueprint, with transceiver: Transceiver) {
         let message = ServerToClientMessage.registerAnimation(blueprint)
         let jsonEncoder = JSONEncoder()
 

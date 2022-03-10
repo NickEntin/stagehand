@@ -9,7 +9,7 @@ import Foundation
 
 public enum ClientToServerMessage {
 
-    case updateAnimation(AnimationBlueprint)
+    case updateAnimation(SerializableAnimationBlueprint)
 
 }
 
@@ -37,7 +37,7 @@ extension ClientToServerMessage: Decodable {
 
         switch key {
         case .updateAnimation:
-            self = .updateAnimation(try container.decode(AnimationBlueprint.self, forKey: .updateAnimation))
+            self = .updateAnimation(try container.decode(SerializableAnimationBlueprint.self, forKey: .updateAnimation))
         }
     }
 

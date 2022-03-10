@@ -13,9 +13,9 @@ import SwiftUI
 struct AnimationDetailsView: View {
 
     init(
-        animation: AnimationBlueprint,
+        animation: SerializableAnimationBlueprint,
         transceiver: Transceiver,
-        blueprintForID: @escaping (Token<AnimationBlueprint>) -> AnimationBlueprint?
+        blueprintForID: @escaping (Token<SerializableAnimationBlueprint>) -> SerializableAnimationBlueprint?
     ) {
         self.durationFormatter = NumberFormatter()
         durationFormatter.maximumFractionDigits = 2
@@ -27,12 +27,12 @@ struct AnimationDetailsView: View {
     }
 
     @State
-    var animation: AnimationBlueprint
+    var animation: SerializableAnimationBlueprint
 
     @ObservedObject
     var transceiver: Transceiver
 
-    private let blueprintForID: (Token<AnimationBlueprint>) -> AnimationBlueprint?
+    private let blueprintForID: (Token<SerializableAnimationBlueprint>) -> SerializableAnimationBlueprint?
 
     @State
     private var selectedEffectiveRepeatStyle: EffectiveRepeatStyle
@@ -131,14 +131,14 @@ struct RepeatStyleRows: View {
 
     init(
         selectedEffectiveRepeatStyle: Binding<EffectiveRepeatStyle>,
-        animation: Binding<AnimationBlueprint>
+        animation: Binding<SerializableAnimationBlueprint>
     ) {
         self.selectedEffectiveRepeatStyle = selectedEffectiveRepeatStyle
         self.animation = animation
     }
 
     let selectedEffectiveRepeatStyle: Binding<EffectiveRepeatStyle>
-    let animation: Binding<AnimationBlueprint>
+    let animation: Binding<SerializableAnimationBlueprint>
 
     var body: some View {
         HStack {
@@ -187,7 +187,7 @@ enum EffectiveRepeatStyle {
     case infinitelyRepeating
     case repeating
 
-    init(_ repeatStyle: AnimationBlueprint.RepeatStyle) {
+    init(_ repeatStyle: SerializableAnimationBlueprint.RepeatStyle) {
         switch repeatStyle.count {
         case 1:
             self = .noRepeat

@@ -312,7 +312,7 @@ public protocol ExecutionBlockConfig {
 
 internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 
-    var id: Token<StageManagerPrimitives.AnimationBlueprint.ManagedKeyframeSeries>
+    var id: Token<SerializableAnimationBlueprint.ManagedKeyframeSeries>
 
     var name: String
 
@@ -327,7 +327,7 @@ internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 internal struct UnmanagedKeyframeSeries<ElementType: AnyObject> {
 
     init<PropertyType: AnimatableProperty>(
-        id: Token<AnimationBlueprint.UnmanagedKeyframeSeries>,
+        id: Token<SerializableAnimationBlueprint.UnmanagedKeyframeSeries>,
         name: String,
         enabled: Bool,
         property: WritableKeyPath<ElementType, PropertyType>,
@@ -344,7 +344,7 @@ internal struct UnmanagedKeyframeSeries<ElementType: AnyObject> {
         }
     }
 
-    var id: Token<AnimationBlueprint.UnmanagedKeyframeSeries>
+    var id: Token<SerializableAnimationBlueprint.UnmanagedKeyframeSeries>
 
     var name: String
 
@@ -371,7 +371,7 @@ internal struct ManagedAssignmentSeries<ElementType: AnyObject> {
 internal final class ManagedExecutionBlock<ElementType: AnyObject> {
 
     init<Config: ExecutionBlockConfig>(
-        id: Token<AnimationBlueprint.ManagedExecutionBlockConfig>,
+        id: Token<SerializableAnimationBlueprint.ManagedExecutionBlockConfig>,
         name: String,
         enabled: Bool,
         factory: @escaping (Config) -> ManagedAnimationBlueprint<ElementType>.ManagedExecution,
@@ -394,7 +394,7 @@ internal final class ManagedExecutionBlock<ElementType: AnyObject> {
         }
     }
 
-    var id: Token<AnimationBlueprint.ManagedExecutionBlockConfig>
+    var id: Token<SerializableAnimationBlueprint.ManagedExecutionBlockConfig>
 
     var name: String
 
@@ -409,7 +409,7 @@ internal final class ManagedExecutionBlock<ElementType: AnyObject> {
 internal struct ChildManagedAnimation<ElementType: AnyObject> {
 
     init<SubelementType: AnyObject>(
-        id: Token<AnimationBlueprint.ManagedChildAnimation>,
+        id: Token<SerializableAnimationBlueprint.ManagedChildAnimation>,
         name: String,
         enabled: Bool,
         managedAnimation: ManagedAnimation<SubelementType>,
@@ -434,13 +434,13 @@ internal struct ChildManagedAnimation<ElementType: AnyObject> {
         }
     }
 
-    var id: Token<AnimationBlueprint.ManagedChildAnimation>
+    var id: Token<SerializableAnimationBlueprint.ManagedChildAnimation>
 
     var name: String
 
     var enabled: Bool
 
-    var managedAnimationID: Token<AnimationBlueprint>
+    var managedAnimationID: Token<SerializableAnimationBlueprint>
 
     var relativeStartTimestamp: Double
 

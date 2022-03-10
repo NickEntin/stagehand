@@ -39,6 +39,8 @@ struct ManagedExecutionView: View {
                         }
                     }
                 }
+            case .intFreeform:
+                fatalError() // TODO: Handle freeform int controls
             }
         }
     }

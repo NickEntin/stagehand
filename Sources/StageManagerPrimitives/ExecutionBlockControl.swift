@@ -35,13 +35,35 @@ public enum ExecutionBlockControl {
 
     }
 
-    // case stringSelection(Selection<String>)
-
     case intSelection(Selection<Int>)
 
     // MARK: -
 
-    // case freeformInt(name: String, defaultValue: Int, validRange: ClosedRange<Int>)
+    public struct Freeform<OptionType: Comparable> {
+
+        public init(
+            id: Token<ExecutionBlockControl>,
+            name: String,
+            validRange: Range<OptionType>?,
+            selectedValue: OptionType
+        ) {
+            self.id = id
+            self.name = name
+            self.validRange = validRange
+            self.selectedValue = selectedValue
+        }
+
+        public var id: Token<ExecutionBlockControl>
+
+        public var name: String
+
+        public var validRange: Range<OptionType>?
+
+        public var selectedValue: OptionType
+
+    }
+
+    case intFreeform(Freeform<Int>)
 
 }
 
@@ -57,6 +79,8 @@ extension ExecutionBlockControl: Identifiable {
         switch self {
         case let .intSelection(selection):
             return selection.id
+        case let .intFreeform(freeform):
+            return freeform.id
         }
     }
 
@@ -66,6 +90,7 @@ extension ExecutionBlockControl: Codable {
 
     private enum CodingKeys: CodingKey {
         case intSelection
+        case intFreeform
     }
 
     private enum SelectionKeys: CodingKey {
@@ -74,6 +99,13 @@ extension ExecutionBlockControl: Codable {
         case availableOptionDisplayNames
         case availableOptionValues
         case selectedOption
+    }
+
+    private enum FreeformKeys: CodingKey {
+        case id
+        case name
+        case validRange
+        case selectedValue
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -98,10 +130,23 @@ extension ExecutionBlockControl: Codable {
             try selectionContainer.encode(availableValues, forKey: .availableOptionValues)
         }
 
+        func encodeFreeform<OptionType: Encodable>(
+            _ freeform: Freeform<OptionType>,
+            in container: inout KeyedEncodingContainer<FreeformKeys>
+        ) throws {
+            try container.encode(freeform.id, forKey: .id)
+            try container.encode(freeform.name, forKey: .name)
+            try container.encodeIfPresent(freeform.validRange, forKey: .validRange)
+            try container.encode(freeform.selectedValue, forKey: .selectedValue)
+        }
+
         switch self {
         case let .intSelection(selection):
             var selectionContainer = container.nestedContainer(keyedBy: SelectionKeys.self, forKey: .intSelection)
             try encodeSelection(selection, in: &selectionContainer)
+        case let .intFreeform(freeform):
+            var selectionContainer = container.nestedContainer(keyedBy: FreeformKeys.self, forKey: .intFreeform)
+            try encodeFreeform(freeform, in: &selectionContainer)
         }
     }
 
@@ -131,10 +176,25 @@ extension ExecutionBlockControl: Codable {
             )
         }
 
+        func decodeFreeform<ValueType: Decodable>(
+            _ container: KeyedDecodingContainer<FreeformKeys>
+        ) throws -> Freeform<ValueType> {
+            return Freeform<ValueType>(
+                id: try container.decode(Token<ExecutionBlockControl>.self, forKey: .id),
+                name: try container.decode(String.self, forKey: .name),
+                validRange: try container.decodeIfPresent(Range<ValueType>.self, forKey: .validRange),
+                selectedValue: try container.decode(ValueType.self, forKey: .selectedValue)
+            )
+        }
+
         switch key {
         case .intSelection:
             self = .intSelection(
                 try decodeSelection(container.nestedContainer(keyedBy: SelectionKeys.self, forKey: .intSelection))
+            )
+        case .intFreeform:
+            self = .intFreeform(
+                try decodeFreeform(container.nestedContainer(keyedBy: FreeformKeys.self, forKey: .intFreeform))
             )
         }
     }

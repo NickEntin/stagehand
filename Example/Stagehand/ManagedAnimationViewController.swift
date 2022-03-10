@@ -254,8 +254,8 @@ struct HapticFeedbackConfig: ExecutionBlockConfig {
         switch controls[0] {
         case let .intSelection(selection):
             return .init(rawValue: selection.selectedOption)!
-//        default:
-//            fatalError()
+        default:
+            fatalError("Unexpected control type")
         }
     }
 

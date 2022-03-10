@@ -440,7 +440,7 @@ internal struct ChildManagedAnimation<ElementType: AnyObject> {
 
     var enabled: Bool
 
-    var managedAnimationID: UUID
+    var managedAnimationID: Token<AnimationBlueprint>
 
     var relativeStartTimestamp: Double
 

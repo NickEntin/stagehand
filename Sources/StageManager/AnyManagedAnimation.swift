@@ -12,7 +12,11 @@ internal final class AnyManagedAnimation {
 
     // MARK: - Life Cycle
 
-    internal init<ElementType: AnyObject>(managedAnimation: ManagedAnimation<ElementType>, id: UUID, name: String) {
+    internal init<ElementType: AnyObject>(
+        managedAnimation: ManagedAnimation<ElementType>,
+        id: Token<AnimationBlueprint>,
+        name: String
+    ) {
         self.managedAnimation = managedAnimation
 
         self.updateBlueprintAction = { blueprint, error in

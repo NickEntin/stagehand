@@ -12,7 +12,7 @@ extension AnimationBlueprint {
 
     init<ElementType: AnyObject>(
         blueprint: ManagedAnimationBlueprint<ElementType>,
-        id: UUID,
+        id: Token<AnimationBlueprint>,
         name: String
     ) {
         self.init(

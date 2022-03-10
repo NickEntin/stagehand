@@ -42,7 +42,7 @@ public final class StageManager {
         named name: String,
         blueprint: ManagedAnimationBlueprint<ElementType>
     ) -> ManagedAnimation<ElementType> {
-        let id = UUID()
+        let id = Token<AnimationBlueprint>()
         let animation = ManagedAnimation(blueprint: blueprint, id: id)
         managedAnimations[id] = AnyManagedAnimation(managedAnimation: animation, id: id, name: name)
         return animation
@@ -52,7 +52,7 @@ public final class StageManager {
 
     private let memoServer: Memo.Server = .init(config: .stageManager)
 
-    private var managedAnimations: [UUID: AnyManagedAnimation] = [:]
+    private var managedAnimations: [Token<AnimationBlueprint>: AnyManagedAnimation] = [:]
 
     private var transceivers: [Transceiver] = []
 

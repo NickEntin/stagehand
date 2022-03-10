@@ -41,7 +41,7 @@ final class ManagedAnimationViewController: DemoViewController {
 
         let scaleAnimation = stageManager.registerManagedAnimation(
             named: "Scale View",
-            blueprint: Self.makeScaleBlueprint()
+            blueprint: Self.makeScaleBlueprint(hapticFeedbackStyle: .medium)
         )
 
         let scaleBothAnimation = stageManager.registerManagedAnimation(

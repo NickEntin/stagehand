@@ -21,7 +21,7 @@ public final class ManagedAnimation<ElementType: AnyObject> {
 
     // MARK: - Life Cycle
 
-    internal init(blueprint: ManagedAnimationBlueprint<ElementType>, id: UUID) {
+    internal init(blueprint: ManagedAnimationBlueprint<ElementType>, id: Token<AnimationBlueprint>) {
         self.blueprint = blueprint
         self.id = id
     }
@@ -30,7 +30,7 @@ public final class ManagedAnimation<ElementType: AnyObject> {
 
     internal var blueprint: ManagedAnimationBlueprint<ElementType>
 
-    internal let id: UUID
+    internal let id: Token<AnimationBlueprint>
 
     // MARK: - Public Methods
 

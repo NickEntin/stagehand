@@ -15,7 +15,7 @@ struct AnimationDetailsView: View {
     init(
         animation: AnimationBlueprint,
         transceiver: Transceiver,
-        blueprintForID: @escaping (UUID) -> AnimationBlueprint?
+        blueprintForID: @escaping (Token<AnimationBlueprint>) -> AnimationBlueprint?
     ) {
         self.durationFormatter = NumberFormatter()
         durationFormatter.maximumFractionDigits = 2
@@ -32,7 +32,7 @@ struct AnimationDetailsView: View {
     @ObservedObject
     var transceiver: Transceiver
 
-    private let blueprintForID: (UUID) -> AnimationBlueprint?
+    private let blueprintForID: (Token<AnimationBlueprint>) -> AnimationBlueprint?
 
     @State
     private var selectedEffectiveRepeatStyle: EffectiveRepeatStyle

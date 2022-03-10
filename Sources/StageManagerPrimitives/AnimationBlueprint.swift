@@ -8,7 +8,11 @@
 import Foundation
 
 // TODO: Prefix with "Serializable"
-public struct AnimationBlueprint: Codable, Identifiable {
+public struct AnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
+
+    // MARK: - TokenIdentifiable
+
+    public static var tokenPrefix: String = "ABP"
 
     // MARK: - Public Static Properties
 
@@ -17,7 +21,7 @@ public struct AnimationBlueprint: Codable, Identifiable {
     // MARK: - Life Cycle
 
     public init(
-        id: UUID,
+        id: Token<AnimationBlueprint>,
         name: String,
         implicitDuration: TimeInterval,
         implicitRepeatStyle: AnimationBlueprint.RepeatStyle,
@@ -38,7 +42,7 @@ public struct AnimationBlueprint: Codable, Identifiable {
 
     // MARK: - Public Properties
 
-    public var id: UUID
+    public var id: Token<AnimationBlueprint>
 
     public var name: String
 
@@ -147,7 +151,7 @@ public struct AnimationBlueprint: Codable, Identifiable {
 
         // MARK: - Life Cycle
 
-        public init(id: UUID, name: String, enabled: Bool, animationID: UUID) {
+        public init(id: UUID, name: String, enabled: Bool, animationID: Token<AnimationBlueprint>) {
             self.id = id
             self.name = name
             self.enabled = enabled
@@ -162,7 +166,7 @@ public struct AnimationBlueprint: Codable, Identifiable {
 
         public var enabled: Bool
 
-        public var animationID: UUID
+        public var animationID: Token<AnimationBlueprint>
 
     }
 

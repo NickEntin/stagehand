@@ -93,7 +93,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
     ) {
         unmanagedKeyframeSeries.append(
             UnmanagedKeyframeSeries<ElementType>(
-                id: UUID(),
+                id: .init(),
                 name: name,
                 enabled: true,
                 property: property,
@@ -176,7 +176,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
     ) {
         managedExeuctionBlocks.append(
             .init(
-                id: UUID(),
+                id: .init(),
                 name: name,
                 enabled: true,
                 factory: factory,
@@ -226,7 +226,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
     ) {
         childManagedAnimations.append(
             ChildManagedAnimation<ElementType>(
-                id: UUID(),
+                id: .init(),
                 name: name,
                 enabled: true,
                 managedAnimation: childAnimation,
@@ -264,7 +264,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
     ) {
         managedKeyframeSeries.append(
             ManagedKeyframeSeries(
-                id: UUID(),
+                id: .init(),
                 name: name,
                 property: property,
                 enabled: true,
@@ -312,7 +312,7 @@ public protocol ExecutionBlockConfig {
 
 internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 
-    var id: UUID
+    var id: Token<StageManagerPrimitives.AnimationBlueprint.ManagedKeyframeSeries>
 
     var name: String
 
@@ -327,7 +327,7 @@ internal struct ManagedKeyframeSeries<ElementType: AnyObject> {
 internal struct UnmanagedKeyframeSeries<ElementType: AnyObject> {
 
     init<PropertyType: AnimatableProperty>(
-        id: UUID,
+        id: Token<AnimationBlueprint.UnmanagedKeyframeSeries>,
         name: String,
         enabled: Bool,
         property: WritableKeyPath<ElementType, PropertyType>,
@@ -344,7 +344,7 @@ internal struct UnmanagedKeyframeSeries<ElementType: AnyObject> {
         }
     }
 
-    var id: UUID
+    var id: Token<AnimationBlueprint.UnmanagedKeyframeSeries>
 
     var name: String
 
@@ -371,7 +371,7 @@ internal struct ManagedAssignmentSeries<ElementType: AnyObject> {
 internal final class ManagedExecutionBlock<ElementType: AnyObject> {
 
     init<Config: ExecutionBlockConfig>(
-        id: UUID,
+        id: Token<AnimationBlueprint.ManagedExecutionBlockConfig>,
         name: String,
         enabled: Bool,
         factory: @escaping (Config) -> ManagedAnimationBlueprint<ElementType>.ManagedExecution,
@@ -394,7 +394,7 @@ internal final class ManagedExecutionBlock<ElementType: AnyObject> {
         }
     }
 
-    var id: UUID
+    var id: Token<AnimationBlueprint.ManagedExecutionBlockConfig>
 
     var name: String
 
@@ -409,7 +409,7 @@ internal final class ManagedExecutionBlock<ElementType: AnyObject> {
 internal struct ChildManagedAnimation<ElementType: AnyObject> {
 
     init<SubelementType: AnyObject>(
-        id: UUID,
+        id: Token<AnimationBlueprint.ManagedChildAnimation>,
         name: String,
         enabled: Bool,
         managedAnimation: ManagedAnimation<SubelementType>,
@@ -434,7 +434,7 @@ internal struct ChildManagedAnimation<ElementType: AnyObject> {
         }
     }
 
-    var id: UUID
+    var id: Token<AnimationBlueprint.ManagedChildAnimation>
 
     var name: String
 

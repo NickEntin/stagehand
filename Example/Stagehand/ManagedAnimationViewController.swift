@@ -233,7 +233,7 @@ struct HapticFeedbackConfig: ExecutionBlockConfig {
         controls = [
             .intSelection(
                 .init(
-                    id: UUID(),
+                    id: .init(),
                     name: "Style",
                     availableOptions: [
                         (displayName: "Light", value: UIImpactFeedbackGenerator.FeedbackStyle.light.rawValue),

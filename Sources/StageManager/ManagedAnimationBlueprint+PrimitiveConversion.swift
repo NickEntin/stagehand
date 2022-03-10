@@ -103,7 +103,7 @@ extension ManagedAnimationBlueprint {
     }
 
     enum BlueprintUpdateError: Swift.Error {
-        case keyframeSeriesTypeMistmatch(id: UUID)
+        case keyframeSeriesTypeMistmatch(id: Token<AnimationBlueprint.ManagedKeyframeSeries>)
     }
 
 }

@@ -76,6 +76,8 @@ extension ManagedAnimationBlueprint {
 
         // TODO: Update managed property assignments
 
+        // TODO: Update unmanaged property assignments
+
         self.managedExeuctionBlocks = self.managedExeuctionBlocks.map { execution in
             guard let serializedExecutionConfig = blueprint.managedExecutionBlockConfigs.first(where: { $0.id == execution.id }) else {
                 return execution
@@ -86,6 +88,10 @@ extension ManagedAnimationBlueprint {
 
             return execution
         }
+
+        // TODO: Update unmanaged execution blocks
+
+        // TODO: Update unmanaged per-frame execution blocks
 
         self.childManagedAnimations = self.childManagedAnimations.map { child in
             guard let serializedChild = blueprint.managedChildAnimations.first(where: { $0.id == child.id }) else {
@@ -99,7 +105,9 @@ extension ManagedAnimationBlueprint {
             return child
         }
 
-        // TODO: Update the rest of the properties
+        // TODO: Update child blueprints
+
+        // TODO: Update unmanaged child animations
     }
 
     enum BlueprintUpdateError: Swift.Error {

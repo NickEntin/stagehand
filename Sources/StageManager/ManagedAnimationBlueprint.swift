@@ -142,12 +142,13 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     // MARK: - Public Methods - Unmanaged Property Assignments
 
+    @available(*, unavailable, message: "Not yet implemented")
     public mutating func addUnmanagedAssignments<PropertyType>(
         named name: String,
         for property: WritableKeyPath<ElementType, PropertyType>,
         assignments: [(relativeTimestamp: Double, value: PropertyType)]
     ) {
-        // TODO
+        // TODO: Support unmanaged property assignments
     }
 
     // MARK: - Public Methods - Execution
@@ -208,11 +209,12 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     // MARK: - Public Methods - Per-Frame Execution
 
+    @available(*, unavailable, message: "Not yet implemented")
     public mutating func addUnmanagedPerFrameExecution(
         named name: String,
         _ block: @escaping PerFrameExecutionBlock
     ) {
-        // TODO
+        // TODO: Support unmanaged per-frame execution blocks
     }
 
     // MARK: - Public Methods - Composition
@@ -237,22 +239,24 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         )
     }
 
+    @available(*, unavailable, message: "Not yet implemented")
     public mutating func addChildBlueprint<SubelementType: AnyObject>(
         _ childBlueprint: ManagedAnimationBlueprint<SubelementType>,
         for subelement: KeyPath<ElementType, SubelementType>,
         startingAt relativeStartTimestamp: Double,
         relativeDuration: Double
     ) {
-        // TODO
+        // TODO: Support child blueprints
     }
 
+    @available(*, unavailable, message: "Not yet implemented")
     public mutating func addUnmanagedChild<SubelementType: AnyObject>(
         _ childAnimation: Animation<SubelementType>,
         for subelement: KeyPath<ElementType, SubelementType>,
         startingAt relativeStartTimestamp: Double,
         relativeDuration: Double
     ) {
-        // TODO
+        // TODO: Support unmanaged child animations
     }
 
     // MARK: - Private Methods
@@ -278,7 +282,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
         for property: PartialKeyPath<ElementType>,
         assignmentSequence: AssignmentSequence
     ) {
-        // TODO
+        // TODO: Support managed property assignments
     }
 
     // MARK: - Public Types

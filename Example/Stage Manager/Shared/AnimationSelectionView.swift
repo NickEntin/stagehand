@@ -57,7 +57,7 @@ struct AnimationSelectionView: View {
 
 struct ManagedAnimation: Identifiable {
 
-    var id: String
+    var id: Token<SerializableAnimationBlueprint>
 
     var displayName: String
 
@@ -98,7 +98,7 @@ extension Transceiver: Memo.TransceiverObserver {
                 print("[AnimationSelectionView] Adding managed animation: \"\(blueprint.name)\"")
                 managedAnimations.append(
                     ManagedAnimation(
-                        id: blueprint.name, // TODO
+                        id: blueprint.id,
                         displayName: blueprint.name,
                         blueprint: blueprint
                     )

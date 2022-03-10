@@ -69,10 +69,7 @@ public final class ManagedAnimation<ElementType: AnyObject> {
             case let .cgfloat(keyframes):
                 add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)
             case let .color(keyframes):
-                let writableProperty = keyframeSeries.property as! WritableKeyPath<ElementType, CGColor>
-                for keyframe in keyframes {
-                    animation.addKeyframe(for: writableProperty, at: keyframe.relativeTimestamp, value: keyframe.value.toCGColor())
-                }
+                add(keyframes: keyframes, for: keyframeSeries.property, to: &animation)
             }
         }
 
@@ -82,15 +79,23 @@ public final class ManagedAnimation<ElementType: AnyObject> {
 
         // TODO: Add managed property assignments
 
+        // TODO: Add unmanaged property assignments
+
         for executionBlock in blueprint.managedExeuctionBlocks.filter({ $0.enabled }) {
             executionBlock.addToAnimation(&animation)
         }
+
+        // TODO: Add unmanaged execution blocks
+
+        // TODO: Add unmanaged per-frame execution blocks
 
         for child in blueprint.childManagedAnimations.filter({ $0.enabled }) {
             child.addToAnimation(&animation)
         }
 
-        // TODO: Add the rest of the properties
+        // TODO: Add child blueprints
+
+        // TODO: Add unmanaged child animations
 
         return animation
     }
@@ -105,6 +110,21 @@ public final class ManagedAnimation<ElementType: AnyObject> {
         let writableProperty = property as! WritableKeyPath<ElementType, PropertyType>
         for keyframe in keyframes {
             animation.addKeyframe(for: writableProperty, at: keyframe.relativeTimestamp, value: keyframe.value)
+        }
+    }
+
+    private func add(
+        keyframes: [Keyframe<RGBAColor>],
+        for property: PartialKeyPath<ElementType>,
+        to animation: inout Animation<ElementType>
+    ) {
+        let writableProperty = property as! WritableKeyPath<ElementType, CGColor>
+        for keyframe in keyframes {
+            animation.addKeyframe(
+                for: writableProperty,
+                at: keyframe.relativeTimestamp,
+                value: keyframe.value.toCGColor()
+            )
         }
     }
 

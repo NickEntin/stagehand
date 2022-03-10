@@ -96,7 +96,7 @@ extension StageManager: Memo.ServerDelegate {
     }
 
     public func server(_ server: Server, didFailWithError error: Error) {
-        // TODO
+        // TODO: Do we need to handle errors here? This method is never called currently.
     }
 
 }

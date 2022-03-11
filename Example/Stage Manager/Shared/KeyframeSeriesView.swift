@@ -120,6 +120,7 @@ struct NumericKeyframeChart: View {
             let height: CGFloat = geometry.size.height
 
             let controlPointSize = CGSize(width: 8, height: 8)
+            let controlPointHitTargetSize = CGSize(width: 44, height: 44)
 
             ZStack(alignment: .topLeading) {
                 Grid(width: width, height: height)
@@ -169,13 +170,14 @@ struct NumericKeyframeChart: View {
                     let offsetX: CGFloat = keyframe.relativeTimestamp * width - controlPointSize.width / 2 + inProgressOffset.width
                     let offsetY: CGFloat = (height - keyframe.relativeValue * height - controlPointSize.height / 2 + inProgressOffset.height)
                         .clamped(in: (-controlPointSize.height / 2)...(height - controlPointSize.height / 2))
+                    let horizontalOutset = (controlPointHitTargetSize.width - controlPointSize.width) / 2
+                    let verticalOutset = (controlPointHitTargetSize.height - controlPointHitTargetSize.height) / 2
+
                     Circle()
                         .fill(Color.blue)
                         .frame(width: controlPointSize.width, height: controlPointSize.height, alignment: .center)
-                        .offset(
-                            x: offsetX,
-                            y: offsetY
-                        )
+                        .padding(EdgeInsets(top: verticalOutset, leading: horizontalOutset, bottom: verticalOutset, trailing: horizontalOutset))
+                        .offset(x: offsetX - horizontalOutset, y: offsetY - verticalOutset)
                         .simultaneousGesture(
                             DragGesture()
                                 .onChanged { value in

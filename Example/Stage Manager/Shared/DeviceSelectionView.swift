@@ -12,38 +12,25 @@ import SwiftUI
 
 struct DeviceSelectionView: View {
 
-    init(/* animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void */) {
-        // self.animationSelectionAction = animationSelectionAction
-
+    init() {
         client = Client()
     }
 
     @ObservedObject
     var client: Client
 
-    // var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
-
     var body: some View {
-        ScrollView {
-            HStack {
-                VStack(alignment: .leading) {
-                    ForEach(client.availableTransceivers) { transceiver in
-                        NavigationLink {
-                            AnimationSelectionView(
-                                transceiver: transceiver.memoTransceiver //,
-                                // animationSelectionAction: animationSelectionAction
-                            )
-                        } label: {
-                            Text(transceiver.displayName)
-                                .padding()
-                        }
-                    }
-                }
-                Spacer()
+        List(client.availableTransceivers) { transceiver in
+            NavigationLink {
+                AnimationSelectionView(transceiver: transceiver.memoTransceiver)
+                    .navigationTitle(transceiver.displayName)
+            } label: {
+                Text(transceiver.displayName)
             }
-            Spacer()
         }
-
+        .listStyle(SidebarListStyle())
+        .frame(minWidth: 200)
+        .navigationTitle("Devices")
     }
 
 }

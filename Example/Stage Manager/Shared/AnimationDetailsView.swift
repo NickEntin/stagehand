@@ -84,17 +84,17 @@ struct AnimationDetailsView: View {
             }
         }
         .navigationTitle(animation.name)
-        HStack {
-            Button("Update") {
-                Task {
-                    try await transceiver.updateAnimation(animation)
-                }
+        Button {
+            Task {
+                try await transceiver.updateAnimation(animation)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(Color.white)
-            .cornerRadius(8)
+        } label: {
+            Text("Update")
+                .frame(maxWidth: .infinity)
+                .padding([.vertical])
+                .background(Color.blue)
+                .foregroundColor(Color.white)
+                .cornerRadius(8)
         }
         .padding()
         .onChange(of: selectedEffectiveRepeatStyle) { newValue in

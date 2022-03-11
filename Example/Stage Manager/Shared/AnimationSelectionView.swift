@@ -12,45 +12,52 @@ import SwiftUI
 
 struct AnimationSelectionView: View {
 
-    init(transceiver: Memo.Transceiver /*, animationSelectionAction: @escaping (AnimationBlueprint, Transceiver) -> Void */) {
+    init(transceiver: Memo.Transceiver) {
         self.transceiver = Transceiver(memoTransceiver: transceiver)
-        // self.animationSelectionAction = animationSelectionAction
     }
 
     @ObservedObject
     var transceiver: Transceiver
 
-    // var animationSelectionAction: (AnimationBlueprint, Transceiver) -> Void
-
     var body: some View {
-        ScrollView {
-            HStack {
-                VStack(alignment: .leading) {
-                    ForEach(transceiver.managedAnimations) { animation in
-//                        Button(animation.displayName) {
-//                            animationSelectionAction(animation.blueprint, transceiver)
-//                        }
-                        NavigationLink {
-                            AnimationDetailsView(
-                                animation: animation.blueprint,
-                                transceiver: transceiver,
-                                blueprintForID: { id in
-                                    return transceiver.managedAnimations
-                                        .first(where: { $0.blueprint.id == id })?
-                                        .blueprint
-                                }
-                            )
-                        } label: {
-                            Text(animation.displayName)
-                                .padding()
-                        }
+        #if os(iOS)
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad, .mac:
+            list.listStyle(SidebarListStyle())
+        case .phone:
+            list.listStyle(InsetGroupedListStyle())
+        default:
+            fatalError("Unexpected user interface idiom")
+        }
+        #else
+        list.listStyle(SidebarListStyle())
+        #endif
+    }
+
+    var list: some View {
+        List {
+            Section(
+                header: Text("Animations")
+                    .font(.headline)
+            ) {
+                ForEach(transceiver.managedAnimations) { animation in
+                    NavigationLink {
+                        AnimationDetailsView(
+                            animation: animation.blueprint,
+                            transceiver: transceiver,
+                            blueprintForID: { id in
+                                return transceiver.managedAnimations
+                                    .first(where: { $0.blueprint.id == id })?
+                                    .blueprint
+                            }
+                        )
+                    } label: {
+                        Text(animation.displayName)
                     }
                 }
-                Spacer()
             }
-            Spacer()
         }
-        .navigationTitle("Animations")
+        .frame(minWidth: 200)
     }
 
 }

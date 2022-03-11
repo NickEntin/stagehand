@@ -17,22 +17,24 @@ struct ContentView: View {
     var body: some View {
         HStack {
             NavigationView {
-                DeviceSelectionView(
-//                    animationSelectionAction: { (animation, transceiver) in
-//                        animationDetailsParams = (animation, transceiver)
-//                    }
-                )
-                .navigationTitle("Devices")
+                DeviceSelectionView()
+                EmptyView()
+                EmptyView()
             }
-//            .frame(minWidth: 350)
-//            .layoutPriority(0.3)
-//            ZStack {
-//                Color.purple
-//                if let (animation, transceiver) = animationDetailsParams {
-//                    AnimationDetailsView(animation: animation, transceiver: transceiver)
-//                }
-//            }
-//            .layoutPriority(0.7)
+            .toolbar {
+                ToolbarItem(placement: ToolbarItemPlacement.navigation) {
+                    Button {
+                        #if os(macOS)
+                            NSApp.keyWindow?.firstResponder?.tryToPerform(
+                                #selector(NSSplitViewController.toggleSidebar(_:)),
+                                with: nil
+                            )
+                        #endif
+                    } label: {
+                        Label("Toggle sidebar", systemImage: "sidebar.left")
+                    }
+                }
+            }
 
         }
     }

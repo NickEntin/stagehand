@@ -26,15 +26,18 @@ struct SwitchRow<Destination: View>: View {
 
     var body: some View {
         HStack {
-//            if let titleDestination = titleDestination {
-//                NavigationLink(destination: titleDestination) {
-//                    Text(title)
-//                        .layoutPriority(1)
-//                }
-//            } else {
+            if let titleDestination = titleDestination {
+                HStack {
+                    Text(title)
+                    NavigationLink(destination: titleDestination) {
+                        Image(systemName: "link")
+                    }
+                }
+                .layoutPriority(1)
+            } else {
                 Text(title)
                     .layoutPriority(1)
-//            }
+            }
             Spacer()
                 .layoutPriority(0.5)
             Toggle(title, isOn: isOn)

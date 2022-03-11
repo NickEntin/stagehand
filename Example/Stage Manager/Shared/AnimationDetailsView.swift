@@ -80,9 +80,13 @@ struct AnimationDetailsView: View {
             ForEach($animation.unmanagedKeyframeSeries) { series in
                 SwitchRow(title: series.wrappedValue.name, isOn: series.enabled)
             }
+            // TODO: Show managed property assignments
+            // TODO: Show unmanaged property assignments
             ForEach($animation.managedExecutionBlockConfigs) { config in
                 ManagedExecutionView(managedExecutionConfig: config)
             }
+            // TODO: Show unmanaged execution blocks
+            // TODO: Show unmanaged per-frame execution blocks
             ForEach($animation.managedChildAnimations) { child in
                 SwitchRow(
                     title: child.wrappedValue.name,
@@ -98,8 +102,11 @@ struct AnimationDetailsView: View {
                     }
                 )
             }
+            // TODO: Show child blueprints
+            // TODO: Show unmanaged child animations
         }
         .navigationTitle(animation.name)
+        // TODO: Disable the update button when transceiver has no active connection
         Button {
             Task {
                 try await transceiver.updateAnimation(animation)

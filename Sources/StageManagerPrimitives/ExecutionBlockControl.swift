@@ -7,11 +7,11 @@
 
 import Foundation
 
-public enum ExecutionBlockControl {
+public enum ExecutionBlockControl: Equatable {
 
     // MARK: - Selection
 
-    public struct Selection<OptionType> {
+    public struct Selection<OptionType: Equatable>: Equatable {
 
         public init(
             id:  Token<ExecutionBlockControl>,
@@ -33,13 +33,22 @@ public enum ExecutionBlockControl {
 
         public var selectedOption: OptionType
 
+        public static func == (lhs: ExecutionBlockControl.Selection<OptionType>, rhs: ExecutionBlockControl.Selection<OptionType>) -> Bool {
+            return lhs.id == rhs.id
+                && lhs.name == rhs.name
+                && lhs.selectedOption == rhs.selectedOption
+                && lhs.availableOptions.count == rhs.availableOptions.count
+                && zip(lhs.availableOptions, rhs.availableOptions)
+                    .allSatisfy { $0.0 == $1.0 && $0.1 == $1.1 }
+        }
+
     }
 
     case intSelection(Selection<Int>)
 
     // MARK: -
 
-    public struct Freeform<OptionType: Comparable> {
+    public struct Freeform<OptionType: Comparable>: Equatable {
 
         public init(
             id: Token<ExecutionBlockControl>,

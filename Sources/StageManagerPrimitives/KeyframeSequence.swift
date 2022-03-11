@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Keyframe<PropertyType: Codable>: Codable {
+public struct Keyframe<PropertyType: Codable & Equatable>: Codable, Equatable {
 
     // MARK: - Life Cycle
 
@@ -29,7 +29,7 @@ public struct Keyframe<PropertyType: Codable>: Codable {
 
 }
 
-public enum KeyframeSequence {
+public enum KeyframeSequence: Equatable {
 
     case double([Keyframe<Double>])
 
@@ -94,7 +94,7 @@ extension KeyframeSequence: Decodable {
 
 }
 
-public struct RGBAColor: Codable {
+public struct RGBAColor: Codable, Equatable {
 
     public init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         self.red = red

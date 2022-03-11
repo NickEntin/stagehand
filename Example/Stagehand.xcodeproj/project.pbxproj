@@ -62,6 +62,8 @@
 		D2883ABD27C0CA8B009AC3A1 /* StepperRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */; };
 		D29A537E27D854F700244D2C /* ManagedExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A537D27D854F700244D2C /* ManagedExecutionView.swift */; };
 		D29A537F27D854F700244D2C /* ManagedExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A537D27D854F700244D2C /* ManagedExecutionView.swift */; };
+		D29A538A27DB223900244D2C /* UndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538927DB223900244D2C /* UndoManager.swift */; };
+		D29A538B27DB223900244D2C /* UndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538927DB223900244D2C /* UndoManager.swift */; };
 		D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2FCB20827AFD92100FB97F4 /* ManagedAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */; };
@@ -169,6 +171,7 @@
 		D24516EB27C48D1100491DEB /* SwitchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRow.swift; sourceTree = "<group>"; };
 		D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperRow.swift; sourceTree = "<group>"; };
 		D29A537D27D854F700244D2C /* ManagedExecutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExecutionView.swift; sourceTree = "<group>"; };
+		D29A538927DB223900244D2C /* UndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoManager.swift; sourceTree = "<group>"; };
 		D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSeriesView.swift; sourceTree = "<group>"; };
 		D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedAnimationViewController.swift; sourceTree = "<group>"; };
 		D2FCB20A27B0879300FB97F4 /* StageManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManagerApp.swift; sourceTree = "<group>"; };
@@ -441,6 +444,7 @@
 				D2FCB22627B0922C00FB97F4 /* DeviceSelectionView.swift */,
 				D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */,
 				D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */,
+				D29A538927DB223900244D2C /* UndoManager.swift */,
 				D24516EB27C48D1100491DEB /* SwitchRow.swift */,
 				D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */,
 				D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */,
@@ -935,6 +939,7 @@
 				D2FCB22827B092D500FB97F4 /* DeviceSelectionView.swift in Sources */,
 				D2FCB21B27B0879400FB97F4 /* ContentView.swift in Sources */,
 				D2FCB21927B0879400FB97F4 /* StageManagerApp.swift in Sources */,
+				D29A538A27DB223900244D2C /* UndoManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -951,6 +956,7 @@
 				D2FCB22927B092D600FB97F4 /* DeviceSelectionView.swift in Sources */,
 				D2FCB21C27B0879400FB97F4 /* ContentView.swift in Sources */,
 				D2FCB21A27B0879400FB97F4 /* StageManagerApp.swift in Sources */,
+				D29A538B27DB223900244D2C /* UndoManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdentifiable {
+public struct SerializableAnimationBlueprint: Codable, Equatable, Identifiable, TokenIdentifiable {
 
     // MARK: - TokenIdentifiable
 
@@ -59,7 +59,7 @@ public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdenti
 
     // MARK: - Public Types
 
-    public struct RepeatStyle: Codable {
+    public struct RepeatStyle: Codable, Equatable {
 
         // MARK: - Life Cycle
 
@@ -76,7 +76,7 @@ public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdenti
 
     }
 
-    public struct ManagedKeyframeSeries: Codable, Identifiable, TokenIdentifiable {
+    public struct ManagedKeyframeSeries: Codable, Equatable, Identifiable, TokenIdentifiable {
 
         // MARK: - TokenIdentifiable
 
@@ -103,7 +103,7 @@ public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdenti
 
     }
 
-    public struct UnmanagedKeyframeSeries: Codable, Identifiable, TokenIdentifiable {
+    public struct UnmanagedKeyframeSeries: Codable, Equatable, Identifiable, TokenIdentifiable {
 
         // MARK: - TokenIdentifiable
 
@@ -127,7 +127,7 @@ public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdenti
 
     }
 
-    public struct ManagedExecutionBlockConfig: Codable, Identifiable, TokenIdentifiable {
+    public struct ManagedExecutionBlockConfig: Codable, Equatable, Identifiable, TokenIdentifiable {
 
         // MARK: - TokenIdentifiable
 
@@ -159,7 +159,7 @@ public struct SerializableAnimationBlueprint: Codable, Identifiable, TokenIdenti
 
     }
 
-    public struct ManagedChildAnimation: Codable, Identifiable, TokenIdentifiable {
+    public struct ManagedChildAnimation: Codable, Equatable, Identifiable, TokenIdentifiable {
 
         // MARK: - TokenIdentifiable
 

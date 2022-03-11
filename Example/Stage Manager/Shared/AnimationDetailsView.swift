@@ -24,6 +24,8 @@ struct AnimationDetailsView: View {
         self._selectedEffectiveRepeatStyle = State(initialValue: .init(animation.implicitRepeatStyle))
         self.transceiver = transceiver
         self.blueprintForID = blueprintForID
+
+        self.undoManager = .init(animation)
     }
 
     @State
@@ -48,6 +50,10 @@ struct AnimationDetailsView: View {
 
     @State
     private var dataToImport: Data?
+
+    // TODO: This doesn't current track changes to `selectedEffectiveRepeatStyle`
+    @ObservedObject
+    private var undoManager: UndoManager<SerializableAnimationBlueprint>
 
     var body: some View {
         ScrollView {
@@ -107,7 +113,24 @@ struct AnimationDetailsView: View {
                 animation.implicitRepeatStyle.count = 0
             }
         }
+        .onChange(of: animation) { newValue in
+            undoManager.register(newValue)
+        }
         .toolbar {
+            Button {
+                animation = undoManager.undo()
+            } label: {
+                Image(systemName: "arrow.uturn.backward")
+            }
+            .flipsForRightToLeftLayoutDirection(false)
+            .disabled(!undoManager.canUndo)
+            Button {
+                animation = undoManager.redo()
+            } label: {
+                Image(systemName: "arrow.uturn.forward")
+            }
+            .flipsForRightToLeftLayoutDirection(false)
+            .disabled(!undoManager.canRedo)
             Button {
                 print("Import file")
                 showDocumentPicker = true

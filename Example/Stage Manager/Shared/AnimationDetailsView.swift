@@ -48,12 +48,22 @@ struct AnimationDetailsView: View {
     @State
     private var showDocumentPicker: Bool = false
 
-    @State
-    private var dataToImport: Data?
-
     // TODO: This doesn't current track changes to `selectedEffectiveRepeatStyle`
     @ObservedObject
     private var undoManager: UndoManager<SerializableAnimationBlueprint>
+
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass
+    #endif
+
+    private var shouldUseSingleToolbarItem: Bool {
+        #if os(iOS)
+        return horizontalSizeClass == .compact
+        #else
+        return false
+        #endif
+    }
 
     var body: some View {
         ScrollView {
@@ -117,34 +127,57 @@ struct AnimationDetailsView: View {
             undoManager.register(newValue)
         }
         .toolbar {
-            Button {
-                animation = undoManager.undo()
-            } label: {
-                Image(systemName: "arrow.uturn.backward")
-            }
-            .flipsForRightToLeftLayoutDirection(false)
-            .disabled(!undoManager.canUndo)
-            Button {
-                animation = undoManager.redo()
-            } label: {
-                Image(systemName: "arrow.uturn.forward")
-            }
-            .flipsForRightToLeftLayoutDirection(false)
-            .disabled(!undoManager.canRedo)
-            Button {
-                print("Import file")
-                showDocumentPicker = true
-            } label: {
-                Image(systemName: "square.and.arrow.down")
-            }
-            Button {
-                print("Export file")
-            } label: {
-                Image(systemName: "square.and.arrow.up")
-            }
-        }
-        .onChange(of: dataToImport) { dataToImport in
+            HStack {
+                if shouldUseSingleToolbarItem {
+                    Menu {
+                        Button {
+                            animation = undoManager.undo()
+                        } label: {
+                            Label("Undo", systemImage: "arrow.uturn.backward")
+                        }
+                        .flipsForRightToLeftLayoutDirection(false)
+                        .disabled(!undoManager.canUndo)
+                        Button {
+                            animation = undoManager.redo()
+                        } label: {
+                            Label("Redo", systemImage: "arrow.uturn.forward")
+                        }
+                        .flipsForRightToLeftLayoutDirection(false)
+                        .disabled(!undoManager.canRedo)
+                        Button {
+                            print("Export spec")
+                        } label: {
+                            Label("Export", systemImage: "square.and.arrow.up")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                    }
 
+                } else {
+                    Button {
+                        animation = undoManager.undo()
+                    } label: {
+                        Image(systemName: "arrow.uturn.backward")
+                            .accessibilityLabel("Undo")
+                    }
+                    .flipsForRightToLeftLayoutDirection(false)
+                    .disabled(!undoManager.canUndo)
+                    Button {
+                        animation = undoManager.redo()
+                    } label: {
+                        Image(systemName: "arrow.uturn.forward")
+                            .accessibilityLabel("Redo")
+                    }
+                    .flipsForRightToLeftLayoutDirection(false)
+                    .disabled(!undoManager.canRedo)
+                    Button {
+                        print("Export spec")
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .accessibilityLabel("Export")
+                    }
+                }
+            }
         }
     }
 

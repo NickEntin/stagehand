@@ -64,6 +64,10 @@
 		D29A537F27D854F700244D2C /* ManagedExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A537D27D854F700244D2C /* ManagedExecutionView.swift */; };
 		D29A538A27DB223900244D2C /* UndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538927DB223900244D2C /* UndoManager.swift */; };
 		D29A538B27DB223900244D2C /* UndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538927DB223900244D2C /* UndoManager.swift */; };
+		D29A538D27DBFFDA00244D2C /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538C27DBFFDA00244D2C /* Grid.swift */; };
+		D29A538E27DBFFDA00244D2C /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538C27DBFFDA00244D2C /* Grid.swift */; };
+		D29A539027DC001200244D2C /* Comparable+Clamping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538F27DC001200244D2C /* Comparable+Clamping.swift */; };
+		D29A539127DC001200244D2C /* Comparable+Clamping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538F27DC001200244D2C /* Comparable+Clamping.swift */; };
 		D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2FCB20827AFD92100FB97F4 /* ManagedAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */; };
@@ -172,6 +176,8 @@
 		D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepperRow.swift; sourceTree = "<group>"; };
 		D29A537D27D854F700244D2C /* ManagedExecutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedExecutionView.swift; sourceTree = "<group>"; };
 		D29A538927DB223900244D2C /* UndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoManager.swift; sourceTree = "<group>"; };
+		D29A538C27DBFFDA00244D2C /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		D29A538F27DC001200244D2C /* Comparable+Clamping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamping.swift"; sourceTree = "<group>"; };
 		D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSeriesView.swift; sourceTree = "<group>"; };
 		D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedAnimationViewController.swift; sourceTree = "<group>"; };
 		D2FCB20A27B0879300FB97F4 /* StageManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManagerApp.swift; sourceTree = "<group>"; };
@@ -448,7 +454,9 @@
 				D24516EB27C48D1100491DEB /* SwitchRow.swift */,
 				D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */,
 				D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */,
+				D29A538C27DBFFDA00244D2C /* Grid.swift */,
 				D29A537D27D854F700244D2C /* ManagedExecutionView.swift */,
+				D29A538F27DC001200244D2C /* Comparable+Clamping.swift */,
 				D2FCB20C27B0879400FB97F4 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -933,10 +941,12 @@
 				D2FCB24427BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */,
 				D2FCB22B27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */,
 				D2883ABC27C0CA8B009AC3A1 /* StepperRow.swift in Sources */,
+				D29A538D27DBFFDA00244D2C /* Grid.swift in Sources */,
 				D29A537E27D854F700244D2C /* ManagedExecutionView.swift in Sources */,
 				D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */,
 				D24516EC27C48D1100491DEB /* SwitchRow.swift in Sources */,
 				D2FCB22827B092D500FB97F4 /* DeviceSelectionView.swift in Sources */,
+				D29A539027DC001200244D2C /* Comparable+Clamping.swift in Sources */,
 				D2FCB21B27B0879400FB97F4 /* ContentView.swift in Sources */,
 				D2FCB21927B0879400FB97F4 /* StageManagerApp.swift in Sources */,
 				D29A538A27DB223900244D2C /* UndoManager.swift in Sources */,
@@ -950,10 +960,12 @@
 				D2FCB24527BCB82F00FB97F4 /* AnimationDetailsView.swift in Sources */,
 				D2FCB22C27B09FAC00FB97F4 /* AnimationSelectionView.swift in Sources */,
 				D2883ABD27C0CA8B009AC3A1 /* StepperRow.swift in Sources */,
+				D29A538E27DBFFDA00244D2C /* Grid.swift in Sources */,
 				D29A537F27D854F700244D2C /* ManagedExecutionView.swift in Sources */,
 				D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */,
 				D24516ED27C48D1100491DEB /* SwitchRow.swift in Sources */,
 				D2FCB22927B092D600FB97F4 /* DeviceSelectionView.swift in Sources */,
+				D29A539127DC001200244D2C /* Comparable+Clamping.swift in Sources */,
 				D2FCB21C27B0879400FB97F4 /* ContentView.swift in Sources */,
 				D2FCB21A27B0879400FB97F4 /* StageManagerApp.swift in Sources */,
 				D29A538B27DB223900244D2C /* UndoManager.swift in Sources */,

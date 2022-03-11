@@ -217,32 +217,6 @@ struct NumericKeyframeChart: View {
 
 }
 
-struct Grid: View {
-
-    init(width: CGFloat, height: CGFloat) {
-        self.width = width
-        self.height = height
-    }
-
-    let width: CGFloat
-    let height: CGFloat
-
-    var body: some View {
-        Path { path in
-            for y in stride(from: 0, through: height, by: height / 10) {
-                path.move(to: CGPoint(x: 0, y: y))
-                path.addLine(to: CGPoint(x: width, y: y))
-            }
-            for x in stride(from: 0, through: width, by: width / 10) {
-                path.move(to: CGPoint(x: x, y: 0))
-                path.addLine(to: CGPoint(x: x, y: height))
-            }
-        }
-        .stroke(Color(white: 0.5), lineWidth: 0.5)
-    }
-
-}
-
 struct ColorKeyframeChart: View {
 
     init(
@@ -256,7 +230,7 @@ struct ColorKeyframeChart: View {
                 Keyframe(timestamp: CGFloat(keyframe.relativeTimestamp), color: keyframe.value.toCGColor())
             })
 
-        default:
+        case .double, .cgfloat:
             fatalError()
         }
     }
@@ -360,17 +334,5 @@ struct KeyframeSeriesView_Previews: PreviewProvider {
             ]
         )
     )
-
-}
-
-private extension Comparable {
-
-    func clamped(min minValue: Self, max maxValue: Self) -> Self {
-        return max(minValue, min(maxValue, self))
-    }
-
-    func clamped(in range: ClosedRange<Self>) -> Self {
-        return clamped(min: range.lowerBound, max: range.upperBound)
-    }
 
 }

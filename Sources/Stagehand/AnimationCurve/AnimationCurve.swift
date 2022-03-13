@@ -27,4 +27,6 @@ public protocol AnimationCurve {
 
     func adjustedProgress(for progress: Double) -> Double
 
+    func isEqual(to curve: AnimationCurve) -> Bool
+
 }

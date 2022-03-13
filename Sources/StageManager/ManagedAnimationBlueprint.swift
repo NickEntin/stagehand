@@ -29,7 +29,7 @@ public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 
     public var implicitRepeatStyle: AnimationRepeatStyle = .noRepeat
 
-    public var curve: AnimationCurve = LinearAnimationCurve()
+    public var curve: ManagedAnimationBlueprintCurveProviding = LinearAnimationCurve()
 
     // MARK: - Internal Properties
 

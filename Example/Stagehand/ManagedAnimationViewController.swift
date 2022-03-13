@@ -17,7 +17,6 @@
 import Memo
 import Stagehand
 import StageManager
-//import StageManagerPrimitives
 import UIKit
 
 final class ManagedAnimationViewController: DemoViewController {
@@ -28,6 +27,10 @@ final class ManagedAnimationViewController: DemoViewController {
         super.init()
 
         contentView = mainView
+
+        _ = stageManager.registerManagedCurve(named: "Ease In Ease Out", curve: .easeInEaseOut)
+        _ = stageManager.registerManagedCurve(named: "Ease In", curve: .easeIn)
+        _ = stageManager.registerManagedCurve(named: "Ease Out", curve: .easeOut)
 
         let leftToRightAnimation = stageManager.registerManagedAnimation(
             named: "Left to Right",

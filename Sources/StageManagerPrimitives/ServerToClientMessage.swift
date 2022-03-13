@@ -11,12 +11,15 @@ public enum ServerToClientMessage {
 
     case registerAnimation(SerializableAnimationBlueprint)
 
+    case registerCubicBezierCurve(SerializableCubicBezierAnimationCurve)
+
 }
 
 extension ServerToClientMessage {
 
     enum CodingKeys: CodingKey {
         case registerAnimation
+        case registerCubicBezierCurve
     }
 
 }
@@ -40,6 +43,11 @@ extension ServerToClientMessage: Decodable {
             self = .registerAnimation(
                 try container.decode(SerializableAnimationBlueprint.self, forKey: .registerAnimation)
             )
+
+        case .registerCubicBezierCurve:
+            self = .registerCubicBezierCurve(
+                try container.decode(SerializableCubicBezierAnimationCurve.self, forKey: .registerCubicBezierCurve)
+            )
         }
     }
 
@@ -53,6 +61,9 @@ extension ServerToClientMessage: Encodable {
         switch self {
         case let .registerAnimation(blueprint):
             try container.encode(blueprint, forKey: .registerAnimation)
+
+        case let .registerCubicBezierCurve(curve):
+            try container.encode(curve, forKey: .registerCubicBezierCurve)
         }
     }
 

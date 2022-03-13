@@ -56,13 +56,28 @@ struct AnimationSelectionView: View {
                     }
                 }
             }
+            Section(
+                header: Text("Curves")
+                    .font(.headline)
+            ) {
+                ForEach(transceiver.managedCurves) { curve in
+                    NavigationLink {
+                        CurveDetailsView(
+                            curve: curve.curve,
+                            transceiver: transceiver
+                        )
+                    } label: {
+                        Text(curve.displayName)
+                    }
+                }
+            }
         }
         .frame(minWidth: 200)
     }
 
 }
 
-struct ManagedAnimation: Identifiable {
+struct ManagedAnimationModel: Identifiable {
 
     var id: Token<SerializableAnimationBlueprint>
 
@@ -72,57 +87,12 @@ struct ManagedAnimation: Identifiable {
 
 }
 
-final class Transceiver: ObservableObject {
+struct ManagedCurveModel: Identifiable {
 
-    init(memoTransceiver: Memo.Transceiver) {
-        self.memoTransceiver = memoTransceiver
-        memoTransceiver.addObserver(self)
-    }
+    var id: Token<SerializableCubicBezierAnimationCurve>
 
-    @Published
-    var managedAnimations: [ManagedAnimation] = []
+    var displayName: String
 
-    private let memoTransceiver: Memo.Transceiver
-
-    public func updateAnimation(_ blueprint: SerializableAnimationBlueprint) async throws {
-        let encoder = JSONEncoder()
-        let payload = try encoder.encode(ClientToServerMessage.updateAnimation(blueprint))
-        try await memoTransceiver.send(payload: payload)
-    }
-
-}
-
-extension Transceiver: Memo.TransceiverObserver {
-
-    func transceiver(_ transceiver: Memo.Transceiver, didReceivePayload payload: Data) {
-        let jsonDecoder = JSONDecoder()
-
-        do {
-            let message = try jsonDecoder.decode(ServerToClientMessage.self, from: payload)
-
-            switch message {
-            case let .registerAnimation(blueprint):
-                print("[AnimationSelectionView] Adding managed animation: \"\(blueprint.name)\"")
-                managedAnimations.append(
-                    ManagedAnimation(
-                        id: blueprint.id,
-                        displayName: blueprint.name,
-                        blueprint: blueprint
-                    )
-                )
-            }
-
-        } catch let error {
-            print("Failed to decode message: \(error)")
-        }
-    }
-
-    func transceiverDidUpdateConnection(_ transceiver: Memo.Transceiver) {
-        // No-op.
-    }
-
-    func transceiverDidLoseConnection(_ transceiver: Memo.Transceiver) {
-        // No-op.
-    }
+    var curve: SerializableCubicBezierAnimationCurve
 
 }

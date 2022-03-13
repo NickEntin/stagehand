@@ -74,6 +74,15 @@ struct AnimationDetailsView: View {
                 getValue: { formattedImplicitDuration }
             )
             RepeatStyleRows(selectedEffectiveRepeatStyle: $selectedEffectiveRepeatStyle, animation: $animation)
+            HStack {
+                Text("Curve")
+                Spacer()
+                Picker("Curve", selection: animation.curve) {
+                    // TODO: Populate with managed curves
+                    // TODO: Populate with unmanaged curves
+                }
+            }
+            .padding()
             ForEach($animation.managedKeyframeSeries) { series in
                 KeyframeSeriesView(keyframeSeries: series)
             }
@@ -119,6 +128,7 @@ struct AnimationDetailsView: View {
                 .foregroundColor(Color.white)
                 .cornerRadius(8)
         }
+        .disabled(!transceiver.hasActiveConnection)
         .padding()
         .onChange(of: selectedEffectiveRepeatStyle) { newValue in
             switch selectedEffectiveRepeatStyle {

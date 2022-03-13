@@ -44,8 +44,39 @@ public final class StageManager {
     ) -> ManagedAnimation<ElementType> {
         let id = Token<SerializableAnimationBlueprint>()
         let animation = ManagedAnimation(blueprint: blueprint, id: id)
-        managedAnimations[id] = AnyManagedAnimation(managedAnimation: animation, id: id, name: name)
+
+        let curve: SerializableAnimationBlueprint.Curve
+        if let managedCurve = blueprint.curve as? ManagedCubicBezierCurve {
+            curve = .managedCubicBezier(managedCurve.id)
+        } else if let existingCurve = unmanagedCurves.first(where: { $0.value.1.isEqual(to: blueprint.curve.animationCurve) }) {
+            curve = .unmanaged(existingCurve.value.0)
+        } else {
+            curve = .unmanaged(registerUnmanagedCurve(named: blueprint.curve.displayName, curve: blueprint.curve.animationCurve))
+        }
+
+        managedAnimations[id] = AnyManagedAnimation(managedAnimation: animation, id: id, name: name, curve: curve)
         return animation
+    }
+
+    public func registerManagedCurve(
+        named name: String,
+        curve: CubicBezierAnimationCurve
+    ) -> ManagedCubicBezierCurve {
+        let id = Token<SerializableCubicBezierAnimationCurve>()
+        let managedCurve = ManagedCubicBezierCurve(curve: curve, id: id, name: name)
+        managedCubicBezierCurves[id] = managedCurve
+        return managedCurve
+    }
+
+    @discardableResult
+    public func registerUnmanagedCurve(
+        named name: String,
+        curve: AnimationCurve
+    ) -> SerializableUnmanagedAnimationCurve {
+        let id = Token<SerializableUnmanagedAnimationCurve>()
+        let serializableCurve = SerializableUnmanagedAnimationCurve(id: id, name: name)
+        unmanagedCurves[id] = (serializableCurve, curve)
+        return serializableCurve
     }
 
     // MARK: - Private Properties
@@ -54,15 +85,16 @@ public final class StageManager {
 
     private var managedAnimations: [Token<SerializableAnimationBlueprint>: AnyManagedAnimation] = [:]
 
+    private var managedCubicBezierCurves: [Token<SerializableCubicBezierAnimationCurve>: ManagedCubicBezierCurve] = [:]
+
+    private var unmanagedCurves: [Token<SerializableUnmanagedAnimationCurve>: (SerializableUnmanagedAnimationCurve, AnimationCurve)] = [:]
+
     private var transceivers: [Transceiver] = []
 
     // MARK: - Private Methods
 
-    private func register(_ blueprint: SerializableAnimationBlueprint, with transceiver: Transceiver) {
-        let message = ServerToClientMessage.registerAnimation(blueprint)
-        let jsonEncoder = JSONEncoder()
-
-        let payload = try! jsonEncoder.encode(message)
+    private func send(_ message: ServerToClientMessage, with transceiver: Transceiver) {
+        let payload = try! JSONEncoder().encode(message)
 
         @Sendable
         func send(payload: Data, retryCount: Int) {
@@ -82,6 +114,16 @@ public final class StageManager {
         send(payload: payload, retryCount: 10)
     }
 
+    private func register(_ blueprint: SerializableAnimationBlueprint, with transceiver: Transceiver) {
+        let message = ServerToClientMessage.registerAnimation(blueprint)
+        send(message, with: transceiver)
+    }
+
+    private func register(_ curve: SerializableCubicBezierAnimationCurve, with transceiver: Transceiver) {
+        let message = ServerToClientMessage.registerCubicBezierCurve(curve)
+        send(message, with: transceiver)
+    }
+
 }
 
 extension StageManager: Memo.ServerDelegate {
@@ -92,6 +134,10 @@ extension StageManager: Memo.ServerDelegate {
 
         self.managedAnimations.forEach { (id, managedAnimation) in
             self.register(managedAnimation.serialize(), with: transceiver)
+        }
+
+        self.managedCubicBezierCurves.forEach { (id, managedCubicBezierCurve) in
+            self.register(managedCubicBezierCurve.serialize(), with: transceiver)
         }
     }
 

@@ -15,7 +15,8 @@ internal final class AnyManagedAnimation {
     internal init<ElementType: AnyObject>(
         managedAnimation: ManagedAnimation<ElementType>,
         id: Token<SerializableAnimationBlueprint>,
-        name: String
+        name: String,
+        curve: SerializableAnimationBlueprint.Curve
     ) {
         self.managedAnimation = managedAnimation
 
@@ -28,7 +29,12 @@ internal final class AnyManagedAnimation {
         }
 
         self.serializeAction = {
-            return SerializableAnimationBlueprint(blueprint: managedAnimation.blueprint, id: id, name: name)
+            return SerializableAnimationBlueprint(
+                blueprint: managedAnimation.blueprint,
+                id: id,
+                name: name,
+                curve: curve
+            )
         }
     }
 

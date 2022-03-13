@@ -153,16 +153,14 @@ struct NumericKeyframeChart: View {
                         )
                     }
 
-                    if lastKeyframe.relativeTimestamp != 1 {
-                        let lastOffset = offsetForKeyframe(id: lastKeyframe.id)
-                        path.addLine(
-                            to: CGPoint(
-                                x: width,
-                                y: (height - lastKeyframe.relativeValue * height + lastOffset.height)
-                                    .clamped(in: 0...height)
-                            )
+                    let lastOffset = offsetForKeyframe(id: lastKeyframe.id)
+                    path.addLine(
+                        to: CGPoint(
+                            x: width,
+                            y: (height - lastKeyframe.relativeValue * height + lastOffset.height)
+                                .clamped(in: 0...height)
                         )
-                    }
+                    )
                 }
                 .stroke(lineWidth: 2)
                 ForEach(keyframeValues) { keyframe in

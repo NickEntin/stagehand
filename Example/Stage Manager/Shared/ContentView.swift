@@ -16,6 +16,9 @@ struct ContentView: View {
 
     var body: some View {
         HStack {
+            // TODO: This NavigationView works as a proof of concept, but it's a really bad experience since it starts
+            // with focus on the second view and hides the first column (device selection) on iOS devices. As far as I
+            // can tell, there's no way to control this behavior.
             NavigationView {
                 DeviceSelectionView()
                 EmptyView()
@@ -31,7 +34,7 @@ struct ContentView: View {
                             )
                         #endif
                     } label: {
-                        Label("Toggle sidebar", systemImage: "sidebar.left")
+                        Label("Toggle Device List", systemImage: "sidebar.left")
                     }
                 }
             }

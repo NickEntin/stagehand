@@ -60,7 +60,7 @@ public final class ManagedAnimation<ElementType: AnyObject> {
 
         animation.implicitDuration = blueprint.implicitDuration
         animation.implicitRepeatStyle = blueprint.implicitRepeatStyle
-        animation.curve = blueprint.curve
+        animation.curve = blueprint.curve.animationCurve
 
         for keyframeSeries in blueprint.managedKeyframeSeries.filter({ $0.enabled }) {
             switch keyframeSeries.keyframeSequence {

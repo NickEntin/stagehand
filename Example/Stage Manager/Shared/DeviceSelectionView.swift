@@ -35,9 +35,9 @@ struct DeviceSelectionView: View {
 
 }
 
-struct AvailableTransceiver: Identifiable {
+struct AvailableTransceiverModel: Identifiable {
 
-    var id: String
+    var id: UUID
 
     var displayName: String
 
@@ -67,7 +67,7 @@ final class Client: ObservableObject {
     let memoClient: Memo.Client
 
     @Published
-    private(set) var availableTransceivers: [AvailableTransceiver] = []
+    private(set) var availableTransceivers: [AvailableTransceiverModel] = []
 
 }
 
@@ -77,9 +77,9 @@ extension Client: Memo.ClientDelegate {
         print("Updating available transceivers")
         DispatchQueue.main.async {
             self.availableTransceivers = client.availableTransceivers.map { transceiver in
-                AvailableTransceiver(
-                    id: transceiver.deviceToken.uuidString,
-                    displayName: transceiver.name.isEmpty ? "(null)" : transceiver.name,
+                AvailableTransceiverModel(
+                    id: transceiver.deviceToken,
+                    displayName: transceiver.name.isEmpty ? "Unknown Device" : transceiver.name,
                     memoTransceiver: transceiver
                 )
             }

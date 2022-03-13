@@ -29,11 +29,11 @@ public struct CubicBezierAnimationCurve: AnimationCurve {
         self.controlPoint2 = controlPoint2
     }
 
-    // MARK: - Private Properties
+    // MARK: - Public Properties
 
-    private let controlPoint1: (x: Double, y: Double)
+    public let controlPoint1: (x: Double, y: Double)
 
-    private let controlPoint2: (x: Double, y: Double)
+    public let controlPoint2: (x: Double, y: Double)
 
     // MARK: - Animation Curve
 
@@ -81,6 +81,14 @@ public struct CubicBezierAnimationCurve: AnimationCurve {
         let y2 = 3 * (1 - t) * t * t * controlPoint2.y
         let y3 = t * t * t
         return y1 + y2 + y3
+    }
+
+    public func isEqual(to curve: AnimationCurve) -> Bool {
+        guard let curve = curve as? CubicBezierAnimationCurve else {
+            return false
+        }
+
+        return curve == self
     }
 
     // MARK: - Private Methods

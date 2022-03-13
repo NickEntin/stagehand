@@ -13,13 +13,15 @@ extension SerializableAnimationBlueprint {
     init<ElementType: AnyObject>(
         blueprint: ManagedAnimationBlueprint<ElementType>,
         id: Token<SerializableAnimationBlueprint>,
-        name: String
+        name: String,
+        curve: SerializableAnimationBlueprint.Curve
     ) {
         self.init(
             id: id,
             name: name,
             implicitDuration: blueprint.implicitDuration,
             implicitRepeatStyle: RepeatStyle(repeatStyle: blueprint.implicitRepeatStyle),
+            curve: curve,
             managedKeyframeSeries: blueprint.managedKeyframeSeries
                 .map(SerializableAnimationBlueprint.ManagedKeyframeSeries.init(series:)),
             unmanagedKeyframeSeries: blueprint.unmanagedKeyframeSeries
@@ -136,6 +138,16 @@ extension AnimationRepeatStyle {
     }
 
 }
+
+// MARK: -
+
+//extension SerializableAnimationBlueprint.Curve {
+//
+//    init(unmanagedCurve curve: AnimationCurve) {
+//        self = .unmanaged(SerializableUnmanagedAnimationCurve(id: <#T##Token<SerializableUnmanagedAnimationCurve>#>, name: <#T##String#>))
+//    }
+//
+//}
 
 // MARK: -
 

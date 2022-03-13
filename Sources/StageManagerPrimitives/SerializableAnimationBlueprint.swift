@@ -20,6 +20,7 @@ public struct SerializableAnimationBlueprint: Codable, Equatable, Identifiable, 
         name: String,
         implicitDuration: TimeInterval,
         implicitRepeatStyle: SerializableAnimationBlueprint.RepeatStyle,
+        curve: SerializableAnimationBlueprint.Curve,
         managedKeyframeSeries: [SerializableAnimationBlueprint.ManagedKeyframeSeries],
         unmanagedKeyframeSeries: [SerializableAnimationBlueprint.UnmanagedKeyframeSeries],
         managedExecutionBlockConfigs: [SerializableAnimationBlueprint.ManagedExecutionBlockConfig],
@@ -29,6 +30,7 @@ public struct SerializableAnimationBlueprint: Codable, Equatable, Identifiable, 
         self.name = name
         self.implicitDuration = implicitDuration
         self.implicitRepeatStyle = implicitRepeatStyle
+        self.curve = curve
         self.managedKeyframeSeries = managedKeyframeSeries
         self.unmanagedKeyframeSeries = unmanagedKeyframeSeries
         self.managedExecutionBlockConfigs = managedExecutionBlockConfigs
@@ -45,7 +47,7 @@ public struct SerializableAnimationBlueprint: Codable, Equatable, Identifiable, 
 
     public var implicitRepeatStyle: RepeatStyle
 
-    // TODO: Include curve
+    public var curve: Curve
 
     public var managedKeyframeSeries: [ManagedKeyframeSeries]
 
@@ -73,6 +75,14 @@ public struct SerializableAnimationBlueprint: Codable, Equatable, Identifiable, 
         public var count: UInt
 
         public var autoreversing: Bool
+
+    }
+
+    public enum Curve: Codable, Equatable {
+
+        case managedCubicBezier(Token<SerializableCubicBezierAnimationCurve>)
+
+        case unmanaged(SerializableUnmanagedAnimationCurve)
 
     }
 

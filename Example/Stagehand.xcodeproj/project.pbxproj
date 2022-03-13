@@ -68,6 +68,10 @@
 		D29A538E27DBFFDA00244D2C /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538C27DBFFDA00244D2C /* Grid.swift */; };
 		D29A539027DC001200244D2C /* Comparable+Clamping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538F27DC001200244D2C /* Comparable+Clamping.swift */; };
 		D29A539127DC001200244D2C /* Comparable+Clamping.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A538F27DC001200244D2C /* Comparable+Clamping.swift */; };
+		D29A539E27DC85C200244D2C /* Transceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A539D27DC85C200244D2C /* Transceiver.swift */; };
+		D29A539F27DC85C200244D2C /* Transceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A539D27DC85C200244D2C /* Transceiver.swift */; };
+		D29A53A527DC9ABC00244D2C /* CurveDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A53A427DC9ABC00244D2C /* CurveDetailsView.swift */; };
+		D29A53A627DC9ABC00244D2C /* CurveDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29A53A427DC9ABC00244D2C /* CurveDetailsView.swift */; };
 		D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */; };
 		D2FCB20827AFD92100FB97F4 /* ManagedAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */; };
@@ -178,6 +182,8 @@
 		D29A538927DB223900244D2C /* UndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoManager.swift; sourceTree = "<group>"; };
 		D29A538C27DBFFDA00244D2C /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		D29A538F27DC001200244D2C /* Comparable+Clamping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamping.swift"; sourceTree = "<group>"; };
+		D29A539D27DC85C200244D2C /* Transceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transceiver.swift; sourceTree = "<group>"; };
+		D29A53A427DC9ABC00244D2C /* CurveDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurveDetailsView.swift; sourceTree = "<group>"; };
 		D2D46B4627C9F58200D88EC1 /* KeyframeSeriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyframeSeriesView.swift; sourceTree = "<group>"; };
 		D2FCB20727AFD92100FB97F4 /* ManagedAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedAnimationViewController.swift; sourceTree = "<group>"; };
 		D2FCB20A27B0879300FB97F4 /* StageManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManagerApp.swift; sourceTree = "<group>"; };
@@ -189,7 +195,7 @@
 		D2FCB22627B0922C00FB97F4 /* DeviceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSelectionView.swift; sourceTree = "<group>"; };
 		D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationSelectionView.swift; sourceTree = "<group>"; };
 		D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDetailsView.swift; sourceTree = "<group>"; };
-		D2FCB25C27BE2FCA00FB97F4 /* StageManager--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "StageManager--iOS--Info.plist"; sourceTree = "<group>"; };
+		D2FCB25C27BE2FCA00FB97F4 /* StageManager--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "StageManager--iOS--Info.plist"; sourceTree = "<group>"; };
 		E9E8270E78934D4E99FC9067 /* Pods_StageManager__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StageManager__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F058A67C239ED37BC34BE76C /* Pods_Stagehand_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stagehand_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC42083017E18C3B5F030B47 /* Pods-Stagehand-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand-UnitTests.release.xcconfig"; path = "Target Support Files/Pods-Stagehand-UnitTests/Pods-Stagehand-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -351,7 +357,6 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
-				D2FCB25C27BE2FCA00FB97F4 /* StageManager--iOS--Info.plist */,
 				D2FCB22527B087A200FB97F4 /* Stage Manager */,
 				607FACD21AFB9204008FA782 /* Stagehand Demo */,
 				607FACE81AFB9204008FA782 /* Unit Tests */,
@@ -442,6 +447,14 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		D29A53A327DC926300244D2C /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				D2FCB25C27BE2FCA00FB97F4 /* StageManager--iOS--Info.plist */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
 		D2FCB20927B0879300FB97F4 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -449,7 +462,9 @@
 				D2FCB20B27B0879300FB97F4 /* ContentView.swift */,
 				D2FCB22627B0922C00FB97F4 /* DeviceSelectionView.swift */,
 				D2FCB22A27B09FAC00FB97F4 /* AnimationSelectionView.swift */,
+				D29A539D27DC85C200244D2C /* Transceiver.swift */,
 				D2FCB24327BCB82F00FB97F4 /* AnimationDetailsView.swift */,
+				D29A53A427DC9ABC00244D2C /* CurveDetailsView.swift */,
 				D29A538927DB223900244D2C /* UndoManager.swift */,
 				D24516EB27C48D1100491DEB /* SwitchRow.swift */,
 				D2883ABB27C0CA8B009AC3A1 /* StepperRow.swift */,
@@ -474,6 +489,7 @@
 			isa = PBXGroup;
 			children = (
 				D2FCB20927B0879300FB97F4 /* Shared */,
+				D29A53A327DC926300244D2C /* iOS */,
 				D2FCB21727B0879400FB97F4 /* macOS */,
 			);
 			path = "Stage Manager";
@@ -945,11 +961,13 @@
 				D29A537E27D854F700244D2C /* ManagedExecutionView.swift in Sources */,
 				D2D46B4727C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */,
 				D24516EC27C48D1100491DEB /* SwitchRow.swift in Sources */,
+				D29A53A527DC9ABC00244D2C /* CurveDetailsView.swift in Sources */,
 				D2FCB22827B092D500FB97F4 /* DeviceSelectionView.swift in Sources */,
 				D29A539027DC001200244D2C /* Comparable+Clamping.swift in Sources */,
 				D2FCB21B27B0879400FB97F4 /* ContentView.swift in Sources */,
 				D2FCB21927B0879400FB97F4 /* StageManagerApp.swift in Sources */,
 				D29A538A27DB223900244D2C /* UndoManager.swift in Sources */,
+				D29A539E27DC85C200244D2C /* Transceiver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -964,11 +982,13 @@
 				D29A537F27D854F700244D2C /* ManagedExecutionView.swift in Sources */,
 				D2D46B4827C9F58200D88EC1 /* KeyframeSeriesView.swift in Sources */,
 				D24516ED27C48D1100491DEB /* SwitchRow.swift in Sources */,
+				D29A53A627DC9ABC00244D2C /* CurveDetailsView.swift in Sources */,
 				D2FCB22927B092D600FB97F4 /* DeviceSelectionView.swift in Sources */,
 				D29A539127DC001200244D2C /* Comparable+Clamping.swift in Sources */,
 				D2FCB21C27B0879400FB97F4 /* ContentView.swift in Sources */,
 				D2FCB21A27B0879400FB97F4 /* StageManagerApp.swift in Sources */,
 				D29A538B27DB223900244D2C /* UndoManager.swift in Sources */,
+				D29A539F27DC85C200244D2C /* Transceiver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1249,7 +1269,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "StageManager--iOS--Info.plist";
+				INFOPLIST_FILE = "Stage Manager/iOS/StageManager--iOS--Info.plist";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Connect to apps that use Stagehand";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1290,7 +1310,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "StageManager--iOS--Info.plist";
+				INFOPLIST_FILE = "Stage Manager/iOS/StageManager--iOS--Info.plist";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Connect to apps that use Stagehand";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -24,6 +24,10 @@ public struct LinearAnimationCurve: AnimationCurve {
         return progress
     }
 
+    public func isEqual(to curve: AnimationCurve) -> Bool {
+        return curve is LinearAnimationCurve
+    }
+
 }
 
 // MARK: -
@@ -39,6 +43,10 @@ public struct ParabolicEaseInAnimationCurve: AnimationCurve {
 
     public func adjustedProgress(for progress: Double) -> Double {
         return pow(progress, 2.0)
+    }
+
+    public func isEqual(to curve: AnimationCurve) -> Bool {
+        return curve is ParabolicEaseInAnimationCurve
     }
 
 }
@@ -58,6 +66,10 @@ public struct ParabolicEaseOutAnimationCurve: AnimationCurve {
         return 1 - pow(1 - progress, 2.0)
     }
 
+    public func isEqual(to curve: AnimationCurve) -> Bool {
+        return curve is ParabolicEaseOutAnimationCurve
+    }
+
 }
 
 // MARK: -
@@ -73,6 +85,10 @@ public struct SinusoidalEaseInEaseOutAnimationCurve: AnimationCurve {
 
     public func adjustedProgress(for progress: Double) -> Double {
         return 0.5 - cos(progress * .pi) * 0.5
+    }
+
+    public func isEqual(to curve: AnimationCurve) -> Bool {
+        return curve is SinusoidalEaseInEaseOutAnimationCurve
     }
 
 }

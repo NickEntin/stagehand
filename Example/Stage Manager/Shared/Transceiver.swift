@@ -70,11 +70,15 @@ extension Transceiver: Memo.TransceiverObserver {
     }
 
     func transceiverDidUpdateConnection(_ transceiver: Memo.Transceiver) {
-        hasActiveConnection = true
+        DispatchQueue.main.async {
+            self.hasActiveConnection = true
+        }
     }
 
     func transceiverDidLoseConnection(_ transceiver: Memo.Transceiver) {
-        hasActiveConnection = false
+        DispatchQueue.main.async {
+            self.hasActiveConnection = false
+        }
     }
 
 }

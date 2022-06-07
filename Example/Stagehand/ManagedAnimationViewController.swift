@@ -63,6 +63,14 @@ final class ManagedAnimationViewController: DemoViewController {
                 scaleBothAnimation.perform(on: self.mainView)
             }),
         ]
+
+        Task {
+            do {
+                try await stageManager.start()
+            } catch {
+                print("Failed to start stage manager")
+            }
+        }
     }
 
     // MARK: - Private Properties

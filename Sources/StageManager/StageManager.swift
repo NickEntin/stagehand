@@ -24,19 +24,21 @@ public final class StageManager {
 
     public init() {
         memoServer.delegate = self
-
-        do {
-            try memoServer.start()
-        } catch {
-            print("[StageManager] Failed to start Memo server")
-        }
     }
 
     deinit {
-        memoServer.stop()
+        stop()
     }
 
     // MARK: - Public Methods
+
+    public func start() async throws {
+        try await memoServer.start()
+    }
+
+    public func stop() {
+        memoServer.stop()
+    }
 
     public func registerManagedAnimation<ElementType: AnyObject>(
         named name: String,

@@ -14,8 +14,8 @@
 //  limitations under the License.
 //
 
+import ChoreographerNetworking
 import Stagehand
-import StageManagerPrimitives
 
 public final class ManagedAnimation<ElementType: AnyObject> {
 

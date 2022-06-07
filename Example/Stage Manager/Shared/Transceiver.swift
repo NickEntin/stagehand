@@ -6,8 +6,8 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
+import ChoreographerNetworking
 import Memo
-import StageManagerPrimitives
 
 final class Transceiver: ObservableObject {
 

@@ -5,8 +5,7 @@
 //  Created by Nick Entin on 2/14/22.
 //
 
-import Foundation
-import StageManagerPrimitives
+import ChoreographerNetworking
 
 internal final class AnyManagedAnimation {
 

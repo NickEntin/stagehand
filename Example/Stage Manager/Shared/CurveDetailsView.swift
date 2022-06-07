@@ -7,7 +7,7 @@
 //
 
 import Memo
-import StageManagerPrimitives
+import ChoreographerNetworking
 import SwiftUI
 
 struct CurveDetailsView: View {

@@ -14,9 +14,9 @@
 //  limitations under the License.
 //
 
+import ChoreographerNetworking
 import Memo
 import Stagehand
-import StageManagerPrimitives
 
 public final class StageManager {
 

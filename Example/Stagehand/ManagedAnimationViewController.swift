@@ -14,9 +14,9 @@
 //  limitations under the License.
 //
 
+import Choreographer
 import Memo
 import Stagehand
-import StageManager
 import UIKit
 
 final class ManagedAnimationViewController: DemoViewController {

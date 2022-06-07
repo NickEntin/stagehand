@@ -14,8 +14,8 @@
 //  limitations under the License.
 //
 
+import ChoreographerNetworking
 import Stagehand
-import StageManagerPrimitives
 
 public struct ManagedAnimationBlueprint<ElementType: AnyObject> {
 

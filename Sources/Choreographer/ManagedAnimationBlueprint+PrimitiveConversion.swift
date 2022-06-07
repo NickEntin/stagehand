@@ -5,8 +5,8 @@
 //  Created by Nick Entin on 2/15/22.
 //
 
+import ChoreographerNetworking
 import Stagehand
-import StageManagerPrimitives
 
 extension SerializableAnimationBlueprint {
 

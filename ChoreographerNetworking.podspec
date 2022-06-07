@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'StageManagerPrimitives'
+  s.name             = 'ChoreographerNetworking'
   s.version          = '1.0.0'
   s.summary          = 'Modern, type-safe API for building animations on iOS'
   s.homepage         = 'https://github.com/CashApp/Stagehand'
@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
 
   s.dependency 'Memo'
 
-  s.source_files = 'Sources/StageManagerPrimitives/**/*'
+  s.source_files = 'Sources/ChoreographerNetworking/**/*'
 end

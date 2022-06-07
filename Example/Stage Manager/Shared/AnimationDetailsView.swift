@@ -6,8 +6,8 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
+import ChoreographerNetworking
 import Memo
-import StageManagerPrimitives
 import SwiftUI
 
 struct AnimationDetailsView: View {
@@ -74,15 +74,15 @@ struct AnimationDetailsView: View {
                 getValue: { formattedImplicitDuration }
             )
             RepeatStyleRows(selectedEffectiveRepeatStyle: $selectedEffectiveRepeatStyle, animation: $animation)
-            HStack {
-                Text("Curve")
-                Spacer()
-                Picker("Curve", selection: animation.curve) {
-                    // TODO: Populate with managed curves
-                    // TODO: Populate with unmanaged curves
-                }
-            }
-            .padding()
+//            HStack {
+//                Text("Curve")
+//                Spacer()
+//                Picker("Curve", selection: animation.curve) {
+//                    // TODO: Populate with managed curves
+//                    // TODO: Populate with unmanaged curves
+//                }
+//            }
+//            .padding()
             ForEach($animation.managedKeyframeSeries) { series in
                 KeyframeSeriesView(keyframeSeries: series)
             }

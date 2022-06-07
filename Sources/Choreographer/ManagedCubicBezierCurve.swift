@@ -5,8 +5,8 @@
 //  Created by Nick Entin on 3/11/22.
 //
 
+import ChoreographerNetworking
 import Stagehand
-import StageManagerPrimitives
 
 public final class ManagedCubicBezierCurve: ManagedAnimationBlueprintCurveProviding {
 

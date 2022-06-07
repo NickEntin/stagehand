@@ -6,7 +6,7 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
-import StageManagerPrimitives
+import ChoreographerNetworking
 import SwiftUI
 
 struct ManagedExecutionView: View {

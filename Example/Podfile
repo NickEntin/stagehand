@@ -4,7 +4,7 @@ platform :ios, '14.0'
 
 target 'Stagehand_Example' do
   pod 'Stagehand', :path => '../'
-  pod 'StageManager', :path => '../'
+  pod 'Choreographer', :path => '../'
 
   pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
 
@@ -27,14 +27,14 @@ target 'Stagehand_Example' do
 end
 
 target 'StageManager (iOS)' do
-  pod 'StageManagerPrimitives', :path => '../'
+  pod 'ChoreographerNetworking', :path => '../'
   pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
 end
 
 target 'StageManager (macOS)' do
   platform :osx, '11.0'
 
-  pod 'StageManagerPrimitives', :path => '../'
+  pod 'ChoreographerNetworking', :path => '../'
   pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
 end
 

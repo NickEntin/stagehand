@@ -1,4 +1,10 @@
 PODS:
+  - Choreographer (1.0.0):
+    - ChoreographerNetworking (~> 1.0)
+    - Memo
+    - Stagehand (~> 4.0)
+  - ChoreographerNetworking (1.0.0):
+    - Memo
   - iOSSnapshotTestCase (6.2.0):
     - iOSSnapshotTestCase/SwiftSupport (= 6.2.0)
   - iOSSnapshotTestCase/Core (6.2.0)
@@ -15,21 +21,15 @@ PODS:
   - StagehandTesting/SnapshotTesting (4.0.0):
     - SnapshotTesting (~> 1.7)
     - Stagehand (= 4.0.0)
-  - StageManager (1.0.0):
-    - Memo
-    - Stagehand (~> 4.0)
-    - StageManagerPrimitives (~> 1.0)
-  - StageManagerPrimitives (1.0.0):
-    - Memo
 
 DEPENDENCIES:
+  - Choreographer (from `../`)
+  - ChoreographerNetworking (from `../`)
   - Memo (from `../../Memo-Swift/Memo.podspec`)
   - SnapshotTesting (= 1.7.0)
   - Stagehand (from `../`)
   - StagehandTesting/iOSSnapshotTestCase (from `../`)
   - StagehandTesting/SnapshotTesting (from `../`)
-  - StageManager (from `../`)
-  - StageManagerPrimitives (from `../`)
 
 SPEC REPOS:
   trunk:
@@ -38,27 +38,27 @@ SPEC REPOS:
     - SnapshotTesting
 
 EXTERNAL SOURCES:
+  Choreographer:
+    :path: "../"
+  ChoreographerNetworking:
+    :path: "../"
   Memo:
     :path: "../../Memo-Swift/Memo.podspec"
   Stagehand:
     :path: "../"
   StagehandTesting:
     :path: "../"
-  StageManager:
-    :path: "../"
-  StageManagerPrimitives:
-    :path: "../"
 
 SPEC CHECKSUMS:
+  Choreographer: b1da3076e799d005b8ade6f9d4e4172d0c34dbc9
+  ChoreographerNetworking: 09ec63fe4678dd1a0553bccc0196ea08b9d5cec0
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Memo: 380c1e0013629ad399fb7f6969ff9a6e2650731e
   PeerTalk: 7ad12ee847f28748f8996afdae3add70f7670306
   SnapshotTesting: 273b614fcc60fac7d9f613f6648afa91a7da36be
   Stagehand: 29ee26a0690ebf90a5ea45e86fd88b865baf5403
   StagehandTesting: 3354a5300e7fc6d1ba9ab182762feff9e80cb6de
-  StageManager: 5d935f71a18bb59b6b19d57a291f8bc0e0901871
-  StageManagerPrimitives: ba46fbe2e6ffed4b159906dd0c26b92c2936b4f6
 
-PODFILE CHECKSUM: 0eadfd44a9107557d7323ed53540cec278177556
+PODFILE CHECKSUM: dc2e96affd4b9b717785c0dc263876e578f8e28d
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

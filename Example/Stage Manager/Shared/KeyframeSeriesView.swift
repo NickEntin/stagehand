@@ -6,7 +6,7 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
-import StageManagerPrimitives
+import ChoreographerNetworking
 import SwiftUI
 
 struct KeyframeSeriesView: View {
@@ -275,7 +275,7 @@ struct ColorKeyframeChart: View {
         .frame(height: 50)
         .onChange(of: keyframes) { keyframes in
             keyframeSequence.wrappedValue = .color(keyframes.map { keyframe in
-                StageManagerPrimitives.Keyframe<RGBAColor>(
+                ChoreographerNetworking.Keyframe<RGBAColor>(
                     relativeTimestamp: Double(keyframe.timestamp),
                     value: RGBAColor(cgColor: keyframe.color)
                 )

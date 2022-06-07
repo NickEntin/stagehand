@@ -6,8 +6,8 @@
 //  Copyright © 2022 CocoaPods. All rights reserved.
 //
 
+import ChoreographerNetworking
 import SwiftUI
-import StageManagerPrimitives
 
 final class UndoManager<ValueType: Equatable>: ObservableObject {
 

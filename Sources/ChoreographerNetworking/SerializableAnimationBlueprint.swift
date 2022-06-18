@@ -5,7 +5,7 @@
 //  Created by Nick Entin on 2/6/22.
 //
 
-import Foundation
+import Memo
 
 public struct SerializableAnimationBlueprint: Codable, Equatable, Identifiable, TokenIdentifiable {
 

@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.0.1'
 
-  s.dependency 'Memo'
+  s.dependency 'Memo', '~> 0.1'
 
   s.source_files = 'Sources/ChoreographerNetworking/**/*'
 end

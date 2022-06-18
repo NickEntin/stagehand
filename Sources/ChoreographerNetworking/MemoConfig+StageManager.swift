@@ -10,9 +10,7 @@ import Memo
 extension Memo.Config {
 
     public static let stageManager = Memo.Config(
-        localhostPort: 7846,
-        bonjourServiceName: "stgmngr",
-        invertPeertalkRelationship: true
+        bonjourServiceName: "stgmngr"
     )
 
 }

@@ -6,6 +6,7 @@
 //
 
 import ChoreographerNetworking
+import Memo
 
 internal final class AnyManagedAnimation {
 

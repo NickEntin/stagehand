@@ -5,7 +5,7 @@
 //  Created by Nick Entin on 3/9/22.
 //
 
-import Foundation
+import Memo
 
 public enum ExecutionBlockControl: Equatable {
 

@@ -27,10 +27,10 @@ final class Transceiver: ObservableObject {
 
     private let memoTransceiver: Memo.Transceiver
 
-    public func updateAnimation(_ blueprint: SerializableAnimationBlueprint) async throws {
+    public func updateAnimation(_ blueprint: SerializableAnimationBlueprint) throws {
         let encoder = JSONEncoder()
         let payload = try encoder.encode(ClientToServerMessage.updateAnimation(blueprint))
-        try await memoTransceiver.send(payload: payload)
+        try memoTransceiver.send(payload: payload)
     }
 
 }

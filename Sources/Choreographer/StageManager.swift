@@ -32,8 +32,8 @@ public final class StageManager {
 
     // MARK: - Public Methods
 
-    public func start() async throws {
-        try await memoServer.start()
+    public func start() {
+        memoServer.start()
     }
 
     public func stop() {
@@ -96,13 +96,14 @@ public final class StageManager {
     // MARK: - Private Methods
 
     private func send(_ message: ServerToClientMessage, with transceiver: Transceiver) {
+        // TODO: Handle this error
         let payload = try! JSONEncoder().encode(message)
 
         @Sendable
         func send(payload: Data, retryCount: Int) {
             Task {
                 do {
-                    try await transceiver.send(payload: payload)
+                    try transceiver.send(payload: payload)
                 } catch {
                     if retryCount > 0 {
                         print("Failed to send blueprint")
@@ -130,7 +131,7 @@ public final class StageManager {
 
 extension StageManager: Memo.ServerDelegate {
 
-    public func server(_ server: Server, didReceiveIncomingConnection transceiver: Transceiver) {
+    public func server(_ server: Memo.Server, didReceiveIncomingConnection transceiver: Transceiver) {
         transceiver.addObserver(self)
         transceivers.append(transceiver)
 
@@ -143,8 +144,8 @@ extension StageManager: Memo.ServerDelegate {
         }
     }
 
-    public func server(_ server: Server, didFailWithError error: Error) {
-        // TODO: Do we need to handle errors here? This method is never called currently.
+    public func server(_ server: Server, didEncounterError error: Error) {
+        // TODO: Do we need to handle errors here?
     }
 
 }

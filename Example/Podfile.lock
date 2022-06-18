@@ -1,18 +1,16 @@
 PODS:
   - Choreographer (1.0.0):
     - ChoreographerNetworking (~> 1.0)
-    - Memo
+    - Memo (~> 0.1)
     - Stagehand (~> 4.0)
   - ChoreographerNetworking (1.0.0):
-    - Memo
+    - Memo (~> 0.1)
   - iOSSnapshotTestCase (6.2.0):
     - iOSSnapshotTestCase/SwiftSupport (= 6.2.0)
   - iOSSnapshotTestCase/Core (6.2.0)
   - iOSSnapshotTestCase/SwiftSupport (6.2.0):
     - iOSSnapshotTestCase/Core
-  - Memo (0.1.0):
-    - PeerTalk (~> 0.1)
-  - PeerTalk (0.1.0)
+  - Memo (0.1.0)
   - SnapshotTesting (1.7.0)
   - Stagehand (4.0.0)
   - StagehandTesting/iOSSnapshotTestCase (4.0.0):
@@ -25,7 +23,6 @@ PODS:
 DEPENDENCIES:
   - Choreographer (from `../`)
   - ChoreographerNetworking (from `../`)
-  - Memo (from `../../Memo-Swift/Memo.podspec`)
   - SnapshotTesting (= 1.7.0)
   - Stagehand (from `../`)
   - StagehandTesting/iOSSnapshotTestCase (from `../`)
@@ -34,7 +31,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - iOSSnapshotTestCase
-    - PeerTalk
+    - Memo
     - SnapshotTesting
 
 EXTERNAL SOURCES:
@@ -42,23 +39,20 @@ EXTERNAL SOURCES:
     :path: "../"
   ChoreographerNetworking:
     :path: "../"
-  Memo:
-    :path: "../../Memo-Swift/Memo.podspec"
   Stagehand:
     :path: "../"
   StagehandTesting:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Choreographer: b1da3076e799d005b8ade6f9d4e4172d0c34dbc9
-  ChoreographerNetworking: 09ec63fe4678dd1a0553bccc0196ea08b9d5cec0
+  Choreographer: f0d02cdd0b5beb19d8f07840ddda78aa763bfdc7
+  ChoreographerNetworking: 17d620f00f5313be94bd8435957e5a6238a49cf6
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
-  Memo: 380c1e0013629ad399fb7f6969ff9a6e2650731e
-  PeerTalk: 7ad12ee847f28748f8996afdae3add70f7670306
+  Memo: 96779a0784e3a4afcdd307157247fad4e40e348a
   SnapshotTesting: 273b614fcc60fac7d9f613f6648afa91a7da36be
   Stagehand: 29ee26a0690ebf90a5ea45e86fd88b865baf5403
   StagehandTesting: 3354a5300e7fc6d1ba9ab182762feff9e80cb6de
 
-PODFILE CHECKSUM: dc2e96affd4b9b717785c0dc263876e578f8e28d
+PODFILE CHECKSUM: b39d4e83c20efc0b2a2ba31ce85e88f54e04dde8
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0

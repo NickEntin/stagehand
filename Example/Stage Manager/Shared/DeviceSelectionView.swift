@@ -51,13 +51,7 @@ final class Client: ObservableObject {
         memoClient = Memo.Client(config: .stageManager)
         memoClient.delegate = self
 
-        Task {
-            do {
-                try await memoClient.startSearchingForConnections()
-            } catch {
-                print("Failed to start searching for connections")
-            }
-        }
+        memoClient.startSearchingForConnections()
     }
 
     deinit {
@@ -84,6 +78,10 @@ extension Client: Memo.ClientDelegate {
                 )
             }
         }
+    }
+
+    func client(_ client: Memo.Client, didEncounterError error: Swift.Error) {
+        // TODO
     }
 
 }

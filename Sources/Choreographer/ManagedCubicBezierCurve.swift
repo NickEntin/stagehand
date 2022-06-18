@@ -6,6 +6,7 @@
 //
 
 import ChoreographerNetworking
+import Memo
 import Stagehand
 
 public final class ManagedCubicBezierCurve: ManagedAnimationBlueprintCurveProviding {

@@ -15,6 +15,7 @@
 //
 
 import ChoreographerNetworking
+import Memo
 import Stagehand
 
 public struct ManagedAnimationBlueprint<ElementType: AnyObject> {

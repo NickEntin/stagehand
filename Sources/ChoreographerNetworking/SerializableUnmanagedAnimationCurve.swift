@@ -5,7 +5,7 @@
 //  Created by Nick Entin on 3/12/22.
 //
 
-import Foundation
+import Memo
 
 public struct SerializableUnmanagedAnimationCurve: Codable, Equatable, Identifiable, TokenIdentifiable {
 

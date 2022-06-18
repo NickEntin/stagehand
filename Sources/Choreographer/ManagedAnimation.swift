@@ -15,6 +15,7 @@
 //
 
 import ChoreographerNetworking
+import Memo
 import Stagehand
 
 public final class ManagedAnimation<ElementType: AnyObject> {

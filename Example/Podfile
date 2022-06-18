@@ -6,8 +6,6 @@ target 'Stagehand_Example' do
   pod 'Stagehand', :path => '../'
   pod 'Choreographer', :path => '../'
 
-  pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
-
   target 'Stagehand-UnitTests' do
     inherit! :search_paths
 
@@ -28,14 +26,12 @@ end
 
 target 'StageManager (iOS)' do
   pod 'ChoreographerNetworking', :path => '../'
-  pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
 end
 
 target 'StageManager (macOS)' do
   platform :osx, '11.0'
 
   pod 'ChoreographerNetworking', :path => '../'
-  pod 'Memo', :path => '../../Memo-Swift/Memo.podspec'
 end
 
 install! 'cocoapods', disable_input_output_paths: true

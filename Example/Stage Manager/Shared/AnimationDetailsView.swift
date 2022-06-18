@@ -117,8 +117,10 @@ struct AnimationDetailsView: View {
         .navigationTitle(animation.name)
         // TODO: Disable the update button when transceiver has no active connection
         Button {
-            Task {
-                try await transceiver.updateAnimation(animation)
+            do {
+                try transceiver.updateAnimation(animation)
+            } catch {
+                // TODO
             }
         } label: {
             Text("Update")

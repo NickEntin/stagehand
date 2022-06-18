@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'ChoreographerNetworking', '~> 1.0'
   s.dependency 'Stagehand', '~> 4.0'
-  s.dependency 'Memo'
+  s.dependency 'Memo', '~> 0.1'
 
   s.source_files = 'Sources/Choreographer/**/*'
 

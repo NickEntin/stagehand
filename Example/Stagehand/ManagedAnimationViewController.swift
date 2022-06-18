@@ -64,13 +64,7 @@ final class ManagedAnimationViewController: DemoViewController {
             }),
         ]
 
-        Task {
-            do {
-                try await stageManager.start()
-            } catch {
-                print("Failed to start stage manager")
-            }
-        }
+        stageManager.start()
     }
 
     // MARK: - Private Properties

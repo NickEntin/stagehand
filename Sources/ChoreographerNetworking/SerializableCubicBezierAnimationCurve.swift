@@ -5,7 +5,7 @@
 //  Created by Nick Entin on 3/11/22.
 //
 
-import Foundation
+import Memo
 
 public struct SerializableCubicBezierAnimationCurve: Codable, Equatable, Identifiable, TokenIdentifiable {
 

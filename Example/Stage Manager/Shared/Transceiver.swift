@@ -45,7 +45,6 @@ extension Transceiver: Memo.TransceiverObserver {
 
             switch message {
             case let .registerAnimation(blueprint):
-                print("[AnimationSelectionView] Adding managed animation: \"\(blueprint.name)\"")
                 managedAnimations.append(
                     ManagedAnimationModel(
                         id: blueprint.id,

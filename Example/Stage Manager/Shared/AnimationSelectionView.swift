@@ -40,6 +40,7 @@ struct AnimationSelectionView: View {
                 header: Text("Animations")
                     .font(.headline)
             ) {
+                // TODO: Add ability to group animations (e.g. by feature), ideally with subgroups
                 ForEach(transceiver.managedAnimations) { animation in
                     NavigationLink {
                         AnimationDetailsView(

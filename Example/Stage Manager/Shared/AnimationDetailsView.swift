@@ -120,7 +120,7 @@ struct AnimationDetailsView: View {
             do {
                 try transceiver.updateAnimation(animation)
             } catch {
-                // TODO
+                // TODO: Handle errors
             }
         } label: {
             Text("Update")
@@ -164,7 +164,7 @@ struct AnimationDetailsView: View {
                         .flipsForRightToLeftLayoutDirection(false)
                         .disabled(!undoManager.canRedo)
                         Button {
-                            print("Export spec")
+                            // TODO: Generate doc with export data
                         } label: {
                             Label("Export", systemImage: "square.and.arrow.up")
                         }
@@ -190,7 +190,7 @@ struct AnimationDetailsView: View {
                     .flipsForRightToLeftLayoutDirection(false)
                     .disabled(!undoManager.canRedo)
                     Button {
-                        print("Export spec")
+                        // TODO: Generate doc with export data
                     } label: {
                         Image(systemName: "square.and.arrow.up")
                             .accessibilityLabel("Export")
@@ -231,9 +231,18 @@ struct RepeatStyleRows: View {
                 Spacer(minLength: 32)
                 StepperRow(
                     title: "Repeat Count",
-                    onIncrement: { animation.wrappedValue.implicitRepeatStyle.count += 1 },
-                    onDecrement: { animation.wrappedValue.implicitRepeatStyle.count = max(animation.wrappedValue.implicitRepeatStyle.count - 1, 2) },
-                    getValue: { "\(animation.wrappedValue.implicitRepeatStyle.count)" }
+                    onIncrement: {
+                        animation.wrappedValue.implicitRepeatStyle.count += 1
+                    },
+                    onDecrement: {
+                        animation.wrappedValue.implicitRepeatStyle.count = max(
+                            animation.wrappedValue.implicitRepeatStyle.count - 1,
+                            2
+                        )
+                    },
+                    getValue: {
+                        "\(animation.wrappedValue.implicitRepeatStyle.count)"
+                    }
                 )
             }
             HStack {

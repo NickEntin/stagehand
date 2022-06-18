@@ -68,7 +68,6 @@ final class Client: ObservableObject {
 extension Client: Memo.ClientDelegate {
 
     func clientDidUpdateAvailableTransceivers(client: Memo.Client) {
-        print("Updating available transceivers")
         DispatchQueue.main.async {
             self.availableTransceivers = client.availableTransceivers.map { transceiver in
                 AvailableTransceiverModel(
@@ -81,7 +80,7 @@ extension Client: Memo.ClientDelegate {
     }
 
     func client(_ client: Memo.Client, didEncounterError error: Swift.Error) {
-        // TODO
+        // TODO: Handle errors
     }
 
 }

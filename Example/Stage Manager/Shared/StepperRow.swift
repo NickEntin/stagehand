@@ -42,18 +42,18 @@ struct StepperRow: View {
     
 }
 
-//struct StepperRow_Previews: PreviewProvider {
-//
-//    static var value = 0
-//
-//    static var previews: some View {
-//        StepperRow(title: "Some Value") {
-//            StepperRow_Previews.value += 1
-//        } onDecrement: {
-//            StepperRow_Previews.value -= 1
-//        } getValue: {
-//            return "\(value) units"
-//        }
-//
-//    }
-//}
+struct StepperRow_Previews: PreviewProvider {
+
+    static var value = 0
+
+    static var previews: some View {
+        StepperRow(title: "Some Value") {
+            StepperRow_Previews.value += 1
+        } onDecrement: {
+            StepperRow_Previews.value -= 1
+        } getValue: {
+            return "\(value) units"
+        }
+
+    }
+}

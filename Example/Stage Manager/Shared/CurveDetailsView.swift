@@ -161,7 +161,7 @@ struct CurveDetailsView: View {
         Spacer()
         Button {
             Task {
-//                try await transceiver.updateAnimation(animation)
+                // TODO: Hook up the updater
             }
         } label: {
             Text("Update")
@@ -195,7 +195,7 @@ struct CurveDetailsView: View {
                         .flipsForRightToLeftLayoutDirection(false)
                         .disabled(!undoManager.canRedo)
                         Button {
-                            print("Export spec")
+                            // TODO: Export curve data
                         } label: {
                             Label("Export", systemImage: "square.and.arrow.up")
                         }
@@ -221,7 +221,7 @@ struct CurveDetailsView: View {
                     .flipsForRightToLeftLayoutDirection(false)
                     .disabled(!undoManager.canRedo)
                     Button {
-                        print("Export spec")
+                        // TODO: Export curve data
                     } label: {
                         Image(systemName: "square.and.arrow.up")
                             .accessibilityLabel("Export")

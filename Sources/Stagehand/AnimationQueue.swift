@@ -1,5 +1,6 @@
 //
-//  Copyright 2019 Square Inc.
+//  Portions of this file are Copyright 2025 Nick Entin
+//  Portions of this file are Copyright 2019 Square Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -37,6 +38,19 @@ public final class AnimationQueue<ElementType: AnyObject> {
             return true
         case .complete, .canceled:
             return false
+        }
+    }
+
+    public var inProgressAnimationInstance: AnimationInstance? {
+        guard let currentAnimationInstance = queue.first?.instance else {
+            return nil
+        }
+
+        switch currentAnimationInstance.status {
+        case .pending, .animating:
+            return currentAnimationInstance
+        case .complete, .canceled:
+            return nil
         }
     }
 
@@ -102,10 +116,21 @@ public final class AnimationQueue<ElementType: AnyObject> {
         purgeCompletedAndCanceledAnimations()
     }
 
+    public func pause() {
+        pauseAdvancement = true
+    }
+
+    public func resume() {
+        pauseAdvancement = false
+        advanceToNextAnimationIfReady()
+    }
+
     // MARK: - Private Methods
 
+    private var pauseAdvancement = false
+
     private func advanceToNextAnimationIfReady() {
-        guard let currentAnimation = queue.first else {
+        guard !pauseAdvancement, let currentAnimation = queue.first else {
             return
         }
 

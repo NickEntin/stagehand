@@ -1,6 +1,6 @@
 //
 //  Portions of this file are Copyright 2025 Nick Entin
-//  Portions of this file are Copyright 2019 Square Inc.
+//  Copyright 2019 Square Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.

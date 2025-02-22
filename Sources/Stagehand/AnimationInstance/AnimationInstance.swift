@@ -102,6 +102,39 @@ public final class AnimationInstance {
 
     private var lastRenderedFrameRelativeTimestamp: Double?
 
+    // MARK: Public
+
+    /// Waits for the animation to complete.
+    ///
+    /// - throws: `CancellationError` if the animation was cancelled.
+    @available(iOS 13, *)
+    public func waitForAnimationToComplete() async throws {
+        try await withUnsafeThrowingContinuation { continuation in
+            driver.addCompletion { finished in
+                if finished {
+                    continuation.resume()
+                } else {
+                    continuation.resume(throwing: CancellationError())
+                }
+            }
+        }
+    }
+
+    @available(iOS 13, *)
+    public func waitForNextForwardCycleCompletion() async throws {
+        // @NICK TODO
+    }
+
+    @available(iOS 13, *)
+    public func waitForNextReverseCycleCompletion() async throws {
+        // @NICK TODO
+    }
+
+    @available(iOS 13, *)
+    public func waitForNextForwardOrReverseCycleCompletion() async throws {
+        // @NICK TODO
+    }
+
     // MARK: - Public Methods - Cancelation
 
     public enum CancelationBehavior {

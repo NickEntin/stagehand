@@ -115,7 +115,7 @@ public final class AnimationQueue<ElementType: AnyObject> {
         purgeCompletedAndCanceledAnimations()
     }
 
-    public func pause() {
+    public func pauseBeforeNextAnimation() {
         pauseAdvancement = true
     }
 

@@ -106,6 +106,30 @@ public final class AnimationQueue<ElementType: AnyObject> {
         advanceToNextAnimationIfReady()
     }
 
+    /// Waits for the currently in progress animation to complete.
+    ///
+    /// - throws: `CancellationError` if the animation was cancelled.
+    @available(iOS 13, *)
+    public func waitForInProgressAnimationToComplete() async throws {
+        try await inProgressAnimationInstance?.waitForAnimationToComplete()
+    }
+
+    /// Waits for all animations currently in the queue to complete or be cancelled.
+    @available(iOS 13, *)
+    public func waitForCurrentQueueToComplete() async {
+        let emptyAnimation = Animation<ElementType>()
+        let instance = enqueue(animation: emptyAnimation, duration: 0)
+        try? await instance.waitForAnimationToComplete()
+    }
+
+    /// Waits for all animations in the queue to complete or be cancelled, including animations enqueued after this method is called.
+    @available(iOS 13, *)
+    public func waitForQueueToEmpty() async {
+        while hasInProgressAnimation {
+            await waitForCurrentQueueToComplete()
+        }
+    }
+
     // MARK: - Private Methods
 
     private var pauseAdvancement = false

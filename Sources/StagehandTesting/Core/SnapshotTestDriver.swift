@@ -50,4 +50,8 @@ final class SnapshotTestDriver: Driver {
         animationInstance.renderFrame(at: 0)
     }
 
+    func addCompletion(_ completion: @escaping (Bool) -> Void) {
+        // No-op.
+    }
+
 }

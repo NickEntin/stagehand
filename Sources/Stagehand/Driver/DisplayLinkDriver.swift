@@ -145,6 +145,10 @@ internal final class DisplayLinkDriver: Driver {
         complete(success: false)
     }
 
+    func addCompletion(_ completion: @escaping (Bool) -> Void) {
+        completions.append(completion)
+    }
+
     // MARK: - Internal Methods
 
     func start(timeFactory: () -> CFTimeInterval = CACurrentMediaTime) {
@@ -157,10 +161,6 @@ internal final class DisplayLinkDriver: Driver {
         if delay == 0 {
             renderCurrentFrame()
         }
-    }
-
-    func addCompletion(_ completion: @escaping (Bool) -> Void) {
-        completions.append(completion)
     }
 
     @objc func renderCurrentFrame() {

@@ -25,6 +25,7 @@ final class SpringCurveViewController: DemoViewController {
                 var animation = self.makeAnimation()
                 animation.curve = SpringAnimationCurve(damping: 1, initialVelocity: 0.5)
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
             }),
             ("Spring (0.5 damping, 0.5 velocity)", { [unowned self] in
                 self.reset()
@@ -32,6 +33,7 @@ final class SpringCurveViewController: DemoViewController {
                 var animation = self.makeAnimation()
                 animation.curve = SpringAnimationCurve(damping: 0.5, initialVelocity: 0.5)
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
             }),
             ("Spring (0.5 damping, 0 velocity)", { [unowned self] in
                 self.reset()
@@ -39,6 +41,7 @@ final class SpringCurveViewController: DemoViewController {
                 var animation = self.makeAnimation()
                 animation.curve = SpringAnimationCurve(damping: 0.5, initialVelocity: 0)
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
             }),
             ("Spring (0.2 damping, 0.5 velocity)", { [unowned self] in
                 self.reset()
@@ -46,6 +49,7 @@ final class SpringCurveViewController: DemoViewController {
                 var animation = self.makeAnimation()
                 animation.curve = SpringAnimationCurve(damping: 0.2, initialVelocity: 0.5)
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
             }),
             ("Spring (0.2 damping, 0.7 velocity)", { [unowned self] in
                 self.reset()
@@ -53,6 +57,7 @@ final class SpringCurveViewController: DemoViewController {
                 var animation = self.makeAnimation()
                 animation.curve = SpringAnimationCurve(damping: 0.2, initialVelocity: 0.7)
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
             }),
             ("Spring (0.9 damping, 1.2 velocity)", { [unowned self] in
                 self.reset()
@@ -60,6 +65,27 @@ final class SpringCurveViewController: DemoViewController {
                 var animation = self.makeAnimation()
                 animation.curve = SpringAnimationCurve(damping: 0.9, initialVelocity: 1.2)
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
+            }),
+            ("Reverse Calculate", { [unowned self] in
+                guard let curve = lastCurve else { return }
+                let shapeLayerSize = Double(self.mainView.shapeLayer.bounds.width)
+                let path = UIBezierPath()
+
+                for adjustedProgress in stride(from: Double(0), through: 1, by: 0.02) {
+                    for rawProgress in curve.rawProgress(for: adjustedProgress) {
+                        path.addArc(
+                            withCenter: .init(x: rawProgress * shapeLayerSize, y: (1 - adjustedProgress) * shapeLayerSize),
+                            radius: 1,
+                            startAngle: 0,
+                            endAngle: 2 * .pi,
+                            clockwise: true
+                        )
+                        path.close()
+                    }
+                }
+
+                reverseCalculationPath = path
             }),
         ]
     }
@@ -71,6 +97,14 @@ final class SpringCurveViewController: DemoViewController {
     private var animationInstance: AnimationInstance?
 
     private var curvePath: UIBezierPath = .init()
+
+    private var lastCurve: AnimationCurve?
+
+    private var reverseCalculationPath: UIBezierPath = .init() {
+        didSet {
+            mainView.reverseCalculationShapeLayer.path = reverseCalculationPath.cgPath
+        }
+    }
 
     // MARK: - Private Methods
 
@@ -125,6 +159,8 @@ final class SpringCurveViewController: DemoViewController {
         curvePath = UIBezierPath()
         curvePath.move(to: CGPoint(x: 0, y: mainView.shapeLayer.bounds.height))
         mainView.shapeLayer.path = curvePath.cgPath
+
+        reverseCalculationPath = .init()
     }
 
 }
@@ -158,6 +194,11 @@ extension SpringCurveViewController {
             shapeLayer.lineWidth = 2
             shapeLayer.strokeColor = UIColor.black.cgColor
             layer.addSublayer(shapeLayer)
+
+            reverseCalculationShapeLayer.fillColor = UIColor.red.cgColor
+            reverseCalculationShapeLayer.lineWidth = 0
+            reverseCalculationShapeLayer.strokeColor = nil
+            layer.addSublayer(reverseCalculationShapeLayer)
         }
 
         @available(*, unavailable)
@@ -174,6 +215,8 @@ extension SpringCurveViewController {
         let shapeLayer: CAShapeLayer = .init()
 
         let oldShapeLayer: CAShapeLayer = .init()
+
+        let reverseCalculationShapeLayer: CAShapeLayer = .init()
 
         // MARK: - UIView
 
@@ -195,6 +238,7 @@ extension SpringCurveViewController {
             ShapeLayerUtils.addGridPath(to: gridLayer, rows: 10, columns: 10)
 
             oldShapeLayer.frame = shapeLayer.frame
+            reverseCalculationShapeLayer.frame = shapeLayer.frame
         }
 
     }

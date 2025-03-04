@@ -18,6 +18,9 @@ import Foundation
 
 public struct SpringAnimationCurve: AnimationCurve {
 
+    /// - parameter damping: The damping ratio applied to the spring. Values should be in the range `[0,1]` where `1` means no oscillation (just smooth deceleration).
+    /// - parameter initialVelocity: The velocity at the start of the animation.
+    /// - parameter naturalFrequency: The natural frequency of the spring, which controls how "stiff" it feels. Higher values will cause the spring to bounce more times.
     public init(damping: CGFloat, initialVelocity: CGFloat, naturalFrequency: CGFloat = 10) {
         self.damping = damping
         self.initialVelocity = initialVelocity

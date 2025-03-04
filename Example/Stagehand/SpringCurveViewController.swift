@@ -73,6 +73,14 @@ final class SpringCurveViewController: DemoViewController {
                 self.animationInstance = animation.perform(on: self.mainView.animatableView)
                 self.lastCurve = animation.curve
             }),
+            ("Spring (0.2 damping, 0.7 velocity, high natural freq)", { [unowned self] in
+                self.reset()
+
+                var animation = self.makeAnimation()
+                animation.curve = SpringAnimationCurve(damping: 0.2, initialVelocity: 0.7, naturalFrequency: 20)
+                self.animationInstance = animation.perform(on: self.mainView.animatableView)
+                self.lastCurve = animation.curve
+            }),
             ("Spring (0.9 damping, 1.2 velocity)", { [unowned self] in
                 self.reset()
 

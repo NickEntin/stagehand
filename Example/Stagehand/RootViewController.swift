@@ -40,40 +40,21 @@ final class RootViewController: UITableViewController {
     ]
 
     /// Screens that show how a specific feature can be used.
-    private var featureScreens: [RowModel] {
-        if #available(iOS 17, *) {
-            [
-                ("Simple Keyframe Animations", { SimpleAnimationsViewController() }),
-                ("Relative Keyframe Animations", { RelativeAnimationsViewController() }),
-                ("Color Keyframe Animations", { ColorAnimationsViewController() }),
-                ("Child Animations", { ChildAnimationsViewController() }),
-                ("Animation Curves", { AnimationCurveViewController() }),
-                ("Spring Curves", { SpringCurveViewController() }),
-                ("Child Animations with Curves", { ChildAnimationsWithCurvesViewController() }),
-                ("Animation Cancellation", { AnimationCancelationViewController() }),
-                ("Property Assignments", { PropertyAssignmentViewController() }),
-                ("Repeating Animations", { RepeatingAnimationsViewController() }),
-                ("Execution Blocks", { ExecutionBlockViewController() }),
-                ("Animation Groups", { AnimationGroupViewController() }),
-                ("Animation Queues", { AnimationQueueViewController() }),
-            ]
-        } else {
-            [
-                ("Simple Keyframe Animations", { SimpleAnimationsViewController() }),
-                ("Relative Keyframe Animations", { RelativeAnimationsViewController() }),
-                ("Color Keyframe Animations", { ColorAnimationsViewController() }),
-                ("Child Animations", { ChildAnimationsViewController() }),
-                ("Animation Curves", { AnimationCurveViewController() }),
-                ("Child Animations with Curves", { ChildAnimationsWithCurvesViewController() }),
-                ("Animation Cancellation", { AnimationCancelationViewController() }),
-                ("Property Assignments", { PropertyAssignmentViewController() }),
-                ("Repeating Animations", { RepeatingAnimationsViewController() }),
-                ("Execution Blocks", { ExecutionBlockViewController() }),
-                ("Animation Groups", { AnimationGroupViewController() }),
-                ("Animation Queues", { AnimationQueueViewController() }),
-            ]
-        }
-    }
+    private let featureScreens: [RowModel] = [
+        ("Simple Keyframe Animations", { SimpleAnimationsViewController() }),
+        ("Relative Keyframe Animations", { RelativeAnimationsViewController() }),
+        ("Color Keyframe Animations", { ColorAnimationsViewController() }),
+        ("Child Animations", { ChildAnimationsViewController() }),
+        ("Animation Curves", { AnimationCurveViewController() }),
+        ("Spring Curves", { SpringCurveViewController() }),
+        ("Child Animations with Curves", { ChildAnimationsWithCurvesViewController() }),
+        ("Animation Cancellation", { AnimationCancelationViewController() }),
+        ("Property Assignments", { PropertyAssignmentViewController() }),
+        ("Repeating Animations", { RepeatingAnimationsViewController() }),
+        ("Execution Blocks", { ExecutionBlockViewController() }),
+        ("Animation Groups", { AnimationGroupViewController() }),
+        ("Animation Queues", { AnimationQueueViewController() }),
+    ]
 
     /// Screens that are used for debugging specific functionality.
     private let debuggingScreens: [RowModel] = [

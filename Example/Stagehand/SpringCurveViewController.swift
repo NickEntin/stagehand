@@ -17,7 +17,6 @@
 import Stagehand
 import UIKit
 
-@available(iOS 17, *)
 final class SpringCurveViewController: DemoViewController {
 
     // MARK: - Life Cycle
@@ -189,7 +188,6 @@ final class SpringCurveViewController: DemoViewController {
 
 // MARK: -
 
-@available(iOS 17, *)
 extension SpringCurveViewController {
 
     final class View: UIView {

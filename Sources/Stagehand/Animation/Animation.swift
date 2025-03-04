@@ -426,6 +426,21 @@ public struct Animation<ElementType: AnyObject> {
         return instance
     }
 
+    public func performInteractive(
+        on element: ElementType,
+        completion: ((_ finished: Bool) -> Void)? = nil
+    ) -> InteractiveAnimationInstance {
+        let driver = InteractiveDriver()
+
+        let instance = InteractiveAnimationInstance(
+            animation: self,
+            element: element,
+            driver: driver
+        )
+
+        return instance
+    }
+
     // MARK: - Internal Methods
 
     /// Applies the animatable properties (those defined by keyframes, including collection keyframes) to the `element`

@@ -34,13 +34,12 @@ public struct SpringAnimationCurve: AnimationCurve {
     public func adjustedProgress(for progress: Double) -> Double {
         // Since the curve always starts at `(0,0)` and ends at `(1,1)`, these values should always be the same. Early
         // return with the appropriate values here to avoid extra work and potential for rounding error.
-        if progress == 0 {
+        if progress <= 0 {
             return 0
-        } else if progress == 1 {
+        } else if progress >= 1 {
             return 1
         }
 
-        let progress = progress.clamped(in: 0...1)
         let dampingRatio = min(max(Double(damping), 0.0), 1.0)
         let dampedFrequency = naturalFrequency * sqrt(1.0 - dampingRatio * dampingRatio)
         let expTerm = exp(-dampingRatio * naturalFrequency * progress)
@@ -81,7 +80,7 @@ public struct SpringAnimationCurve: AnimationCurve {
 
         let sampleCount = 100
         var crossingPoints: [Double] = []
-        var prevValue = self.adjustedProgress(for: 0.0) - adjustedProgress
+        var prevValue = -adjustedProgress
 
         for i in 1...sampleCount {
             let t = Double(i) / Double(sampleCount)

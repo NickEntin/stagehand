@@ -46,7 +46,6 @@ let package = Package(
 			dependencies: [],
 			swiftSettings: [
 				.swiftLanguageMode(.v6),
-				.unsafeFlags(["-Xfrontend", "-disable-dynamic-actor-isolation"], .when(configuration: .release)),
 			]
 		),
 		.target(
@@ -58,7 +57,6 @@ let package = Package(
 			exclude: ["iOSSnapshotTestCase"],
 			swiftSettings: [
 				.swiftLanguageMode(.v6),
-				.unsafeFlags(["-Xfrontend", "-disable-dynamic-actor-isolation"], .when(configuration: .release)),
 			]
 		),
 	],

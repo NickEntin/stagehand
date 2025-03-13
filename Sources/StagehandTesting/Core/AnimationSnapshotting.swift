@@ -20,6 +20,7 @@ import UIKit
 
 @testable import Stagehand
 
+@MainActor
 public enum AnimationSnapshotting {
 
     // MARK: - Public Types

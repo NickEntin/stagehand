@@ -18,6 +18,7 @@ import XCTest
 
 @testable import Stagehand
 
+@MainActor
 final class DisplayLinkDriverTests: XCTestCase {
 
     // MARK: - Tests - Rendering
@@ -986,6 +987,7 @@ private final class TestAnimationInstance: DrivenAnimationInstance {
 
 // MARK: -
 
+@MainActor
 private final class TestDisplayLink: DisplayLinkDriverDisplayLink {
 
     // MARK: - DisplayLinkDriverDisplayLink

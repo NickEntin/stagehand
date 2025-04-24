@@ -49,6 +49,15 @@ public final class InteractiveAnimationInstance {
         driver.updateProgress(to: progress)
     }
 
+    public func pause() {
+        switch status {
+        case let .animating(progress):
+            driver.updateProgress(to: progress)
+        case .interactive, .complete, .pending:
+            break
+        }
+    }
+
     /// Begins animating a segment of the animation from the current relative timestamp to a specific point in the animation.
     ///
     /// The `curve` will be applied to the segment on top of any existing animation curve.
@@ -64,31 +73,35 @@ public final class InteractiveAnimationInstance {
     public func animate(
         to relativeTimestamp: Double,
         using curve: AnimationCurve = LinearAnimationCurve(),
-        duration: TimeInterval? = nil
+        duration: TimeInterval? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil,
     ) {
         guard !status.isComplete else {
             // The animation is already complete, there's nothing to animate here.
             return
         }
 
-        driver.animate(to: relativeTimestamp, using: curve, duration: duration)
+        driver.animate(to: relativeTimestamp, using: curve, duration: duration, completion: completion)
     }
 
     public func animateToBeginning(
         using curve: AnimationCurve = LinearAnimationCurve(),
-        duration: TimeInterval? = nil
+        duration: TimeInterval? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil,
     ) {
-        animate(to: 0, using: curve, duration: duration)
+        animate(to: 0, using: curve, duration: duration, completion: completion)
     }
 
     public func animateToEnd(
         using curve: AnimationCurve = LinearAnimationCurve(),
-        duration: TimeInterval? = nil
+        duration: TimeInterval? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil,
     ) {
-        animate(to: 1, using: curve, duration: duration)
+        animate(to: 1, using: curve, duration: duration, completion: completion)
     }
 
     public func markAsComplete() {
+        driver.markAsComplete()
         status = .complete
     }
 
@@ -111,6 +124,10 @@ public final class InteractiveAnimationInstance {
     }
 
     public private(set) var status: Status = .pending
+
+    public var endToEndDuration: TimeInterval {
+        driver.endToEndDuration
+    }
 
     // MARK: Internal
 

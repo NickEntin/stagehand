@@ -164,6 +164,22 @@ public struct AnimationGroup {
             duration: duration,
             repeatStyle: repeatStyle,
             completion: { finished in
+                // Load-bearing: This line creates a retain on self until the animation completes, which transitively retains the elementContainer until the animation completes.
+                self.completions.forEach { $0(finished) }
+                groupCompletion?(finished)
+            }
+        )
+    }
+
+    public func performInteractive(
+        endToEndDuration: TimeInterval? = nil,
+        completion groupCompletion: ((_ finished: Bool) -> Void)? = nil
+    ) -> InteractiveAnimationInstance {
+        return animation.performInteractive(
+            on: elementContainer,
+            endToEndDuration: endToEndDuration,
+            completion: { finished in
+                // Load-bearing: This line creates a retain on self until the animation completes, which transitively retains the elementContainer until the animation completes.
                 self.completions.forEach { $0(finished) }
                 groupCompletion?(finished)
             }

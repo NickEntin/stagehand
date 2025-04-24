@@ -431,7 +431,10 @@ public struct Animation<ElementType: AnyObject> {
         endToEndDuration: TimeInterval? = nil,
         completion: ((_ finished: Bool) -> Void)? = nil
     ) -> InteractiveAnimationInstance {
-        let driver = InteractiveDriver(endToEndDuration: endToEndDuration ?? implicitDuration)
+        let driver = InteractiveDriver(
+            endToEndDuration: endToEndDuration ?? implicitDuration,
+            completion: completion,
+        )
 
         let instance = InteractiveAnimationInstance(
             animation: self,

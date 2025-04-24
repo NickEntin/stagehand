@@ -1,12 +1,17 @@
 // Created by Nick Entin on 3/3/25.
 
 import Foundation
+import UIKit
 
 internal final class InteractiveDriver {
     // MARK: Initialization
 
-    init(endToEndDuration: TimeInterval) {
+    init(
+        endToEndDuration: TimeInterval,
+        completion: ((Bool) -> Void)?,
+    ) {
         self.endToEndDuration = endToEndDuration
+        self.completion = completion
     }
 
     // MARK: Internal
@@ -35,8 +40,8 @@ internal final class InteractiveDriver {
 
             case let .automatic(context):
                 mode = .manual(relativeTimestamp: context.currentRelativeTimestamp())
-
                 context.displayLink.invalidate()
+                context.completion?(false)
             }
 
         case .complete:
@@ -44,6 +49,7 @@ internal final class InteractiveDriver {
         }
 
         renderCurrentFrame()
+        completion?(false)
         status = .completed(success: false)
         animationInstance = nil
     }
@@ -51,7 +57,8 @@ internal final class InteractiveDriver {
     func animate(
         to targetRelativeTimestamp: Double,
         using curve: AnimationCurve = LinearAnimationCurve(),
-        duration: TimeInterval? = nil
+        duration: TimeInterval? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil,
     ) {
         guard !status.isComplete else {
             // The animation has already completed, so there's nothing to animate.
@@ -61,6 +68,7 @@ internal final class InteractiveDriver {
         // Invalidate any in-progress automatic animation.
         if case let .automatic(context) = mode {
             context.displayLink.invalidate()
+            context.completion?(false)
         }
 
         let startRelativeTimestamp = lastRenderedFrame?.relativeTimestamp ?? 0
@@ -73,12 +81,13 @@ internal final class InteractiveDriver {
             segmentDuration: segmentDuration,
             segmentCurve: curve,
             startRelativeTimestamp: startRelativeTimestamp,
-            endRelativeTimestamp: targetRelativeTimestamp
+            endRelativeTimestamp: targetRelativeTimestamp,
+            completion: completion,
         )
 
         mode = .automatic(context)
 
-        context.displayLink.add(to: .current, forMode: .common)
+        context.displayLink.add(to: .main, forMode: .common)
     }
 
     func updateProgress(to relativeTimestamp: Double) {
@@ -90,6 +99,7 @@ internal final class InteractiveDriver {
         // Invalidate any in-progress automatic animation.
         if case let .automatic(context) = mode {
             context.displayLink.invalidate()
+            context.completion?(false)
         }
 
         mode = .manual(relativeTimestamp: relativeTimestamp)
@@ -97,9 +107,28 @@ internal final class InteractiveDriver {
         renderCurrentFrame()
     }
 
+    func markAsComplete() {
+        guard !status.isComplete else {
+            return
+        }
+
+        status = .completed(success: true)
+
+        // Invalidate any in-progress automatic animation.
+        if case let .automatic(context) = mode {
+            context.displayLink.invalidate()
+            context.completion?(true)
+        }
+
+        completion?(true)
+        animationInstance = nil
+    }
+
+    let endToEndDuration: TimeInterval
+
     // MARK: Private
 
-    private let endToEndDuration: TimeInterval
+    private let completion: ((Bool) -> Void)?
 
     private enum Status {
         case active
@@ -139,6 +168,8 @@ internal final class InteractiveDriver {
         var startRelativeTimestamp: Double
 
         var endRelativeTimestamp: Double
+
+        var completion: ((Bool) -> Void)?
 
         /// The current progress, based on the display link's timestamp, with the `segmentCurve` applied.
         func currentRelativeTimestamp() -> Double {
@@ -193,6 +224,7 @@ internal final class InteractiveDriver {
         if case let .automatic(context) = mode, context.endRelativeTimestamp == relativeTimestamp {
             // The automatic part of the animation is complete.
             context.displayLink.invalidate()
+            context.completion?(true)
             mode = .manual(relativeTimestamp: relativeTimestamp)
         }
     }

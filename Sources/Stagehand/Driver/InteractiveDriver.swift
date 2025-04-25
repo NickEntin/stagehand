@@ -42,9 +42,10 @@ final class InteractiveDriver {
             (1, true)
         }
 
-        if case let .automatic(context) = mode {
-            context.displayLink.invalidate()
-            context.completion?(didComplete)
+        // Invalidate any in-progress automatic animation.
+        if let automaticContext = mode.automaticContext {
+            automaticContext.displayLink.invalidate()
+            automaticContext.completion?(didComplete)
         }
 
         mode = .manual(relativeTimestamp: relativeTimestamp)
@@ -67,9 +68,9 @@ final class InteractiveDriver {
         }
 
         // Invalidate any in-progress automatic animation.
-        if case let .automatic(context) = mode {
-            context.displayLink.invalidate()
-            context.completion?(false)
+        if let automaticContext = mode.automaticContext {
+            automaticContext.displayLink.invalidate()
+            automaticContext.completion?(false)
         }
 
         let startRelativeTimestamp = lastRenderedFrame?.relativeTimestamp ?? 0
@@ -98,9 +99,9 @@ final class InteractiveDriver {
         }
 
         // Invalidate any in-progress automatic animation.
-        if case let .automatic(context) = mode {
-            context.displayLink.invalidate()
-            context.completion?(false)
+        if let automaticContext = mode.automaticContext {
+            automaticContext.displayLink.invalidate()
+            automaticContext.completion?(false)
         }
 
         mode = .manual(relativeTimestamp: relativeTimestamp)
@@ -116,9 +117,9 @@ final class InteractiveDriver {
         status = .completed(success: true)
 
         // Invalidate any in-progress automatic animation.
-        if case let .automatic(context) = mode {
-            context.displayLink.invalidate()
-            context.completion?(true)
+        if let automaticContext = mode.automaticContext {
+            automaticContext.displayLink.invalidate()
+            automaticContext.completion?(true)
         }
 
         completion?(true)
@@ -148,6 +149,15 @@ final class InteractiveDriver {
     private enum Mode {
         case manual(relativeTimestamp: Double)
         case automatic(AutomaticContext)
+
+        var automaticContext: AutomaticContext? {
+            switch self {
+            case let .automatic(context):
+                context
+            case .manual:
+                nil
+            }
+        }
     }
 
     private var mode: Mode = .manual(relativeTimestamp: 0)

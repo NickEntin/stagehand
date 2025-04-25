@@ -2,6 +2,7 @@
 
 import Foundation
 
+@MainActor
 public final class InteractiveAnimationInstance {
     // MARK: Initialization
 

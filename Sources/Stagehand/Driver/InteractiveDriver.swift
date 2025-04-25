@@ -4,7 +4,7 @@ import Foundation
 import UIKit
 
 @MainActor
-internal final class InteractiveDriver {
+final class InteractiveDriver {
     // MARK: Initialization
 
     init(

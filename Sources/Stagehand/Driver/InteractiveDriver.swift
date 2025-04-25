@@ -29,7 +29,7 @@ internal final class InteractiveDriver {
             return
         }
 
-        // @NICK TODO: Should halting when relativeTimestamp = 1 be counted as finishing?
+        // Note: Halting currently always counts as "not finishing" the animation, even when relativeTimestamp = 1. We may want to reconsider this at some point. Right now it follows the intention of the method call (halt where you are, don't finish the animation), rather than the visual state (at 1 the animation is visually finished).
 
         let (relativeTimestamp, didComplete): (Double, Bool) = switch (behavior, mode) {
         case (.revert, _):
@@ -202,25 +202,35 @@ internal final class InteractiveDriver {
             context.currentRelativeTimestamp()
         }
 
-        // @NICK TODO: If you hit a frame then start dragging backwards, we need to hit the reverse execution block for that last rendered frame (inclusive if direction is changing?)
+        let executingInReverse: Bool
         if let lastRenderedFrame = lastRenderedFrame {
-            animationInstance.executeBlocks(
-                from: lastRenderedFrame.relativeTimestamp,
-                .exclusive,
-                to: relativeTimestamp
-            )
+            if relativeTimestamp != lastRenderedFrame.relativeTimestamp {
+                executingInReverse = if relativeTimestamp == lastRenderedFrame.relativeTimestamp {
+                    lastRenderedFrame.executingInReverse
+                } else {
+                    relativeTimestamp < lastRenderedFrame.relativeTimestamp
+                }
+
+                animationInstance.executeBlocks(
+                    from: lastRenderedFrame.relativeTimestamp,
+                    executingInReverse == lastRenderedFrame.executingInReverse ? .exclusive : .inclusive,
+                    to: relativeTimestamp
+                )
+            } else {
+                executingInReverse = lastRenderedFrame.executingInReverse
+            }
         } else {
             animationInstance.executeBlocks(
                 from: 0,
                 .inclusive,
                 to: relativeTimestamp
             )
+            executingInReverse = false
         }
 
         animationInstance.renderFrame(at: relativeTimestamp)
 
-        // @NICK TODO: False seems wrong here when relativeTimestamp < lastRenderedFrame.relativeTimestamp
-        lastRenderedFrame = .init(relativeTimestamp: relativeTimestamp, executingInReverse: false)
+        lastRenderedFrame = .init(relativeTimestamp: relativeTimestamp, executingInReverse: executingInReverse)
 
         if case let .automatic(context) = mode, context.endRelativeTimestamp == relativeTimestamp {
             // The automatic part of the animation is complete.

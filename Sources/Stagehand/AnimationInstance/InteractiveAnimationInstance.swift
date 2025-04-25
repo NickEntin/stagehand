@@ -20,7 +20,7 @@ public final class InteractiveAnimationInstance {
 
         self.perFrameExecutionBlocks = animation.perFrameExecutionBlocks
             .map { block in
-                return { [weak element] relativeTimestamp in
+                { [weak element] relativeTimestamp in
                     guard let element else {
                         return
                     }

@@ -153,6 +153,8 @@ public final class AnimationInstance {
     func renderFrame(
         at relativeTimestamp: Double
     ) {
+        // Note: This method is the same logic as in InteractiveAnimationInstance and any changes should probably be synced between the two.
+
         // If our renderer doesn't have an element to render, halt the animation since there's nothing to do.
         guard renderer.canRenderFrame() else {
             cancel(behavior: .halt)

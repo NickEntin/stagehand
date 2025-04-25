@@ -75,7 +75,7 @@ public final class InteractiveAnimationInstance {
         to relativeTimestamp: Double,
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
-        completion: ((_ finished: Bool) -> Void)? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil
     ) {
         guard !status.isComplete else {
             // The animation is already complete, there's nothing to animate here.
@@ -88,7 +88,7 @@ public final class InteractiveAnimationInstance {
     public func animateToBeginning(
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
-        completion: ((_ finished: Bool) -> Void)? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil
     ) {
         animate(to: 0, using: curve, duration: duration, completion: completion)
     }
@@ -96,7 +96,7 @@ public final class InteractiveAnimationInstance {
     public func animateToEnd(
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
-        completion: ((_ finished: Bool) -> Void)? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil
     ) {
         animate(to: 1, using: curve, duration: duration, completion: completion)
     }

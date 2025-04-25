@@ -35,17 +35,17 @@ final class InteractiveAnimationViewController: DemoViewController {
                 let animationInstance = self.createAnimationInstanceIfNeeded()
                 animationInstance.animateToEnd()
             }),
-//            ("Cancel (Halt)", { [unowned self] in
-//                self.animationInstance?.cancel()
-//            }),
+            ("Cancel (Halt)", { [unowned self] in
+                self.animationInstance?.cancel()
+            }),
             ("Use Linear Curve", { [unowned self] in
                 self.animationCurve = LinearAnimationCurve()
-//                self.animationInstance?.cancel()
+                self.animationInstance?.cancel(behavior: .revert)
                 self.animationInstance = self.makeAnimation().performInteractive(on: self.mainView.animatableView)
             }),
             ("Use Easing Curve", { [unowned self] in
                 self.animationCurve = CubicBezierAnimationCurve.easeInEaseOut
-//                self.animationInstance?.cancel()
+                self.animationInstance?.cancel(behavior: .revert)
                 self.animationInstance = self.makeAnimation().performInteractive(on: self.mainView.animatableView)
             }),
         ]

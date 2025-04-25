@@ -56,6 +56,7 @@
 		B3C4CA0A2459F75800893CB5 /* ShapeLayerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C4CA082459F75800893CB5 /* ShapeLayerUtils.swift */; };
 		B3C4CA0D2459F76B00893CB5 /* AnimationCurveSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C4CA0B2459F76B00893CB5 /* AnimationCurveSnapshotTests.swift */; };
 		D246EA552DB85470000DA4A2 /* InteractiveAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D246EA542DB85470000DA4A2 /* InteractiveAnimationViewController.swift */; };
+		D2D9C9AD2D76DFAD00B247A5 /* SpringCurveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D9C9AC2D76DFAD00B247A5 /* SpringCurveViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +141,7 @@
 		B64913526970D210595894B7 /* Pods-Stagehand-PerformanceTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand-PerformanceTests.debug.xcconfig"; path = "Target Support Files/Pods-Stagehand-PerformanceTests/Pods-Stagehand-PerformanceTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B657CC2F9B1F03D85F9BFF96 /* Pods-Stagehand_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand_Example.release.xcconfig"; path = "Target Support Files/Pods-Stagehand_Example/Pods-Stagehand_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D246EA542DB85470000DA4A2 /* InteractiveAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveAnimationViewController.swift; sourceTree = "<group>"; };
+		D2D9C9AC2D76DFAD00B247A5 /* SpringCurveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpringCurveViewController.swift; sourceTree = "<group>"; };
 		F058A67C239ED37BC34BE76C /* Pods_Stagehand_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stagehand_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC42083017E18C3B5F030B47 /* Pods-Stagehand-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand-UnitTests.release.xcconfig"; path = "Target Support Files/Pods-Stagehand-UnitTests/Pods-Stagehand-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -227,6 +229,7 @@
 				3DB3927C23249D680009E8B3 /* ColorAnimationsViewController.swift */,
 				3D1D304922F007B7003E392C /* ChildAnimationsViewController.swift */,
 				3D1D304B22F01136003E392C /* AnimationCurveViewController.swift */,
+				D2D9C9AC2D76DFAD00B247A5 /* SpringCurveViewController.swift */,
 				3D8E3D7F22F16C1B00D70FCB /* ChildAnimationsWithCurvesViewController.swift */,
 				3D8E3D8122F17D3B00D70FCB /* AnimationCancelationViewController.swift */,
 				3D89F1E122FDEAAC008AC33E /* PropertyAssignmentViewController.swift */,
@@ -644,6 +647,7 @@
 				D246EA552DB85470000DA4A2 /* InteractiveAnimationViewController.swift in Sources */,
 				3D8E3D8022F16C1B00D70FCB /* ChildAnimationsWithCurvesViewController.swift in Sources */,
 				3DB3927D23249D680009E8B3 /* ColorAnimationsViewController.swift in Sources */,
+				D2D9C9AD2D76DFAD00B247A5 /* SpringCurveViewController.swift in Sources */,
 				3D875F002323542500670803 /* PerformanceBenchmarkViewController.swift in Sources */,
 				3D75A7BD228FED9900743166 /* AnimationFactory.swift in Sources */,
 				3D1D304C22F01136003E392C /* AnimationCurveViewController.swift in Sources */,
@@ -723,14 +727,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Performance Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Stagehand-PerformanceTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stagehand_Example.app/Stagehand_Example";
 			};
@@ -750,12 +754,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Performance Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Stagehand-PerformanceTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stagehand_Example.app/Stagehand_Example";
 			};
@@ -814,6 +818,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -862,6 +868,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -873,12 +881,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6385SJ58J2;
 				INFOPLIST_FILE = Stagehand/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.StagehandDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -889,12 +897,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6385SJ58J2;
 				INFOPLIST_FILE = Stagehand/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.StagehandDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -912,10 +920,11 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Unit Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stagehand_Example.app/Stagehand_Example";
 			};
 			name = Debug;
@@ -930,10 +939,11 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Unit Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stagehand_Example.app/Stagehand_Example";
 			};
 			name = Release;

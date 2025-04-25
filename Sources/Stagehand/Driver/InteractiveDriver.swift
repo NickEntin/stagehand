@@ -83,7 +83,7 @@ internal final class InteractiveDriver {
             segmentCurve: curve,
             startRelativeTimestamp: startRelativeTimestamp,
             endRelativeTimestamp: targetRelativeTimestamp,
-            completion: completion,
+            completion: completion
         )
 
         mode = .automatic(context)
@@ -175,10 +175,14 @@ internal final class InteractiveDriver {
         /// The current progress, based on the display link's timestamp, with the `segmentCurve` applied.
         func currentRelativeTimestamp() -> Double {
             let relativeDuration = (endRelativeTimestamp - startRelativeTimestamp)
-            let progress = (displayLink.timestamp - startTime) / segmentDuration
-            let curvedProgress = segmentCurve.adjustedProgress(for: progress)
-            let rawRelativeTimestamp = (relativeDuration * curvedProgress + startRelativeTimestamp)
-            return rawRelativeTimestamp.clamped(in: 0...1)
+            if relativeDuration == 0 || segmentDuration == 0 {
+                return endRelativeTimestamp
+            } else {
+                let progress = (displayLink.timestamp - startTime) / segmentDuration
+                let curvedProgress = segmentCurve.adjustedProgress(for: progress)
+                let rawRelativeTimestamp = (relativeDuration * curvedProgress + startRelativeTimestamp)
+                return rawRelativeTimestamp.clamped(in: 0...1)
+            }
         }
     }
 

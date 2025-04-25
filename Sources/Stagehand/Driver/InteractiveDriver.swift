@@ -22,35 +22,35 @@ internal final class InteractiveDriver {
     // completes, this reference will be set to `nil` and the retain cycle will be broken.
     var animationInstance: InteractiveAnimationInstance!
 
-    // @NICK TODO: Might not need this exactly
-    func animationInstanceDidCancel(behavior: AnimationInstance.CancelationBehavior) {
+    func animationInstanceDidCancel(behavior: InteractiveAnimationInstance.CancelationBehavior) {
         guard !status.isComplete else {
             // We're already complete. Nothing to do here.
             return
         }
 
-        switch behavior {
-        case .revert:
-            mode = .manual(relativeTimestamp: 0)
+        // @NICK TODO: Should halting when relativeTimestamp = 1 be counted as finishing?
 
-        case .halt:
-            switch mode {
-            case .manual:
-                break // No-op.
-
-            case let .automatic(context):
-                mode = .manual(relativeTimestamp: context.currentRelativeTimestamp())
-                context.displayLink.invalidate()
-                context.completion?(false)
-            }
-
-        case .complete:
-            mode = .manual(relativeTimestamp: 1)
+        let (relativeTimestamp, didComplete): (Double, Bool) = switch (behavior, mode) {
+        case (.revert, _):
+            (0, false)
+        case let (.halt, .manual(relativeTimestamp)):
+            (relativeTimestamp, false)
+        case let (.halt, .automatic(context)):
+            (context.currentRelativeTimestamp(), false)
+        case (.complete, _):
+            (1, true)
         }
 
+        if case let .automatic(context) = mode {
+            context.displayLink.invalidate()
+            context.completion?(didComplete)
+        }
+
+        mode = .manual(relativeTimestamp: relativeTimestamp)
+
         renderCurrentFrame()
-        completion?(false)
         status = .completed(success: false)
+        completion?(false)
         animationInstance = nil
     }
 

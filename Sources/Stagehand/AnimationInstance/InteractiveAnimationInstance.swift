@@ -53,7 +53,7 @@ public final class InteractiveAnimationInstance {
         switch status {
         case let .animating(progress):
             driver.updateProgress(to: progress)
-        case .interactive, .complete, .pending:
+        case .interactive, .complete, .pending, .canceled:
             break
         }
     }
@@ -105,19 +105,36 @@ public final class InteractiveAnimationInstance {
         status = .complete
     }
 
-    // @NICK TODO: Need a cancel here?
+    public enum CancelationBehavior {
+        /// Return the element back to its state at the beginning of the animation. This will cause the completion handlers to be called with a `finished` of false.
+        case revert
+        /// Stop the animation at its current progress. This will cause the completion handlers to be called with a `finished` of false.
+        case halt
+        /// Apply the final values of the animation. This will cause the completion handlers to be called with a `finished` of true.
+        case complete
+    }
+
+    public func cancel(behavior: CancelationBehavior = .halt) {
+        guard !status.isComplete else {
+            return
+        }
+
+        status = .canceled(behavior: behavior)
+        driver.animationInstanceDidCancel(behavior: behavior)
+    }
 
     public enum Status {
         case pending
         case interactive(progress: Double)
         case animating(progress: Double)
         case complete
+        case canceled(behavior: CancelationBehavior)
 
         var isComplete: Bool {
             switch self {
             case .pending, .interactive, .animating:
                 false
-            case .complete:
+            case .complete, .canceled:
                 true
             }
         }
@@ -148,8 +165,7 @@ public final class InteractiveAnimationInstance {
     ) {
         // If our renderer doesn't have an element to render, halt the animation since there's nothing to do.
         guard renderer.canRenderFrame() else {
-            // @NICK TODO
-//            cancel(behavior: .halt)
+            cancel(behavior: .halt)
             return
         }
 

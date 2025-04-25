@@ -442,6 +442,8 @@ public struct Animation<ElementType: AnyObject> {
             driver: driver
         )
 
+        driver.updateProgress(to: 0)
+
         return instance
     }
 

@@ -9,7 +9,7 @@ internal final class InteractiveDriver {
 
     init(
         endToEndDuration: TimeInterval,
-        completion: ((Bool) -> Void)?,
+        completion: ((Bool) -> Void)?
     ) {
         self.endToEndDuration = endToEndDuration
         self.completion = completion
@@ -59,7 +59,7 @@ internal final class InteractiveDriver {
         to targetRelativeTimestamp: Double,
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
-        completion: ((_ finished: Bool) -> Void)? = nil,
+        completion: ((_ finished: Bool) -> Void)? = nil
     ) {
         guard !status.isComplete else {
             // The animation has already completed, so there's nothing to animate.

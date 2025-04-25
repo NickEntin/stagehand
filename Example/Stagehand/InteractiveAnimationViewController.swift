@@ -35,8 +35,8 @@ final class InteractiveAnimationViewController: DemoViewController {
                 let animationInstance = self.createAnimationInstanceIfNeeded()
                 animationInstance.animateToEnd()
             }),
-            ("Cancel (Halt)", { [unowned self] in
-                self.animationInstance?.cancel()
+            ("Cancel (Revert)", { [unowned self] in
+                self.animationInstance?.cancel(behavior: .revert)
             }),
             ("Use Linear Curve", { [unowned self] in
                 self.animationCurve = LinearAnimationCurve()

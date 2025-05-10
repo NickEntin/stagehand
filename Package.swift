@@ -59,8 +59,5 @@ let package = Package(
 				.swiftLanguageMode(.v6),
 			]
 		),
-	],
-	swiftLanguageVersions: [.v6]
+	]
 )
-
-let version = Version(4, 0, 0)

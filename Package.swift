@@ -29,32 +29,12 @@ let package = Package(
 			name: "Stagehand",
 			targets: ["Stagehand"]
 		),
-		.library(
-			name: "StagehandTesting",
-			targets: ["StagehandTesting"]
-		),
 	],
-	dependencies: [
-		.package(
-            url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
-            .upToNextMajor(from: "1.8.0")
-        ),
-	],
+	dependencies: [],
 	targets: [
 		.target(
 			name: "Stagehand",
 			dependencies: [],
-			swiftSettings: [
-				.swiftLanguageMode(.v6),
-			]
-		),
-		.target(
-			name: "StagehandTesting",
-			dependencies: [
-				"Stagehand",
-				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-			],
-			exclude: ["iOSSnapshotTestCase"],
 			swiftSettings: [
 				.swiftLanguageMode(.v6),
 			]

@@ -47,7 +47,7 @@ public final class InteractiveAnimationInstance {
             return
         }
 
-        driver.updateProgress(to: progress)
+        driver.updateProgress(to: progress.clamped(in: 0...1))
     }
 
     public func pause() {

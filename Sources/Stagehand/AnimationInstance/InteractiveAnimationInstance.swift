@@ -75,14 +75,14 @@ public final class InteractiveAnimationInstance {
         to relativeTimestamp: Double,
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
-        completion: ((_ finished: Bool) -> Void)? = nil
+        completion segmentCompletion: ((_ finished: Bool) -> Void)? = nil
     ) {
         guard !status.isComplete else {
             // The animation is already complete, there's nothing to animate here.
             return
         }
 
-        driver.animate(to: relativeTimestamp, using: curve, duration: duration, completion: completion)
+        driver.animate(to: relativeTimestamp, using: curve, duration: duration, segmentCompletion: segmentCompletion)
     }
 
     public func animateToBeginning(

@@ -60,7 +60,7 @@ final class InteractiveDriver {
         to targetRelativeTimestamp: Double,
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
-        completion: ((_ finished: Bool) -> Void)? = nil
+        segmentCompletion: ((_ finished: Bool) -> Void)? = nil
     ) {
         guard !status.isComplete else {
             // The animation has already completed, so there's nothing to animate.
@@ -84,7 +84,7 @@ final class InteractiveDriver {
             segmentCurve: curve,
             startRelativeTimestamp: startRelativeTimestamp,
             endRelativeTimestamp: targetRelativeTimestamp,
-            completion: completion
+            completion: segmentCompletion
         )
 
         mode = .automatic(context)
@@ -247,10 +247,11 @@ final class InteractiveDriver {
         lastRenderedFrame = .init(relativeTimestamp: relativeTimestamp, executingInReverse: executingInReverse)
 
         if case let .automatic(context) = mode, context.endRelativeTimestamp == relativeTimestamp {
+            mode = .manual(relativeTimestamp: relativeTimestamp)
+
             // The automatic part of the animation is complete.
             context.displayLink.invalidate()
             context.completion?(true)
-            mode = .manual(relativeTimestamp: relativeTimestamp)
         }
     }
 }

@@ -88,17 +88,43 @@ public final class InteractiveAnimationInstance {
     public func animateToBeginning(
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
+        cancelOnFinish: Bool = true,
         completion: ((_ finished: Bool) -> Void)? = nil
     ) {
-        animate(to: 0, using: curve, duration: duration, completion: completion)
+        animate(
+            to: 0,
+            using: curve,
+            duration: duration,
+            completion: cancelOnFinish
+                ? { [weak self] finished in
+                    completion?(finished)
+                    if finished {
+                        self?.cancel()
+                    }
+                }
+                : completion
+        )
     }
 
     public func animateToEnd(
         using curve: AnimationCurve = LinearAnimationCurve(),
         duration: TimeInterval? = nil,
+        completeOnFinish: Bool = true,
         completion: ((_ finished: Bool) -> Void)? = nil
     ) {
-        animate(to: 1, using: curve, duration: duration, completion: completion)
+        animate(
+            to: 1,
+            using: curve,
+            duration: duration,
+            completion: completeOnFinish
+                ? { [weak self] finished in
+                    completion?(finished)
+                    if finished {
+                        self?.markAsComplete()
+                    }
+                }
+                : completion,
+        )
     }
 
     public func markAsComplete() {

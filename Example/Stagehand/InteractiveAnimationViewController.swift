@@ -29,11 +29,11 @@ final class InteractiveAnimationViewController: DemoViewController {
         animationRows = [
             ("Animate to Beginning (Linear)", { [unowned self] in
                 let animationInstance = self.createAnimationInstanceIfNeeded()
-                animationInstance.animateToBeginning()
+                animationInstance.animateToBeginning(cancelOnFinish: false)
             }),
             ("Animate to End (Linear)", { [unowned self] in
                 let animationInstance = self.createAnimationInstanceIfNeeded()
-                animationInstance.animateToEnd()
+                animationInstance.animateToEnd(completeOnFinish: false)
             }),
             ("Cancel (Revert)", { [unowned self] in
                 self.animationInstance?.cancel(behavior: .revert)
@@ -124,9 +124,9 @@ final class InteractiveAnimationViewController: DemoViewController {
         let progress = Double((slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue))
 
         if progress < 0.5 {
-            animationInstance?.animateToBeginning(using: CubicBezierAnimationCurve.easeInEaseOut)
+            animationInstance?.animateToBeginning(using: CubicBezierAnimationCurve.easeInEaseOut, cancelOnFinish: false)
         } else {
-            animationInstance?.animateToEnd(using: CubicBezierAnimationCurve.easeInEaseOut)
+            animationInstance?.animateToEnd(using: CubicBezierAnimationCurve.easeInEaseOut, completeOnFinish: false)
         }
     }
 

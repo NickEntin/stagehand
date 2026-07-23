@@ -3,6 +3,7 @@
     <pages>
         <page name='Creating and Executing an Animation'/>
         <page name='Advanced Execution of Animations'/>
+        <page name='Core Animation Execution'/>
         <page name='All About Keyframes'/>
         <page name='Composing Animations'/>
         <page name='Repeating Animations'/>

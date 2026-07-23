@@ -55,6 +55,7 @@ final class RootViewController: UITableViewController {
         ("Animation Groups", { AnimationGroupViewController() }),
         ("Animation Queues", { AnimationQueueViewController() }),
         ("Interactive Animations", { InteractiveAnimationViewController() }),
+        ("Core Animation Execution", { CoreAnimationExecutionViewController() }),
     ]
 
     /// Screens that are used for debugging specific functionality.

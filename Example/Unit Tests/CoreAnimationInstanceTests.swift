@@ -443,6 +443,56 @@ final class CoreAnimationInstanceTests: XCTestCase {
         instance.cancel()
     }
 
+    func testAnimationGroupCompiledValuesMatchDisplayLinkRendererWithSharedCurve() {
+        // Both children share a curve, which the optimizer elevates into the group's own curve on the display-link
+        // path. The compiled animations must not end up applying the shared curve twice.
+        func makeAnimationGroup(for elements: (UIView, UIView)) -> AnimationGroup {
+            var animation = Animation<UIView>()
+            animation.curve = CubicBezierAnimationCurve.easeInEaseOut
+            animation.addKeyframe(for: \.alpha, at: 0, value: 0)
+            animation.addKeyframe(for: \.alpha, at: 1, value: 1)
+
+            var animationGroup = AnimationGroup()
+            animationGroup.addAnimation(animation, for: elements.0, startingAt: 0, relativeDuration: 1)
+            animationGroup.addAnimation(animation, for: elements.1, startingAt: 0.25, relativeDuration: 0.5)
+            return animationGroup
+        }
+
+        let elements = (UIView(), UIView())
+        let instance = makeAnimationGroup(for: elements).performUsingCoreAnimation(duration: 1)
+        XCTAssertEqual(instance.executionMode, .coreAnimation)
+
+        guard
+            let firstKeyframeAnimation = compiledKeyframeAnimation(on: elements.0.layer, keyPath: "opacity"),
+            let secondKeyframeAnimation = compiledKeyframeAnimation(on: elements.1.layer, keyPath: "opacity"),
+            let keyTimes = firstKeyframeAnimation.keyTimes,
+            let firstValues = firstKeyframeAnimation.values as? [NSNumber],
+            let secondValues = secondKeyframeAnimation.values as? [NSNumber]
+        else {
+            XCTFail("Expected compiled opacity animations on both elements' layers")
+            return
+        }
+
+        let referenceElements = (UIView(), UIView())
+        let referenceGroup = makeAnimationGroup(for: referenceElements)
+        let driver = TestDriver()
+        let referenceInstance = AnimationInstance(
+            animation: referenceGroup.animation,
+            element: referenceGroup.elementContainer,
+            driver: driver
+        )
+
+        for (index, keyTime) in keyTimes.enumerated() {
+            driver.runForward(to: keyTime.doubleValue)
+            XCTAssertEqual(firstValues[index].doubleValue, Double(referenceElements.0.alpha), accuracy: 1e-6)
+            XCTAssertEqual(secondValues[index].doubleValue, Double(referenceElements.1.alpha), accuracy: 1e-6)
+        }
+
+        _ = referenceInstance
+
+        instance.cancel()
+    }
+
     func testAnimationGroupCancelRevertRestoresInitialModelValues() {
         var animation = Animation<UIView>()
         animation.addKeyframe(for: \.alpha, at: 0, value: 0.25)

@@ -75,7 +75,10 @@ extension AnimationGroup {
         }
 
         // The group's curve is applied when compiling, so the compiled animations run on the group's raw timeline.
-        let groupCurve = animation.curve
+        // Use the curve of the unoptimized animation: the compile path samples through the original (also
+        // unoptimized) element animations, while optimization can move a curve shared by every child up into the
+        // group's curve, which would apply it twice here.
+        let groupCurve = self.animation.curve
         let sampleCount = Animation<ElementContainer>.coreAnimationSampleCount(for: cycleDuration)
 
         var compiledElements: [CompiledCoreAnimationElement] = []

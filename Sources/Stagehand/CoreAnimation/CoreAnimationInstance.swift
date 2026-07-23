@@ -202,9 +202,15 @@ public final class CoreAnimationInstance {
         }
 
         // Bring the execution blocks up to the animation's current progress before unwinding them, matching the
-        // display-link driver, which executes up to the last rendered frame before canceling.
-        let currentPosition = currentWallClockPosition()
-        advanceExecution(toCycle: currentPosition.cycle, timestamp: currentPosition.timestamp)
+        // display-link driver, which executes up to the last rendered frame before canceling. During the delay no
+        // frame has been "rendered" yet, so no blocks should have executed.
+        let currentPosition: (cycle: Int, timestamp: Double)
+        if CACurrentMediaTime() > startMediaTime + delay {
+            currentPosition = currentWallClockPosition()
+            advanceExecution(toCycle: currentPosition.cycle, timestamp: currentPosition.timestamp)
+        } else {
+            currentPosition = (cycle: 0, timestamp: 0)
+        }
 
         let modelValueTimestamp: Double
         switch behavior {
@@ -492,9 +498,9 @@ public final class CoreAnimationInstance {
         }
 
         if isCycleReversed(position.cycle) {
-            executor.executeBlocks(from: position.timestamp, .exclusive, to: 0)
+            executor.executeBlocks(from: position.timestamp, executionFromInclusivity, to: 0)
         } else {
-            executor.executeBlocks(from: position.timestamp, .exclusive, to: 1)
+            executor.executeBlocks(from: position.timestamp, executionFromInclusivity, to: 1)
             executor.executeBlocks(from: 1, .inclusive, to: 0)
         }
     }
@@ -507,11 +513,17 @@ public final class CoreAnimationInstance {
         }
 
         if isCycleReversed(position.cycle) {
-            executor.executeBlocks(from: position.timestamp, .exclusive, to: 0)
+            executor.executeBlocks(from: position.timestamp, executionFromInclusivity, to: 0)
             executor.executeBlocks(from: 0, .inclusive, to: 1)
         } else {
-            executor.executeBlocks(from: position.timestamp, .exclusive, to: 1)
+            executor.executeBlocks(from: position.timestamp, executionFromInclusivity, to: 1)
         }
+    }
+
+    /// Whether a walk starting from the current position should include blocks at the position itself: once frames
+    /// have executed up to a position, its blocks have already run.
+    private var executionFromInclusivity: Executor.Inclusivity {
+        return (lastExecutedPosition == nil) ? .inclusive : .exclusive
     }
 
     // MARK: - Private Methods - Timing

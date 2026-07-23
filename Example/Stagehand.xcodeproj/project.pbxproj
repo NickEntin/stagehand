@@ -26,6 +26,7 @@
 		3D75A7C82292910B00743166 /* RelativeAnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D75A7C72292910B00743166 /* RelativeAnimationsViewController.swift */; };
 		3D77A7D924F9CA7F00D25FAE /* CGAffineTransformInterpolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D77A7D824F9CA7F00D25FAE /* CGAffineTransformInterpolationTests.swift */; };
 		3D7D500023011D4400A468A7 /* AnimationInstanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7D4FFE23011C4600A468A7 /* AnimationInstanceTests.swift */; };
+		3DCA00022026072200000002 /* CoreAnimationInstanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCA00012026072200000001 /* CoreAnimationInstanceTests.swift */; };
 		3D7E79AB239FC1F8008BF8FF /* DisplayLinkDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7E79AA239FC1F8008BF8FF /* DisplayLinkDriverTests.swift */; };
 		3D875F002323542500670803 /* PerformanceBenchmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D875EFF2323542500670803 /* PerformanceBenchmarkViewController.swift */; };
 		3D89890F2450DEB3006824FC /* ExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D89890E2450DEB3006824FC /* ExecutorTests.swift */; };
@@ -56,6 +57,7 @@
 		B3C4CA0A2459F75800893CB5 /* ShapeLayerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C4CA082459F75800893CB5 /* ShapeLayerUtils.swift */; };
 		B3C4CA0D2459F76B00893CB5 /* AnimationCurveSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C4CA0B2459F76B00893CB5 /* AnimationCurveSnapshotTests.swift */; };
 		D246EA552DB85470000DA4A2 /* InteractiveAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D246EA542DB85470000DA4A2 /* InteractiveAnimationViewController.swift */; };
+		3DCA00042026072200000004 /* CoreAnimationExecutionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCA00032026072200000003 /* CoreAnimationExecutionViewController.swift */; };
 		D2D9C9AD2D76DFAD00B247A5 /* SpringCurveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D9C9AC2D76DFAD00B247A5 /* SpringCurveViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +103,7 @@
 		3D75A7C72292910B00743166 /* RelativeAnimationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelativeAnimationsViewController.swift; sourceTree = "<group>"; };
 		3D77A7D824F9CA7F00D25FAE /* CGAffineTransformInterpolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGAffineTransformInterpolationTests.swift; sourceTree = "<group>"; };
 		3D7D4FFE23011C4600A468A7 /* AnimationInstanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationInstanceTests.swift; sourceTree = "<group>"; };
+		3DCA00012026072200000001 /* CoreAnimationInstanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationInstanceTests.swift; sourceTree = "<group>"; };
 		3D7E79AA239FC1F8008BF8FF /* DisplayLinkDriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayLinkDriverTests.swift; sourceTree = "<group>"; };
 		3D875EFF2323542500670803 /* PerformanceBenchmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceBenchmarkViewController.swift; sourceTree = "<group>"; };
 		3D89890E2450DEB3006824FC /* ExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutorTests.swift; sourceTree = "<group>"; };
@@ -141,6 +144,7 @@
 		B64913526970D210595894B7 /* Pods-Stagehand-PerformanceTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand-PerformanceTests.debug.xcconfig"; path = "Target Support Files/Pods-Stagehand-PerformanceTests/Pods-Stagehand-PerformanceTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B657CC2F9B1F03D85F9BFF96 /* Pods-Stagehand_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand_Example.release.xcconfig"; path = "Target Support Files/Pods-Stagehand_Example/Pods-Stagehand_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D246EA542DB85470000DA4A2 /* InteractiveAnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveAnimationViewController.swift; sourceTree = "<group>"; };
+		3DCA00032026072200000003 /* CoreAnimationExecutionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimationExecutionViewController.swift; sourceTree = "<group>"; };
 		D2D9C9AC2D76DFAD00B247A5 /* SpringCurveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpringCurveViewController.swift; sourceTree = "<group>"; };
 		F058A67C239ED37BC34BE76C /* Pods_Stagehand_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stagehand_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC42083017E18C3B5F030B47 /* Pods-Stagehand-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stagehand-UnitTests.release.xcconfig"; path = "Target Support Files/Pods-Stagehand-UnitTests/Pods-Stagehand-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -238,6 +242,7 @@
 				3DEE4409231331DD0057D796 /* AnimationGroupViewController.swift */,
 				3D2712ED236A17C5001D3B4B /* AnimationQueueViewController.swift */,
 				D246EA542DB85470000DA4A2 /* InteractiveAnimationViewController.swift */,
+				3DCA00032026072200000003 /* CoreAnimationExecutionViewController.swift */,
 			);
 			name = "Feature Screens";
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 			children = (
 				B3C4CA0B2459F76B00893CB5 /* AnimationCurveSnapshotTests.swift */,
 				3D7D4FFE23011C4600A468A7 /* AnimationInstanceTests.swift */,
+				3DCA00012026072200000001 /* CoreAnimationInstanceTests.swift */,
 				3D89890E2450DEB3006824FC /* ExecutorTests.swift */,
 				3D32EF49234058C7001144B3 /* AnimationOptimizationTests.swift */,
 				607FACEB1AFB9204008FA782 /* AnimationSnapshotTests.swift */,
@@ -645,6 +651,7 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				3D8E3D8422F2BC9300D70FCB /* RepeatingAnimationsViewController.swift in Sources */,
 				D246EA552DB85470000DA4A2 /* InteractiveAnimationViewController.swift in Sources */,
+				3DCA00042026072200000004 /* CoreAnimationExecutionViewController.swift in Sources */,
 				3D8E3D8022F16C1B00D70FCB /* ChildAnimationsWithCurvesViewController.swift in Sources */,
 				3DB3927D23249D680009E8B3 /* ColorAnimationsViewController.swift in Sources */,
 				D2D9C9AD2D76DFAD00B247A5 /* SpringCurveViewController.swift in Sources */,
@@ -674,6 +681,7 @@
 				3D77A7D924F9CA7F00D25FAE /* CGAffineTransformInterpolationTests.swift in Sources */,
 				3DFE460424F4F0D000A460AC /* QuadrantView.swift in Sources */,
 				3D7D500023011D4400A468A7 /* AnimationInstanceTests.swift in Sources */,
+				3DCA00022026072200000002 /* CoreAnimationInstanceTests.swift in Sources */,
 				3D89B4E924E74C01001C7CC3 /* CATransform3D+Additions.swift in Sources */,
 				3D5F2D3B23E63E3600EEFA89 /* AnimationGroupTests.swift in Sources */,
 				B3C4CA0A2459F75800893CB5 /* ShapeLayerUtils.swift in Sources */,

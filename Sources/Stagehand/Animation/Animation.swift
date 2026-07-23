@@ -513,9 +513,9 @@ public struct Animation<ElementType: AnyObject> {
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Internal Methods - Keyframe Series Lookup
 
-    private func keyframeSeries(for property: PartialKeyPath<ElementType>) -> (AnyKeyframeSeries, startingAt: Double)? {
+    internal func keyframeSeries(for property: PartialKeyPath<ElementType>) -> (AnyKeyframeSeries, startingAt: Double)? {
         if let keyframeSeries = keyframeSeriesByProperty[property] {
             return (keyframeSeries, startingAt: 0)
         }
@@ -577,27 +577,29 @@ extension Animation {
         // MARK: - Public Methods
 
         func apply(to element: inout ElementType, at relativeTimestamp: Double, initialValue: PropertyType) {
+            element[keyPath: property] = value(at: relativeTimestamp, initialValue: initialValue)
+        }
+
+        func value(at relativeTimestamp: Double, initialValue: PropertyType) -> PropertyType {
             if let value = valuesByRelativeTimestamp[relativeTimestamp] {
-                element[keyPath: property] = value(initialValue)
+                return value(initialValue)
             } else {
                 let values = valuesByRelativeTimestamp.sorted { $0.key < $1.key }
 
                 guard let previousIndex = values.lastIndex(where: { $0.key < relativeTimestamp }) else {
-                    element[keyPath: property] = values.first!.value(initialValue)
-                    return
+                    return values.first!.value(initialValue)
                 }
 
                 let (previousTimestamp, previousValue) = values[previousIndex]
 
                 let nextIndex = values.index(after: previousIndex)
                 guard nextIndex != values.endIndex else {
-                    element[keyPath: property] = previousValue(initialValue)
-                    return
+                    return previousValue(initialValue)
                 }
 
                 let (nextTimestamp, nextValue) = values[nextIndex]
 
-                element[keyPath: property] = PropertyType.value(
+                return PropertyType.value(
                     between: previousValue(initialValue),
                     and: nextValue(initialValue),
                     at: ((relativeTimestamp - previousTimestamp) / (nextTimestamp - previousTimestamp))
@@ -635,6 +637,10 @@ extension Animation {
             apply(to: &element, at: relativeTimestamp, initialValue: initialValue as! PropertyType)
         }
 
+        func value(at relativeTimestamp: Double, initialValue: Any) -> Any {
+            return value(at: relativeTimestamp, initialValue: initialValue as! PropertyType)
+        }
+
         func mapForParentElement<ParentElementType: AnyObject>(
             _ subelementPath: PartialKeyPath<ParentElementType>
         ) -> (PartialKeyPath<ParentElementType>, AnyKeyframeSeries) {
@@ -655,6 +661,8 @@ internal protocol AnyKeyframeSeries {
     var keyframeRelativeTimestamps: [Double] { get }
 
     func applyToElement(_ element: inout AnyObject, at relativeTimestamp: Double, initialValue: Any)
+
+    func value(at relativeTimestamp: Double, initialValue: Any) -> Any
 
     func mapForParentElement<ParentElementType: AnyObject>(
         _ subelementPath: PartialKeyPath<ParentElementType>

@@ -75,9 +75,11 @@ public struct AnimationGroup {
 
     internal let elementContainer: ElementContainer = .init()
 
-    // MARK: - Private Properties
+    /// The animations added to the group, in the form consumed by the Core Animation execution mode (see
+    /// `performUsingCoreAnimation(delay:duration:repeatStyle:completion:)`).
+    internal private(set) var coreAnimationChildren: [CoreAnimationGroupChild] = []
 
-    private var completions: [(Bool) -> Void] = []
+    internal private(set) var completions: [(Bool) -> Void] = []
 
     // MARK: - Public Methods
 
@@ -105,6 +107,15 @@ public struct AnimationGroup {
             startingAt: relativeStartTimestamp,
             relativeDuration: relativeDuration
         )
+
+        coreAnimationChildren.append(
+            CoreAnimationGroupChild(
+                progressTransform: { adjustedProgress in
+                    return ((adjustedProgress - relativeStartTimestamp) / relativeDuration).clamped(in: 0...1)
+                },
+                payload: CoreAnimationGroupChildPayload(animation: elementAnimation, element: element)
+            )
+        )
     }
 
     /// Adds an animation group as a child of the receiver.
@@ -127,6 +138,28 @@ public struct AnimationGroup {
             startingAt: relativeStartTimestamp,
             relativeDuration: relativeDuration
         )
+
+        // The element container recorded by `addAnimation` isn't itself renderable by Core Animation. Replace it with
+        // the child group's own children, remapped onto this group's timeline through the child group's curve (which
+        // is captured now, matching how `addChild` captures the child's curve).
+        coreAnimationChildren.removeLast()
+
+        let childGroupCurve = animationGroup.animation.curve
+
+        for child in animationGroup.coreAnimationChildren {
+            let childProgressTransform = child.progressTransform
+
+            coreAnimationChildren.append(
+                CoreAnimationGroupChild(
+                    progressTransform: { adjustedProgress in
+                        let localProgress = ((adjustedProgress - relativeStartTimestamp) / relativeDuration)
+                            .clamped(in: 0...1)
+                        return childProgressTransform(childGroupCurve.adjustedProgress(for: localProgress))
+                    },
+                    payload: child.payload
+                )
+            )
+        }
     }
 
     /// Add a completion handler to be called when the animation completes.

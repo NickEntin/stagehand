@@ -32,6 +32,8 @@ protocol Driver: AnyObject {
 
     func animationInstanceDidCancel(behavior: AnimationInstance.CancelationBehavior)
 
+    func addCompletion(_ completion: @escaping (Bool) -> Void)
+
 }
 
 // MARK: -

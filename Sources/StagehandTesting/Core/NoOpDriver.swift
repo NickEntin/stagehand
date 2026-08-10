@@ -32,4 +32,8 @@ final class NoOpDriver: Driver {
         // No-op.
     }
 
+    func addCompletion(_ completion: @escaping (Bool) -> Void) {
+        // No-op.
+    }
+
 }
